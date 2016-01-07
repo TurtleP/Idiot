@@ -99,7 +99,7 @@ function love.load()
 		end
 	end
 
-	backgroundImage = love.graphics.newImage("graphics/game/undergroundbg.png")
+	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
 
 	controls =
 	{
@@ -169,7 +169,7 @@ function love.load()
 		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
-	love.audio.setVolume(0)
+	--love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
@@ -190,6 +190,23 @@ function love.draw()
 	if _G[state .. "Draw"] then
 		_G[state .. "Draw"]()
 	end
+
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, 5)
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6)
+
+	love.graphics.setScreen("top")
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print("Main screen: 400x240", 1, 5)
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print("Main screen: 400x240", 2, 6)
+
+	love.graphics.setScreen("bottom")
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print("Touch screen: 320x240", 1, 5)
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print("Touch screen: 320x240", 2, 6)
 
 	love.graphics.pop()
 end

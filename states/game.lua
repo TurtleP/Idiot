@@ -7,8 +7,7 @@ function gameInit()
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor"}
 
-	gameLoadMap(1, "top")
-	gameLoadMap(1, "bottom")
+	gameLoadMap(1)
 
 	love.graphics.setBackgroundColor(67, 67, 67)
 
@@ -70,32 +69,52 @@ function cameraScroll()
 
 	local self = objects["player"][1]
 
+	--==HORIZONTAL SCROLL==--
+
 	local _MAPWIDTH = mapDimensions[self.screen][1]
 
-	if mapScroll[self.screen] >= 0 and mapScroll[self.screen] + gameFunctions.getWidth(self.screen) <= _MAPWIDTH * 16 then
-		if self.x > mapScroll[self.screen] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-			mapScroll[self.screen] = math.min(self.x - gameFunctions.getWidth(self.screen) * 1 / 2, _MAPWIDTH * 16)
-		elseif self.x < mapScroll[self.screen] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-			mapScroll[self.screen] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
+	if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= (_MAPWIDTH - 1) * 16 then
+		if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
+			mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
+		elseif self.x < mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
+			mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
 		end
 	end
 
-	if mapScroll[self.screen] < 0 then
-		mapScroll[self.screen] = 0
-	elseif mapScroll[self.screen] + gameFunctions.getWidth(self.screen) >= _MAPWIDTH * 16 then
-		mapScroll[self.screen] = (_MAPWIDTH * 16) - gameFunctions.getWidth(self.screen)
+	if mapScroll[self.screen][1] < 0 then
+		mapScroll[self.screen][1] = 0
+	elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= (_MAPWIDTH - 1) * 16 then
+		mapScroll[self.screen][1] = (_MAPWIDTH - 1) * 16 - gameFunctions.getWidth(self.screen)
+	end
+
+	--==VERTICAL SCROLL==--
+
+	local _MAPHEIGHT = mapDimensions[self.screen][2]
+
+	if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
+		if self.y + self.height / 2 > mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
+			mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
+		elseif self.y + self.height / 2 < mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
+			mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
+		end
+	end
+
+	if mapScroll[self.screen][2] < 0 then
+		mapScroll[self.screen][2] = 0
+	elseif mapScroll[self.screen][2] + gameFunctions.getHeight() >= (_MAPHEIGHT) * 16 then
+		mapScroll[self.screen][2] = (_MAPHEIGHT) * 16 - gameFunctions.getHeight()
 	end
 end
 
 function gameDraw()
 	if shakeIntensity > 0 then
-		love.graphics.translate( ( (math.random() * 2 - 1) * shakeIntensity ), (math.random() * 2 - 1) * shakeIntensity ) 
+		love.graphics.translate( math.floor( (math.random() * 2 - 1) * shakeIntensity ), math.floor( (math.random() * 2 - 1) * shakeIntensity ) ) 
 	end
 
 	gameDrawEntities()
 
 	love.graphics.setColor(255, 255, 255, 255)
-	
+
 	gameHud:draw()
 end
 
@@ -179,6 +198,16 @@ function gameDrawEntities()
 			other = "top"
 		end
 	end
+
+	love.graphics.push()
+
+	love.graphics.setScreen(p)
+
+	for x = 1, math.floor(mapDimensions[p][1] / (backgroundImage[p]:getWidth() / 16)) + 1 do
+		love.graphics.draw(backgroundImage[p], (x - 1) * backgroundImage[p]:getWidth(), 0)
+	end
+
+	love.graphics.pop()
 
 	for k, v in pairs(objects["sensor"]) do
 		if v.screen == p then
@@ -266,6 +295,8 @@ function gameDrawEntities()
 		end
 	end
 
+	love.graphics.push()
+	love.graphics.origin()
 	love.graphics.setScreen(p)
 	love.graphics.setColor(0, 0, 0, 255 * gameFade)
 	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
@@ -275,6 +306,8 @@ function gameDrawEntities()
 	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
 
 	love.graphics.setColor(255, 255, 255, 255)
+
+	love.graphics.pop()
 end
 
 function gameAddUseRectangle(x, y, width, height, self)
@@ -315,11 +348,11 @@ function pushPop(self, start)
 			if self.screen == v.screen then
 				love.graphics.push()
 			
-				love.graphics.translate(-math.floor(mapScroll[self.screen]), -math.floor(mapScrollY))
+				love.graphics.translate(-math.floor(mapScroll[self.screen][1]), -math.floor(mapScroll[self.screen][2]))
 			else
 				love.graphics.push()
 
-				love.graphics.translate(-math.floor(mapScroll[self.screen]), -math.floor(mapScrollY))
+				love.graphics.translate(-math.floor(mapScroll[self.screen][1]), -math.floor(mapScroll[self.screen][2]))
 			end
 		else
 			love.graphics.pop()
@@ -349,7 +382,7 @@ function gameLoadObjects(i)
 	tileData = {}
 	tileLinks = {}
 	mapDimensions = {}
-	mapScroll = { ["top"] = 0, ["bottom"] = 0 }
+	mapScroll = { ["top"] = {0, 0}, ["bottom"] = {0, 0} }
 	mapScrollY = 0
 
 	shakeIntensity = 0
@@ -357,22 +390,22 @@ function gameLoadObjects(i)
 	eventSystem:decrypt(mapScripts[i])
 end
 
-function gameLoadMap(map, screen)
+function gameLoadMap(map)
 	gameScrollX = 0
-
-	if not screen then
-		screen = "top"
-	end
 
 	local newMap = require("maps/" .. map)
 
 	local mapData = newMap.layers
 
 	for k, v in ipairs(mapData) do
-		if v.name == screen then
-			loadTiles(v.width, v.height, v.properties, v.data, screen)
-		elseif v.name == screen .. "Objects" then
-			loadObjects(v.objects, screen)
+		if v.type == "tilelayer" then
+			loadTiles(v.width, v.height, v.properties, v.data, v.name)
+		else
+			if v.name == "topObjects" then
+				loadObjects(v.objects, "top")
+			elseif v.name == "bottomObjects" then
+				loadObjects(v.objects, "bottom")
+			end
 		end
 	end
 end
@@ -398,7 +431,7 @@ function loadObjects(objectData, screen)
 		elseif w.name == "fan" then
 			table.insert(objects["fan"], fan:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "key" then
-			table.insert(objects["key"], key:new(w.x + 4, w.y, screen))
+			table.insert(objects["key"], key:new(w.x + 6, w.y, screen))
 		elseif w.name == "pressureplate" then
 			table.insert(objects["plate"], plate:new(w.x, w.y + 11, w.properties, screen))
 		elseif w.name == "sign" then

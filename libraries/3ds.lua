@@ -2,14 +2,13 @@ if love.system.getOS() ~= "3ds" then
 	_SCREEN = "top"
 
 	function love.graphics.setScreen(screen)
+		assert(type(screen) == "string", "String expected, got " .. type(screen))
 		_SCREEN = screen
 
 		if screen == "top" then
 			love.graphics.setScissor(0, -(mapScrollY * scale), 400 * scale, 240 * scale)
-			love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6 * scale)
 		elseif screen == "bottom" then
 			love.graphics.setScissor(40 * scale, (240 * scale) - (mapScrollY * scale), 320 * scale, 240 * scale)
-			love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6 * scale)
 		end
 	end
 

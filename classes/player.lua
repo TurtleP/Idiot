@@ -256,10 +256,6 @@ function player:respawn()
 end
 
 function player:enterObject(entity, name, fade)
-	if self.speedy ~= 0 then
-		return false
-	end
-
 	self.doUpdate = false
 	if fade == nil then
 		fade = true
@@ -424,7 +420,6 @@ function player:useItem()
 			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item})
 
 			if #ret > 0 then
-				print("Can't place")
 				table.insert(objects["box"], newBoxGhost(self.x + add, self.y))
 				return
 			else
@@ -457,7 +452,7 @@ function player:setScreen(screen)
 end
 
 function player:offscreenCheck()
-	if self.y > gameFunctions.getHeight() then
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
 		self:die()
 	end
 end
@@ -487,7 +482,7 @@ end
 function death:update(dt)
 	self.rotation = self.rotation + 4 * dt
 
-	if self.y > gameFunctions.getHeight() then
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
 		local temp = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
 		temp:respawn()
 		table.insert(objects["player"], temp)
@@ -534,7 +529,7 @@ end
 function hat:update(dt)
 	self.rotation = self.rotation + 4 * dt
 
-	if self.y > gameFunctions.getHeight() then
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
 		self.remove = true
 	end
 end

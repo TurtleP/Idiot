@@ -46,15 +46,11 @@ end
 function checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
 	for _, obj2Data in pairs(obj2Table) do
 		if objData.screen == obj2Data.screen then
-			passiveCollide(objData, objName, obj2Name, obj2Data, dt)
-		end
-	end
-end
-
-function passiveCollide(objData, objName, obj2Name, obj2Data, dt)
-	if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) or aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
-		if objData.passiveCollide then
-			objData:passiveCollide(obj2Name, obj2Data)
+			if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) or aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
+				if objData.passiveCollide then
+					objData:passiveCollide(obj2Name, obj2Data)
+				end
+			end
 		end
 	end
 end
@@ -63,58 +59,39 @@ function checkCollision(objTable, obj2Table, objData, objName, obj2Name, dt)
 	local hor, ver = false, false
 
 	for _, obj2Data in pairs(obj2Table) do
-		if obj2Data.screen == objData.screen then
-			checkPhysics(obj2Data, objTable, objData, objName, obj2Name, obj2Table, dt)
+		if objData.screen == obj2Data.screen then
+			if objData ~= obj2Data then
+				if not obj2Data.passive then
+
+					if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
+
+						if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
+							if verticalCollide(objName, objData, obj2Name, obj2Data) then
+								ver = true
+							end
+						elseif aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
+							if horizontalCollide(objName, objData, obj2Name, obj2Data) then
+								hor = true
+							end
+						end
+
+					end
+
+				else 
+					checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
+				end
+			end
 		end
 	end
 
 	return hor, ver
 end
 
-function checkPhysics(obj2Data, objTable, objData, objName, obj2Name, obj2Table, dt)
-	if objData ~= obj2Data then
-		if not obj2Data.passive then
-
-			if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
-
-				if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
-					if verticalCollide(objName, objData, obj2Name, obj2Data) then
-						ver = true
-					end
-				elseif aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
-					if horizontalCollide(objName, objData, obj2Name, obj2Data) then
-						hor = true
-					end
-				else
-					--Diagnal shit
-					--[[local g = 15 * 16 * dt
-					if objData.gravity then
-						g = objData.gravity
-					end
-						
-					if math.abs(objData.speedy - g) < math.abs(objData.speedx) then
-						if verticalCollide(objName, objData, obj2Name, obj2Data) then
-							ver = true
-						end
-					else
-						if horizontalCollide(objName, objData, obj2Name, obj2Data) then
-							hor = true
-						end
-					end]]
-				end
-
-			end
-
-		else 
-			checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
-		end
-	end
-end
-
 function checkrectangle(x, y, width, height, check, callback)
 	local ret = {}
 	local checkObjects = "list"
-
+	local exclude
+	
 	if type(check) == "table" and check[1] == "exclude" then
 		checkObjects = "all"
 		exclude = check[2]
@@ -136,21 +113,22 @@ function checkrectangle(x, y, width, height, check, callback)
 					local skip = false
 					if exclude then
 						if t.x == exclude.x and t.y == exclude.y then
+							print("Skip", t, t.x)
 							skip = true
 						end
 
 						if t.screen ~= exclude.screen then
-							skipe = true
+							skip = true
+						end
+					end
+
+					if callback then
+						if t.screen ~= callback.screen then
+							skip = true
 						end
 					end
 
 					if not skip then
-						if callback then
-							if t.screen ~= callback.screen then
-								return ret
-							end
-						end
-							
 						if t.active then
 							if aabb(x, y, width, height, t.x, t.y, t.width, t.height) then
 								table.insert(ret, {k, t})

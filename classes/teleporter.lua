@@ -119,7 +119,7 @@ end
 
 function teleporter:draw()
 	pushPop(self, true)
-	love.graphics.setScreen(self, true)
+	love.graphics.setScreen(self.screen)
 
 	love.graphics.draw(teleporterImage, teleporterQuads[self.quadi], self.x, self.y)
 

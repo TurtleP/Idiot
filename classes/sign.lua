@@ -133,12 +133,12 @@ function dialog:scrollText()
 	end
 
 	if not self.doScroll then
+		scrollSound:play()
 		self.doScroll = true
 	end
 end
 
 function dialog:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	if self.activated then
@@ -154,10 +154,8 @@ function dialog:draw()
 
 		love.graphics.print(self.drawText, self.x + 4 + off, self.y + 3 + (self.height / 2) - signFont:getHeight() / 2)
 
-		if #self.drawText == #self.text and not self.stop then
+		if #self.drawText == #self.text and not self.doScroll then
 			love.graphics.draw(scrollArrow, self.x + off + love.graphics.getWidth() - 18, self.y + (self.height - 4) + math.sin(love.timer.getTime() * 8))
 		end
 	end
-
-	pushPop(self)
 end
