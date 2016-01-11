@@ -3,7 +3,6 @@ button = class("button")
 function button:init(x, y, r, screen)
 	self.x = x
 	self.y = y
-	self.link = r.link
 
 	self.width = 3
 	self.height = 8
@@ -18,17 +17,17 @@ function button:init(x, y, r, screen)
 
 	self.quadi = directions[r.direction] or 1
 	self.singleUse = bool(r.singleUse) or false
-
-	if r.direction == "left" then
-		self.x = x + 13
-	end
-
 	
+	local add = 0
+	if r.direction == "left" then
+		add = 13
+	end
+	self.add = add
 
 	self.pressi = 1
 	self.timer = 0
 
-	self.useRectangle = gameAddUseRectangle(self.x, self.y, self.width, self.height, self)
+	self.useRectangle = gameAddUseRectangle(self.x + add, self.y, self.width, self.height, self)
 
 	self.screen = screen
 end
@@ -74,7 +73,7 @@ function button:draw()
 	pushPop(self, true)
 
 	love.graphics.setScreen(self.screen)
-	love.graphics.draw(buttonImage, buttonQuads[self.pressi][self.quadi], self.x, self.y)
+	love.graphics.draw(buttonImage, buttonQuads[self.pressi][self.quadi], self.x + self.add, self.y + 3)
 
 	pushPop(self)
 end

@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 29,
+  nextobjectid = 50,
   properties = {},
   tilesets = {
     {
@@ -19,7 +19,7 @@ return {
       spacing = 1,
       margin = 0,
       image = "../graphics/objects.png",
-      imagewidth = 238,
+      imagewidth = 306,
       imageheight = 17,
       tileoffset = {
         x = 0,
@@ -27,7 +27,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 14,
+      tilecount = 18,
       tiles = {}
     }
   },
@@ -39,7 +39,7 @@ return {
       y = 0,
       width = 29,
       height = 20,
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -59,22 +59,22 @@ return {
         1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
         1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
         1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 15, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
-        1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
-        1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 1, 1, 1, 1, 1, 10, 10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1
+        1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 12, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
     {
       type = "objectgroup",
       name = "topObjects",
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -92,7 +92,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "turret"
+            ["link"] = "top;416;80"
           }
         },
         {
@@ -107,7 +107,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "turret"
+            ["link"] = "top;32;80"
           }
         },
         {
@@ -152,96 +152,32 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "top"
+            ["link"] = "bottom;192;192"
           }
         },
         {
-          id = 18,
-          name = "sign",
+          id = 31,
+          name = "laser",
           type = "",
           shape = "rectangle",
           x = 224,
-          y = 288,
+          y = 240,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
           properties = {
-            ["text"] = "Hello, world!"
+            ["height"] = "4",
+            ["link"] = "top;224;304"
           }
         },
         {
-          id = 19,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 128,
-          y = 304,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 20,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 144,
-          y = 304,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 21,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 160,
-          y = 304,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 22,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 176,
-          y = 304,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 23,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 272,
-          y = 304,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 25,
-          name = "spikes",
+          id = 33,
+          name = "button",
           type = "",
           shape = "rectangle",
           x = 288,
-          y = 304,
+          y = 288,
           width = 16,
           height = 16,
           rotation = 0,
@@ -249,12 +185,57 @@ return {
           properties = {}
         },
         {
-          id = 26,
-          name = "spikes",
+          id = 40,
+          name = "notgate",
           type = "",
           shape = "rectangle",
-          x = 304,
+          x = 224,
           y = 304,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;288;288"
+          }
+        },
+        {
+          id = 41,
+          name = "dropper",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;208;160"
+          }
+        },
+        {
+          id = 42,
+          name = "notgate",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = ""
+          }
+        },
+        {
+          id = 43,
+          name = "sensor",
+          type = "",
+          shape = "rectangle",
+          x = 144,
+          y = 272,
           width = 16,
           height = 16,
           rotation = 0,
@@ -262,17 +243,21 @@ return {
           properties = {}
         },
         {
-          id = 27,
-          name = "spikes",
+          id = 44,
+          name = "door",
           type = "",
           shape = "rectangle",
-          x = 320,
-          y = 304,
+          x = 272,
+          y = 272,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["link"] = "top;144;272",
+            ["locked"] = "true",
+            ["start"] = "false"
+          }
         }
       }
     },
@@ -283,42 +268,42 @@ return {
       y = 0,
       width = 29,
       height = 20,
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
       properties = {
-        ["height"] = "15",
-        ["width"] = "27"
+        ["height"] = "20",
+        ["width"] = "28"
       },
       encoding = "lua",
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 4, 0, 0, 8, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 4, 0, 0, 8, 0, 0, 0, 5, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
         1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
         1, 12, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 1, 0, 0,
-        1, 1, 1, 1, 10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1, 1, 1, 1, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        1, 1, 1, 1, 10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 7, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 8, 0, 0, 8, 0, 0, 0, 6, 0, 0, 0, 0, 2, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+        1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0
       }
     },
     {
       type = "objectgroup",
       name = "bottomObjects",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -349,7 +334,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "soso",
+            ["link"] = "bottom;16;208",
             ["maxheight"] = "4"
           }
         },
@@ -364,9 +349,7 @@ return {
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {
-            ["link"] = "soso"
-          }
+          properties = {}
         },
         {
           id = 7,
@@ -380,7 +363,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "top"
+            ["link"] = "top;224;112"
           }
         },
         {
@@ -462,7 +445,159 @@ return {
           height = 16,
           rotation = 0,
           visible = true,
+          properties = {
+            ["link"] = "dropbox"
+          }
+        },
+        {
+          id = 29,
+          name = "dropper",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 128,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "bottom;368;208"
+          }
+        },
+        {
+          id = 34,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 16,
+          y = 288,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["locked"] = "false",
+            ["start"] = "false"
+          }
+        },
+        {
+          id = 35,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 64,
+          y = 288,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "bottom;128;288",
+            ["locked"] = "true"
+          }
+        },
+        {
+          id = 36,
+          name = "pressureplate",
+          type = "",
+          shape = "rectangle",
+          x = 128,
+          y = 288,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "exitDoor"
+          }
+        },
+        {
+          id = 37,
+          name = "spikes",
+          type = "",
+          shape = "rectangle",
+          x = 96,
+          y = 304,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
           properties = {}
+        },
+        {
+          id = 38,
+          name = "spikes",
+          type = "",
+          shape = "rectangle",
+          x = 160,
+          y = 304,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 39,
+          name = "sign",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 288,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["text"] = "<- Exit sandbox mode"
+          }
+        },
+        {
+          id = 45,
+          name = "delayer",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 64,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "bottom;320;80",
+            ["time"] = "6"
+          }
+        },
+        {
+          id = 46,
+          name = "button",
+          type = "",
+          shape = "rectangle",
+          x = 320,
+          y = 80,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["direction"] = "left"
+          }
+        },
+        {
+          id = 48,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 208,
+          y = 96,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "bottom;208;64",
+            ["locked"] = "true"
+          }
         }
       }
     }

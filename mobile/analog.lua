@@ -84,7 +84,7 @@ function newAnalog(Ax, Ay, Ar, Br, Bd)
 	function analog:draw()
 		--self screen
 		local t = self
-		love.graphics.setColor(self.areaColor)
+		love.graphics.setColor(unpack(self.areaColor))
 		love.graphics.circle("line", t.cx, t.cy, t.deadzone*t.size, 64)
 		love.graphics.circle("fill", t.cx, t.cy, t.deadzone*t.size, 64)
 		
@@ -92,18 +92,18 @@ function newAnalog(Ax, Ay, Ar, Br, Bd)
 		love.graphics.stencil( function() love.graphics.circle("fill", ax, ay, t.button, 32) end, "invert" )
 		local l = love.graphics.getLineWidth()
 		love.graphics.setLineWidth(12)
-		love.graphics.setColor(self.stickColor)
+		love.graphics.setColor(unpack(self.stickColor))
 		love.graphics.line(ax, ay, t.cx, t.cy)
 		love.graphics.circle("fill", t.cx, t.cy, 12/2, 32)
 		love.graphics.setLineWidth(l)
 		love.graphics.setStencilTest()
 		
 		--stick
-		love.graphics.setColor(self.stickColor)
+		love.graphics.setColor(unpack(self.stickColor))
 		love.graphics.circle("fill", ax, ay, t.button, 32)
 
 		--sick outer-ring
-		love.graphics.setColor(self.areaColor)
+		love.graphics.setColor(unpack(self.areaColor))
 		love.graphics.circle("line", ax, ay, t.button, 32)
 	end
 

@@ -19,6 +19,16 @@ if love.system.getOS() ~= "3ds" then
 		return 400
 	end
 
+	local oldSetColor = love.graphics.setColor
+	function love.graphics.setColor(r, g, b, a)
+		assert(type(r) ~= "table", "Bad argument #1: number expected, got " .. type(r))
+		assert(type(g) ~= "table", "Bad argument #2: number expected, got " .. type(g))
+		assert(type(b) ~= "table", "Bad argument #3: number expected, got " .. type(b))
+		assert(type(a) ~= "table", "Bad argument #4: number expected, got " .. type(a))
+
+		oldSetColor(r, g, b, a)
+	end
+
 	function love.graphics.getHeight()
 		return 240
 	end
@@ -33,20 +43,90 @@ if love.system.getOS() ~= "3ds" then
 
 		oldclear(r, g, b, a)
 	end
-end
 
-if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
-
-	--[[
+	local _KEYNAMES =
+	{
 		"a", "b", "select", "start",
 		"dright", "dleft", "dup", "ddown",
 		"rbutton", "lbutton", "x", "y",
-		"", "", "lzbutton", "rzbutton",
-		"", "", "", "",
-		"touch", "", "", "",
-		"cstickright", "cstickleft", "cstickup", "cstickdown",
+		"lzbutton", "rzbutton", "cstickright", 
+		"cstickleft", "cstickup", "cstickdown",
 		"cpadright", "cpadleft", "cpadup", "cpaddown"
-	--]]
+	}
+
+	local _CONFIG =
+	{
+		["a"] = "u",
+		["b"] = "i",
+		["y"] = "o",
+		["x"] = "p",
+		["start"] = "return",
+		["select"] = "rshift",
+		["dup"] = "up",
+		["dleft"] = "left",
+		["dright"] = "right",
+		["ddown"] = "down",
+		["rbutton"] = "/",
+		["lbutton"] = "rcontrol",
+		["cpadright"] = "d",
+		["cpadleft"] = "a",
+		["cpadup"] = "w",
+		["cpaddown"] = "s",
+		["cstickleft"] = "",
+		["cstickright"] ="",
+		["cstickup"] = "",
+		["cstickdown"] = ""
+	}
+
+	--[[if love.keypressed then
+		local oldKeyPressed = love.keypressed
+		function love.keypressed(key)
+			for k = 1, #_KEYNAMES do
+				if _CONFIG[_KEYNAMES[k] == key then
+					oldKeyPressed(_KEYNAMES[k])
+				end
+			end
+		end
+	end
+
+	if love.keyreleased then
+		local oldKeyReleased = love.keyreleased
+		function love.keyreleased(key)
+			for k = 1, #_KEYNAMES do
+				if _CONFIG[_KEYNAMES[k] == key then
+					oldKeyReleased(_KEYNAMES[k])
+				end
+			end
+		end
+	end]]
+
+	-- Clamps a number to within a certain range.
+	function math.clamp(low, n, high) 
+		return math.min(math.max(low, n), high) 
+	end
+
+	local oldMousePressed = love.mousepressed
+	function love.mousepressed(x, y, button)
+		x, y = math.clamp(0, x - 40, 320), math.clamp(0, y - 240, 240)
+
+		if oldMousePressed then
+			oldMousePressed(x, y, 1)
+		end
+	end
+
+	local oldMouseReleased = love.mousereleased
+	function love.mousereleased(x, y, button)
+		x, y = math.clamp(0, x - 40, 320), math.clamp(0, y - 240, 240)
+
+		if oldMouseReleased then
+			oldMouseReleased(x, y, 1)
+		end
+	end
+
+	love.window.setMode(400, 480, {vsync = true})
+end
+
+if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 
 	if not _EMULATEHOMEBREW then
 		love.graphics.scale = function() end

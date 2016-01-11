@@ -68,14 +68,3 @@ function eventsystem:decrypt(scriptString)
 		self:queue(cmd, arg)
 	end
 end
-
-local commands = {"levelEquals", "wait", "spawnPlayer", "shake", "dialog"}
-function eventsystem:sortKeys(query)
-	local out = {}
-
-	for k = 1, #commands do
-		for i, v in pairs(query) do
-
-		end
-	end
-end

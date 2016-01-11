@@ -157,37 +157,38 @@ function touchcontrol:draw()
 		return
 	end
 
-	local screen = "top"
-	if objects["player"][1] then
-		--love.graphics.setScreen(objects["player"][1].screen)
-	end
+	love.graphics.setColor(255, 255, 255, 255)
+
+	love.graphics.setScreen("top")
+
+	love.graphics.setScissor(0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
 
 	love.graphics.push()
 
+	--love.graphics.translate(0, -math.floor(mapScrollY))
+
 	analogStick:draw()
 
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.push()
 
-		love.graphics.push()
-
-			love.graphics.scale(scale, scale)
-
-			for k, v in ipairs(self.buttons) do
-				v:draw()
-			end
-
-		love.graphics.pop()
+	--love.graphics.translate(0, -math.floor(mapScrollY))
+	love.graphics.scale(scale, scale)
+	
+	for k, v in ipairs(self.buttons) do
+		v:draw()
+	end
 
 	love.graphics.pop()
+
+	love.graphics.pop()
+
+	love.graphics.setScissor()
+
 end
 
 local oldDraw = love.draw
 function love.draw()
 	oldDraw()
 
-	--love.graphics.setScissor(0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
-
 	touchControls:draw()
-
-	--love.graphics.setScissor()
 end

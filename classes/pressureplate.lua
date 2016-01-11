@@ -1,6 +1,6 @@
 plate = class("plate")
 
-function plate:init(x, y, r, screen)
+function plate:init(x, y, screen)
 	self.x = x
 	self.y = y
 
@@ -8,8 +8,6 @@ function plate:init(x, y, r, screen)
 	self.height = 5
 
 	self.quadi = 1
-
-	self.link = r.link
 
 	self.playSound = false
 
@@ -23,10 +21,15 @@ function plate:addOut(obj)
 end
 
 function plate:update(dt)
-	local obj = checkrectangle(self.x, self.y, self.width, self.height, {"box", "player"}, self)
+	local obj = checkrectangle(self.x, self.y + 11, self.width, self.height, {"box", "player"}, self)
 
 	--print(#obj)
 	if #obj > 0 then
+		if obj[1][1] == "player" then
+			if not obj[1][2].mask then
+				return
+			end
+		end
 		self:out("on")
 	else
 		self:out("off")
@@ -59,12 +62,12 @@ function plate:draw()
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
-	local add = 0
+	local addx, addy = 0, 11
 	if self.quadi == 2 then
-		add = -4
+		addx = -4
 	end
 
-	love.graphics.draw(plateImage, plateQuads[self.quadi], self.x + add, self.y)
+	love.graphics.draw(plateImage, plateQuads[self.quadi], self.x + addx, self.y + addy)
 
 	pushPop(self)
 end

@@ -4,6 +4,7 @@ io.stdout:setvbuf("no")
 class = require 'libraries/middleclass'
 require 'libraries/physics'
 require 'libraries/event'
+require 'libraries/gamefunctions'
 
 --states
 require 'states/title'
@@ -24,6 +25,10 @@ require 'classes/pipe'
 require 'classes/hud'
 require 'classes/button'
 require 'classes/sensor'
+require 'classes/dropper'
+require 'classes/laser'
+require 'classes/notgate'
+require 'classes/delayer'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
@@ -99,7 +104,21 @@ function love.load()
 		end
 	end
 
+	dropperImage = love.graphics.newImage("graphics/objects/dropper.png")
+	dropperQuads = {}
+	for k = 1, 9 do
+		dropperQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, dropperImage:getWidth(), dropperImage:getHeight())
+	end
+
+	delayerImage = love.graphics.newImage("graphics/objects/delayer.png")
+	delayerQuads = {}
+	for k = 1, 2 do
+		delayerQuads[k] = love.graphics.newQuad((k - 1) * 16, 0, 16, 16, delayerImage:getWidth(), delayerImage:getHeight())
+	end
+
 	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
+
+	notImage = love.graphics.newImage("graphics/objects/not.png")
 
 	controls =
 	{
@@ -144,6 +163,7 @@ function love.load()
 	unlockSound = love.audio.newSource("audio/unlock.wav")
 	pipeSound = love.audio.newSource("audio/pipe.wav")
 	buttonSound = love.audio.newSource("audio/button.wav")
+	timeSound = love.audio.newSource("audio/time.wav")
 	sensorSound = { love.audio.newSource("audio/sensoron.wav") , love.audio.newSource("audio/sensoroff.wav") }
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
@@ -169,7 +189,7 @@ function love.load()
 		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
-	--love.audio.setVolume(0)
+	love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
@@ -195,18 +215,6 @@ function love.draw()
 	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, 5)
 	love.graphics.setColor(255, 255, 255)
 	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6)
-
-	love.graphics.setScreen("top")
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("Main screen: 400x240", 1, 5)
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print("Main screen: 400x240", 2, 6)
-
-	love.graphics.setScreen("bottom")
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("Touch screen: 320x240", 1, 5)
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print("Touch screen: 320x240", 2, 6)
 
 	love.graphics.pop()
 end

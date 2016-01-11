@@ -18,7 +18,7 @@ function pipe:init(x, y, r, screen)
 		["down"] = 3
 	}
 
-	self.link = r.link
+	self.link = r.link:split(";")
 	self.direction = r.direction or "up"
 	self.screen = r.screen or "top"
 
@@ -46,10 +46,11 @@ function pipe:addLink()
 	for k, v in pairs(outputs) do
 		if v == "pipe" then
 			for j, w in pairs(objects[v]) do
-				if w ~= self then
-					if w.link == self.link then
+				if w.screen == self.link[1] then
+					if w.x == tonumber(self.link[2]) and w.y == tonumber(self.link[3]) then
 						w:addOut(self)
-						break
+						
+						self.link = {}
 					end
 				end
 			end

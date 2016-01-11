@@ -10,7 +10,7 @@ function teleporter:init(x, y, r, screen)
 	self.speedx = 0
 	self.speedy = 0
 
-	self.link = r.link
+	self.link = r.link:split(";")
 
 	self.open = false
 	self.closeAnimation = false
@@ -41,10 +41,11 @@ function teleporter:addLink()
 	for k, v in pairs(outputs) do
 		if v == "teleporter" then
 			for j, w in pairs(objects[v]) do
-				if w ~= self then
-					if w.link == self.link then
+				if w.screen == self.link[1] then
+					if w.x == tonumber(self.link[2]) and w.y == tonumber(self.link[3]) then
 						w:addOut(self)
-						break
+						
+						self.link = {}
 					end
 				end
 			end

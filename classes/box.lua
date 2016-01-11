@@ -39,7 +39,6 @@ function box:use(player)
 	if player then
 		active = false
 	end
-	self.active = active
 	self.passive = not active
 
 	return self
@@ -47,8 +46,6 @@ end
 
 function box:update(dt)
 	if self.parent then
-		self.x = self.parent.x
-		self.y = self.parent.y - self.height / 1.4
 		return
 	end
 
@@ -67,6 +64,7 @@ end
 
 --BEWARE
 function newBoxGhost(x, y)
+	print("BEWARE")
 	local box = {}
 
 	box.x = x

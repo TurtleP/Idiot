@@ -95,10 +95,10 @@ function virtualbutton:draw()
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(virtualButton, virtualButtonQuads[self.colors[tostring(self.pressed)].quadi], self.x, self.y)
 
-	love.graphics.setColor(self.colors[tostring(self.pressed)].color)
+	love.graphics.setColor(unpack(self.colors[tostring(self.pressed)].color))
 	love.graphics.circle("line", self.x + self.width / 2, self.y + self.height / 2, math.floor(self.width / 2), 64)
 
-	love.graphics.setColor(self.colors[tostring(not self.pressed)].color)
+	love.graphics.setColor(unpack(self.colors[tostring(not self.pressed)].color))
 	love.graphics.print(self.text, self.x + (self.width / 2) - buttonFont:getWidth(self.text) / 2 + 0.5, self.y + (self.height / 2) - buttonFont:getHeight(self.text) / 2 + 1.5)
 
 	love.graphics.setColor(255, 255, 255, 255)

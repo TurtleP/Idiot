@@ -15,7 +15,9 @@ function door:init(x, y, r, screen)
 
 	self.isLocked = bool(r.locked)
 
-	self.link = r.link
+	if r.link then
+		self.link = r.link:split(";")
+	end
 
 	self.open = false
 	self.closeAnimation = false
@@ -28,6 +30,7 @@ function door:init(x, y, r, screen)
 		self.active = true
 		self.static = true
 		self.passive = false
+		self.width = 5
 	else
 		self.passive = true
 	end
@@ -49,8 +52,12 @@ function door:addLink()
 	for k, v in pairs(outputs) do
 		for j, w in pairs(objects[v]) do
 			if w.addOut then
-				if w.link == self.link then
-					w:addOut(self)
+				if w.screen == self.link[1] then
+					if w.x == tonumber(self.link[2]) and w.y == tonumber(self.link[3]) then
+						w:addOut(self)
+						
+						self.link = {}
+					end
 				end
 			end
 		end
@@ -70,7 +77,7 @@ function door:update(dt)
 end
 
 function door:unlock(player)
-	if self.link then
+	if #self.link > 1 then
 		return
 	end
 
@@ -82,7 +89,6 @@ function door:input(t)
 	if t == "on" then
 		self.unlocked = true
 	elseif t == "off" then
-		print("!")
 		self.unlocked = false
 	elseif t == "toggle" then
 		self.unlocked = not self.unlocked
@@ -106,6 +112,8 @@ function door:normalDoor(dt)
 				self.timer = self.timer - 12 * dt
 				self.quadi = math.floor(self.timer % 3) + 1
 			else
+				self.player.remove = true
+				gameNextLevel()
 				self.closeAnimation = false
 				self.timer = 0
 			end

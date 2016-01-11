@@ -87,7 +87,7 @@ function checkCollision(objTable, obj2Table, objData, objName, obj2Name, dt)
 	return hor, ver
 end
 
-function checkrectangle(x, y, width, height, check, callback)
+function checkrectangle(x, y, width, height, check, callback, allow)
 	local ret = {}
 	local checkObjects = "list"
 	local exclude
@@ -109,7 +109,7 @@ function checkrectangle(x, y, width, height, check, callback)
 
 		if checkObjects == "all" or hasObject then
 			for s, t in pairs(v) do
-				if checkObjects ~= "all" then
+				if allow or checkObjects ~= "all" then
 					local skip = false
 					if exclude then
 						if t.x == exclude.x and t.y == exclude.y then

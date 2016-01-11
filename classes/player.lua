@@ -120,6 +120,13 @@ function player:update(dt)
 	self:animate(dt)
 end
 
+function player:updateBox()
+	if self.item then
+		self.item.x = (self.x + (self.width / 2)) - self.item.width / 2
+		self.item.y = self.y - self.item.height / 1.4
+	end
+end	
+
 function player:draw()
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
@@ -217,6 +224,12 @@ function player:passiveCollide(name, data)
 			data:use(self)
 		end
 	end
+
+	if name == "laser" then
+		if data.on then
+			self:die()
+		end
+	end
 end
 
 function player:dialogStuff(name, entity)
@@ -231,11 +244,6 @@ function player:dialogStuff(name, entity)
 	if data.current <= #data.text then
 		self.speedx = 0
 		self.doUpdate = false
-		--[[if #data.drawText == #data.text then
-			if self.useKey then
-				data:scrollText()
-			end
-		end]]
 		self.timer = 0
 	else
 		self.doUpdate = true
@@ -417,10 +425,11 @@ function player:useItem()
 				add = -self.item.width - 2
 			end
 
-			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item})
+			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item}, nil, true)
 
 			if #ret > 0 then
 				table.insert(objects["box"], newBoxGhost(self.x + add, self.y))
+				self.useKey = true
 				return
 			else
 				self:dropBox()
@@ -442,6 +451,7 @@ function player:dropBox()
 			self.item.x = self.x - self.item.width
 		end
 		self.item.y = self.y + (self.height / 2) - self.item.height / 2
+		self.item.speedy = 0
 
 		self.item = false
 	end

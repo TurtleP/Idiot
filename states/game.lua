@@ -3,9 +3,7 @@ function gameInit()
 
 	currentLevel = 1
 
-	gameLoadObjects(1)
-
-	outputs = {"plate", "button", "pipe", "teleporter", "sensor"}
+	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate"}
 
 	gameLoadMap(1)
 
@@ -17,8 +15,6 @@ function gameInit()
 	gameFade = 0
 	otherFade = 1
 	gameScreen = "top"
-
-	_PLAYERTRANSITIONTO = ""
 end
 
 function gameUpdate(dt)
@@ -60,6 +56,12 @@ function gameUpdate(dt)
 	cameraScroll()
 
 	physicsupdate(dt)
+
+	if objects["player"][1] then
+		if objects["player"][1].updateBox then
+			objects["player"][1]:updateBox()
+		end
+	end
 end
 
 function cameraScroll()
@@ -73,18 +75,20 @@ function cameraScroll()
 
 	local _MAPWIDTH = mapDimensions[self.screen][1]
 
-	if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= (_MAPWIDTH - 1) * 16 then
-		if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-			mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
-		elseif self.x < mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-			mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
+	if _MAPWIDTH > 25 then
+		if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= (_MAPWIDTH - 1) * 16 then
+			if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
+				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
+			elseif self.x < mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
+				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
+			end
 		end
-	end
 
-	if mapScroll[self.screen][1] < 0 then
-		mapScroll[self.screen][1] = 0
-	elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= (_MAPWIDTH - 1) * 16 then
-		mapScroll[self.screen][1] = (_MAPWIDTH - 1) * 16 - gameFunctions.getWidth(self.screen)
+		if mapScroll[self.screen][1] < 0 then
+			mapScroll[self.screen][1] = 0
+		elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= (_MAPWIDTH - 1) * 16 then
+			mapScroll[self.screen][1] = (_MAPWIDTH - 1) * 16 - gameFunctions.getWidth(self.screen)
+		end
 	end
 
 	--==VERTICAL SCROLL==--
@@ -107,15 +111,21 @@ function cameraScroll()
 end
 
 function gameDraw()
-	if shakeIntensity > 0 then
-		love.graphics.translate( math.floor( (math.random() * 2 - 1) * shakeIntensity ), math.floor( (math.random() * 2 - 1) * shakeIntensity ) ) 
-	end
+	love.graphics.push()
 
-	gameDrawEntities()
+		love.graphics.translate(0, -math.floor(mapScrollY))
 
-	love.graphics.setColor(255, 255, 255, 255)
+		if shakeIntensity > 0 then
+			love.graphics.translate( math.floor( (math.random() * 2 - 1) * shakeIntensity ), math.floor( (math.random() * 2 - 1) * shakeIntensity ) ) 
+		end
 
-	gameHud:draw()
+		gameDrawEntities()
+
+		love.graphics.setColor(255, 255, 255, 255)
+
+		gameHud:draw()
+
+	love.graphics.pop()
 end
 
 function gameKeypressed(key)
@@ -223,6 +233,12 @@ function gameDrawEntities()
 		end
 	end
 
+	for k, v in pairs(objects["logicgate"]) do
+		if v.screen == p then
+			v:draw()
+		end
+	end
+
 	for k, v in pairs(objects["door"]) do
 		if v.screen == p then
 			v:draw()
@@ -271,7 +287,19 @@ function gameDrawEntities()
 		end
 	end
 
+	for k, v in pairs(objects["laser"]) do
+		if v.screen == p then
+			v:draw()
+		end
+	end
+
 	for k, v in pairs(objects["box"]) do
+		if v.screen == p then
+			v:draw()
+		end
+	end
+
+	for k, v in pairs(objects["dropper"]) do
 		if v.screen == p then
 			v:draw()
 		end
@@ -296,14 +324,15 @@ function gameDrawEntities()
 	end
 
 	love.graphics.push()
+
 	love.graphics.origin()
 	love.graphics.setScreen(p)
 	love.graphics.setColor(0, 0, 0, 255 * gameFade)
-	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
+	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
 
 	love.graphics.setScreen(other)
 	love.graphics.setColor(0, 0, 0, 255 * otherFade)
-	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
+	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
 
 	love.graphics.setColor(255, 255, 255, 255)
 
@@ -335,6 +364,20 @@ function gameUseRectangle(x, y, width, height)
 	return ret
 end
 
+function gameNextLevel()
+	if _EMULATEHOMEBREW then
+		read = love.filesystem.isFile
+		path = "maps/" .. currentLevel + 1 .. ".lua"
+	else
+		read = io.open
+		path = "sdmc:/3ds/Idiot/game/maps/" .. currentLevel + 1 .. ".lua"
+	end
+
+	if read(path) then
+		gameLoadMap(currentLevel + 1)
+	end
+end
+
 function pushPop(self, start)
 	local v
 	if objects["player"][1] then
@@ -360,8 +403,9 @@ function pushPop(self, start)
 	end
 end
 
-function gameLoadObjects(i)
+function gameLoadObjects()
 	objects = {}
+
 	objects["tile"] = {}
 	objects["player"] = {}
 	objects["sign"] = {}
@@ -376,6 +420,9 @@ function gameLoadObjects(i)
 	objects["pipe"] = {}
 	objects["button"] = {}
 	objects["sensor"] = {}
+	objects["dropper"] = {}
+	objects["laser"] = {}
+	objects["logicgate"] = {}
 
 	objectUseRectangles = {}
 
@@ -387,11 +434,13 @@ function gameLoadObjects(i)
 
 	shakeIntensity = 0
 
-	eventSystem:decrypt(mapScripts[i])
+	eventSystem:decrypt(mapScripts[currentScript])
 end
 
 function gameLoadMap(map)
-	gameScrollX = 0
+	currentLevel = map
+
+	gameLoadObjects()
 
 	local newMap = require("maps/" .. map)
 
@@ -412,8 +461,8 @@ end
 
 function loadObjects(objectData, screen)
 	for j, w in pairs(objectData) do
-		if not w.properties then
-			w.properties = {}
+		if not w.properties.link then
+			w.properties.link = ""
 		end
 
 		if w.name == "door" then
@@ -421,19 +470,20 @@ function loadObjects(objectData, screen)
 
 			if w.properties.start == "true" then
 				_PLAYERSPAWNX, _PLAYERSPAWNY = w.x, w.y
+				objects["player"][1] = player:new(w.x, w.y)
 			end
 		elseif w.name == "pipe" then
 			table.insert(objects["pipe"], pipe:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "box" then
 			table.insert(objects["box"], box:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "button" then
-			table.insert(objects["button"], button:new(w.x, w.y + 4, w.properties, screen))
+			table.insert(objects["button"], button:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "fan" then
 			table.insert(objects["fan"], fan:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "key" then
 			table.insert(objects["key"], key:new(w.x + 6, w.y, screen))
 		elseif w.name == "pressureplate" then
-			table.insert(objects["plate"], plate:new(w.x, w.y + 11, w.properties, screen))
+			table.insert(objects["plate"], plate:new(w.x, w.y, screen))
 		elseif w.name == "sign" then
 			table.insert(objects["sign"], sign:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "spikes" then
@@ -442,13 +492,25 @@ function loadObjects(objectData, screen)
 			table.insert(objects["teleporter"], teleporter:new(w.x, w.y - 16, w.properties, screen))
 		elseif w.name == "sensor" then
 			table.insert(objects["sensor"], sensor:new(w.x, w.y, w.properties, screen))
+		elseif w.name == "dropper" then
+			table.insert(objects["dropper"], dropper:new(w.x, w.y, w.properties, screen))
+		elseif w.name == "laser" then
+			table.insert(objects["laser"], laser:new(w.x + 7.5, w.y, w.properties, screen))
+		elseif w.name == "spawn" then
+			_PLAYERSPAWNX, _PLAYERSPAWNY = w.x, w.y
+		elseif w.name == "notgate" then
+			table.insert(objects["logicgate"], notgate:new(w.x, w.y, w.properties, screen))
+		elseif w.name == "delayer" then
+			table.insert(objects["logicgate"], delayer:new(w.x, w.y, w.properties, screen))
 		end
 	end
 
 	for k, v in pairs(objects) do
 		for j, w in pairs(v) do
-			if w.addLink and w.link then
-				w:addLink()
+			if w.addLink then
+				if w.link and #w.link > 0 then
+					w:addLink()
+				end
 			end
 		end
 	end
@@ -459,7 +521,7 @@ function loadTiles(mapWidth, mapHeight, properties, mapData, screen)
 	local pos = { solid = {}, passive = {} }
 	local first = {false, false}
 	
-	mapDimensions[screen] = {properties.width, properties.height}
+	mapDimensions[screen] = {tonumber(properties.width), tonumber(properties.height)}
 
 	--map loop (tiles)
 	for y = 1, mapHeight do

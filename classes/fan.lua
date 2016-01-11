@@ -18,7 +18,8 @@ function fan:init(x, y, r, screen)
 
 	self.particleTimer = 0
 
-	self.link = r.link
+	self.link = r.link:split(";")
+	
 	self.maxheight = self.y - (r.maxheight * 16) or 0
 
 	self.air = true
@@ -30,8 +31,12 @@ function fan:addLink()
 	for k, v in pairs(outputs) do
 		for j, w in pairs(objects[v]) do
 			if w.addOut then
-				if w.link == self.link then
-					w:addOut(self)
+				if w.screen == self.link[1] then
+					if w.x == tonumber(self.link[2]) and w.y == tonumber(self.link[3]) then
+						w:addOut(self)
+						
+						self.link = {}
+					end
 				end
 			end
 		end
