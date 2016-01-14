@@ -5,6 +5,7 @@ function delayer:init(x, y, properties, screen)
 	self.y = y
 
 	self.time = tonumber(properties.time) or 2
+	self.isTimer = bool(properties.timer)
 
 	self.out = false
 
@@ -41,16 +42,35 @@ end
 
 function delayer:update(dt)
 	if self.out then
-		if self.timer < self.time then
-			self.timer = self.timer + dt
+		if not self.isTimer then
+			if self.timer < self.time then
+				self.timer = self.timer + dt
 
-			if not timeSound:isPlaying() and not buttonSound:isPlaying() then
-				timeSound:play()
+				if not timeSound:isPlaying() and not buttonSound:isPlaying() then
+					timeSound:play()
+				end
+			else
+				timeSound:stop()
+				for k = 1, #self.outtable do
+					self.outtable[k]:input("on")
+				end
 			end
 		else
-			timeSound:stop()
-			for k = 1, #self.outtable do
-				self.outtable[k]:input("on")
+			if self.timer < self.time then
+				self.timer = self.timer + dt
+
+				if not timeSound:isPlaying() and not buttonSound:isPlaying() then
+					timeSound:play()
+				end
+
+				for k = 1, #self.outtable do
+					self.outtable[k]:input("on")
+				end
+			else
+				timeSound:stop()
+				for k = 1, #self.outtable do
+					self.outtable[k]:input("off")
+				end
 			end
 		end
 	end

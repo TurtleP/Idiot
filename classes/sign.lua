@@ -73,8 +73,8 @@ function dialog:init(text, character, autoscroll, sign, screen)
 	self.stop = false
 	self.maxChars = 48
 
-	if character == "idiot" then
-		self.character = idiotHeadImage
+	if dialogs[character] then
+		self.character = dialogs[character]
 	end
 
 	self.canScroll = false

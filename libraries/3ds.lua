@@ -21,12 +21,11 @@ if love.system.getOS() ~= "3ds" then
 
 	local oldSetColor = love.graphics.setColor
 	function love.graphics.setColor(r, g, b, a)
-		assert(type(r) ~= "table", "Bad argument #1: number expected, got " .. type(r))
-		assert(type(g) ~= "table", "Bad argument #2: number expected, got " .. type(g))
-		assert(type(b) ~= "table", "Bad argument #3: number expected, got " .. type(b))
-		assert(type(a) ~= "table", "Bad argument #4: number expected, got " .. type(a))
-
-		oldSetColor(r, g, b, a)
+		if type(r) == "table" then
+			oldSetColor(unpack(r))
+		else
+			oldSetColor(r, g, b, a)
+		end
 	end
 
 	function love.graphics.getHeight()

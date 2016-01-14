@@ -8,7 +8,7 @@ return {
   height = 20,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 50,
+  nextobjectid = 54,
   properties = {},
   tilesets = {
     {
@@ -39,7 +39,7 @@ return {
       y = 0,
       width = 29,
       height = 20,
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -57,12 +57,12 @@ return {
         1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 1,
         1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 13, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
-        1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 15, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 15, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 8, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 0, 0, 0, 0, 0, 1, 6, 0, 0, 0, 6, 1,
         1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
@@ -74,7 +74,7 @@ return {
     {
       type = "objectgroup",
       name = "topObjects",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -258,6 +258,63 @@ return {
             ["locked"] = "true",
             ["start"] = "false"
           }
+        },
+        {
+          id = 50,
+          name = "pressureplate",
+          type = "",
+          shape = "rectangle",
+          x = 368,
+          y = 208,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 51,
+          name = "pressureplate",
+          type = "",
+          shape = "rectangle",
+          x = 432,
+          y = 208,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 52,
+          name = "andgate",
+          type = "",
+          shape = "rectangle",
+          x = 400,
+          y = 224,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;368;208-top;432;208"
+          }
+        },
+        {
+          id = 53,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 400,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;400;224",
+            ["locked"] = "true"
+          }
         }
       }
     },
@@ -268,7 +325,7 @@ return {
       y = 0,
       width = 29,
       height = 20,
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -303,7 +360,7 @@ return {
     {
       type = "objectgroup",
       name = "bottomObjects",
-      visible = true,
+      visible = false,
       opacity = 1,
       offsetx = 0,
       offsety = 0,

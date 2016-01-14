@@ -37,6 +37,7 @@ function player:init(x, y)
 	self.animations =
 	{
 		["idle"] = 1,
+		["waiting"] = {rate = 2, cycle = {8, 9}},
 		["walk"] = {rate = 8, cycle = {1, 2, 1, 3}},
 		["run"] = {rate = 12, cycle = {1, 2, 1, 3}},
 		["holdwalk"] = {rate = 8, cycle = {5, 6, 5, 7}},
@@ -69,6 +70,8 @@ function player:init(x, y)
 	self.draws = true
 
 	self.screen = "top"
+
+	self.idleTimer = 0
 end
 
 function player:update(dt)
@@ -317,7 +320,23 @@ function player:animate(dt)
 	elseif self.speedy ~= 0 then
 		self.state = stateAdd .. "jump"
 	elseif self.speedx == 0 and self.speedy == 0 then
-		self.state = stateAdd .. "idle"
+		if stateAdd ~= "hold" then
+			self.idleTimer = self.idleTimer + dt
+			if self.idleTimer > 4 then
+				self.state = "waiting"
+			else
+				self.state = "idle"
+			end
+		else
+			if stateAdd == "hold" or self.idleTimer < 4 then
+				self.state = "holdidle"
+			end
+		end
+		
+	end
+
+	if self.state ~= "idle" and self.state ~= "waiting" then
+		self.idleTimer = 0
 	end
 
 	local anim = self.animations[self.state]
@@ -411,8 +430,12 @@ function player:useItem()
 
 		if #collide > 0 then
 			if not self.item then
-				if collide[1].screen == self.screen then
-					self.item = collide[1]:use(self)
+				for j = 1, #collide do	
+					if collide[j].screen == self.screen then
+						print("Pick up:", collide[j])
+						self.item = collide[j]:use(self)
+						break
+					end
 				end
 			end
 		end
@@ -442,7 +465,6 @@ end
 
 function player:dropBox()
 	if self.item then
-		print("Dropping box!")
 		self.item:use(false)
 				
 		if self.direction == "right" then
@@ -462,8 +484,7 @@ function player:setScreen(screen)
 end
 
 function player:offscreenCheck()
-	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
-		self:die()
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then		self:die()
 	end
 end
 

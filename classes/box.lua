@@ -21,7 +21,8 @@ function box:init(x, y, link, screen)
 		["spikes"] = true,
 		["box"] = true,
 		["pipe"] = true,
-		["fan"] = true
+		["fan"] = true,
+		["player"] = true
 	}
 
 	self.passive = false
@@ -64,7 +65,6 @@ end
 
 --BEWARE
 function newBoxGhost(x, y)
-	print("BEWARE")
 	local box = {}
 
 	box.x = x

@@ -29,6 +29,7 @@ require 'classes/dropper'
 require 'classes/laser'
 require 'classes/notgate'
 require 'classes/delayer'
+require 'classes/andgate'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
@@ -37,7 +38,7 @@ function love.load()
 
 	idiotImage = love.graphics.newImage("graphics/player/idiot.png")
 	idiotQuads = {}
-	for k = 1, 8 do
+	for k = 1, 9 do
 		idiotQuads[k] = {}
 		for y = 1, 2 do
 			idiotQuads[k][y] = love.graphics.newQuad((k - 1) * 16, (y - 1) * 18, 16, 18, idiotImage:getWidth(), idiotImage:getHeight())
@@ -46,7 +47,13 @@ function love.load()
 
 	idiotHatImage = love.graphics.newImage("graphics/player/hat.png")
 	idiotDeadImage = love.graphics.newImage("graphics/player/dead.png")
-	idiotHeadImage = love.graphics.newImage("graphics/player/talk.png")
+
+	dialogs = 
+	{
+		["idiot"] = love.graphics.newImage("graphics/dialog/idiot.png"),
+		["turtle"] = love.graphics.newImage("graphics/dialog/turtle.png"),
+		["renhoek"] = love.graphics.newImage("graphics/dialog/renhoek.png"),
+	}
 
 	objectSet = love.graphics.newImage("graphics/objects.png")
 	objectQuads = {}
@@ -119,6 +126,7 @@ function love.load()
 	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
 
 	notImage = love.graphics.newImage("graphics/objects/not.png")
+	andImage = love.graphics.newImage("graphics/objects/and.png")
 
 	controls =
 	{
@@ -189,7 +197,7 @@ function love.load()
 		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
-	love.audio.setVolume(0)
+	--love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end

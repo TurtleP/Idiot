@@ -67,7 +67,7 @@ function notgate:draw()
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
-	love.graphics.draw(notImage, self.x, self.y)
+	love.graphics.draw(notImage, self.x + 4.5, self.y + 4.5)
 
 	pushPop(self)
 end

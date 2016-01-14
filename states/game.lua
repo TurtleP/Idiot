@@ -5,7 +5,7 @@ function gameInit()
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate"}
 
-	gameLoadMap(1)
+	gameLoadMap(currentLevel)
 
 	love.graphics.setBackgroundColor(67, 67, 67)
 
@@ -138,6 +138,10 @@ function gameKeypressed(key)
 	end
 
 	if objects["player"][1].fade < 1 then
+		return
+	end
+
+	if _LOCKPLAYER then
 		return
 	end
 
@@ -374,6 +378,7 @@ function gameNextLevel()
 	end
 
 	if read(path) then
+		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	end
 end
@@ -434,7 +439,9 @@ function gameLoadObjects()
 
 	shakeIntensity = 0
 
-	eventSystem:decrypt(mapScripts[currentScript])
+	for k = 1, #mapScripts do
+		eventSystem:decrypt(mapScripts[k])
+	end
 end
 
 function gameLoadMap(map)
@@ -502,6 +509,8 @@ function loadObjects(objectData, screen)
 			table.insert(objects["logicgate"], notgate:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "delayer" then
 			table.insert(objects["logicgate"], delayer:new(w.x, w.y, w.properties, screen))
+		elseif w.name == "andgate" then
+			table.insert(objects["logicgate"], andgate:new(w.x, w.y, w.properties, screen))
 		end
 	end
 
