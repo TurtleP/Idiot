@@ -51,8 +51,6 @@ function love.load()
 	dialogs = 
 	{
 		["idiot"] = love.graphics.newImage("graphics/dialog/idiot.png"),
-		["turtle"] = love.graphics.newImage("graphics/dialog/turtle.png"),
-		["renhoek"] = love.graphics.newImage("graphics/dialog/renhoek.png"),
 	}
 
 	objectSet = love.graphics.newImage("graphics/objects.png")
