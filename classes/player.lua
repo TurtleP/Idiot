@@ -179,12 +179,24 @@ function player:leftCollide(name, data)
 			data:unlock(self)
 		end
 	end
+
+	if name == "pipe" then
+		if self.leftKey then
+			data:use(self)
+		end
+	end
 end
 
 function player:rightCollide(name, data)
 	if name == "door" then
 		if self.keys > 0 then
 			data:unlock(self)
+		end
+	end
+
+	if name == "pipe" then
+		if self.rightKey then
+			data:use(self)
 		end
 	end
 end
@@ -451,7 +463,7 @@ function player:useItem()
 			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item}, nil, true)
 
 			if #ret > 0 then
-				table.insert(objects["box"], newBoxGhost(self.x + add, self.y))
+				table.insert(objects["box"], newBoxGhost(self.x + add, self.y, self.screen))
 				self.useKey = true
 				return
 			else

@@ -14,8 +14,9 @@ function pipe:init(x, y, r, screen)
 	local directions = 
 	{
 		["up"] = 1,
-		["middle"] = 2,
-		["down"] = 3
+		["down"] = 2,
+		["left"] = 3,
+		["right"] = 4,
 	}
 
 	self.link = r.link:split(";")
@@ -62,13 +63,14 @@ function pipe:addOut(obj)
 	self.pipe = obj
 end
 
-function pipe:out()
+function pipe:out(direction)
 	self.player.downKey = false
 	self.player.upKey = false
 	
 	self.player:setScreen(self.pipe.screen)
+
 	self.player.x, self.player.y = self.pipe.x + self.pipe.width / 2 - self.player.width / 2, self.pipe.y
-	
+
 	self.pipe.player = self.player
 	self.player = nil
 	
@@ -84,10 +86,24 @@ function pipe:transfer(player, dt)
 			else
 				return true
 			end
-		else
+		elseif self.direction == "down" then
 			if player.y > self.y then
 				self.player.active = false
 				self.player.y = self.player.y - 60 * dt
+			else
+				return true
+			end
+		elseif self.direction == "left" then
+			if player.x < self.x then
+				self.player.active = false
+				self.player.x = self.player.x + 60 * dt
+			else
+				return true
+			end
+		elseif self.direction == "right" then
+			if player.x > self.x then
+				self.player.active = false
+				self.player.x = self.player.x - 60 * dt
 			else
 				return true
 			end
@@ -99,9 +115,21 @@ function pipe:transfer(player, dt)
 			else
 				return true
 			end
-		else
+		elseif self.direction == "down" then
 			if self.player.y < self.y + self.height then
 				self.player.y = math.min(self.player.y + 60 * dt, self.y + self.height)
+			else
+				return true
+			end
+		elseif self.direction == "left" then
+			if player.x + player.width > self.x then
+				self.player.x = math.max(self.player.x - 60 * dt, self.x - player.width)
+			else
+				return true
+			end
+		elseif self.direction == "right" then
+			if player.x  < self.x + self.width then
+				self.player.x = math.min(self.player.x + 60 * dt, self.x + self.width)
 			else
 				return true
 			end
@@ -112,7 +140,20 @@ end
 function pipe:update(dt)
 	if self.player then
 		if not self.output then
-			if self.player:enterObject(self, "pipe", false) then
+			if self.direction == "up" or self.direction == "down" then
+				if self.player:enterObject(self, "pipe", false) then
+					if not self.playSound then
+						pipeSound:play()
+						self.playSound = true
+					end
+
+					if self:transfer(self.player, dt) and gameFade == 1 then
+						self:out()
+						gameFadeOut = false
+						self.playSound = false
+					end
+				end
+			else
 				if not self.playSound then
 					pipeSound:play()
 					self.playSound = true

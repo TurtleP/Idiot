@@ -31,6 +31,8 @@ function box:init(x, y, link, screen)
 	self.useRectangle = gameAddUseRectangle(self.x, self.y, self.width, self.height, self)
 
 	self.screen = screen
+
+	self.outtable = {}
 end
 
 function box:use(player)
@@ -52,6 +54,29 @@ function box:update(dt)
 
 	self.useRectangle.x = self.x
 	self.useRectangle.y = self.y
+
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
+		self:destroy()
+	end
+end
+
+function box:addOut(obj)
+	table.insert(self.outtable, obj)
+end
+
+function box:destroy()
+	for j = 1, #self.outtable do
+		self.outtable[j]:input("on")
+	end
+	self.remove = true
+end
+
+function box:downCollide(name, data)
+	if name == "spikes" then
+		if self.speedy > 200 then
+			self:destroy()
+		end
+	end
 end
 
 function box:draw()
@@ -64,7 +89,7 @@ function box:draw()
 end
 
 --BEWARE
-function newBoxGhost(x, y)
+function newBoxGhost(x, y, screen)
 	local box = {}
 
 	box.x = x
@@ -78,6 +103,7 @@ function newBoxGhost(x, y)
 	box.passive = true
 
 	box.fade = 1
+	box.screen = screen
 
 	function box:update(dt)
 		self.fade = math.max(self.fade - 0.6 * dt, 0)

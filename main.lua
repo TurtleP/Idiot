@@ -96,7 +96,7 @@ function love.load()
 
 	pipeImage = love.graphics.newImage("graphics/objects/pipe.png")
 	pipeQuads = {}
-	for k = 1, 3 do
+	for k = 1, 4 do
 		pipeQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, pipeImage:getWidth(), pipeImage:getHeight())
 	end
 
@@ -195,13 +195,14 @@ function love.load()
 		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
-	--love.audio.setVolume(0)
+	love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
 
 function love.update(dt)
 	dt = math.min(1/60, dt)
+	gdt = dt
 
 	if _G[state .. "Update"] then
 		_G[state .. "Update"](dt)

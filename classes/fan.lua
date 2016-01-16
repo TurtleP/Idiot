@@ -20,7 +20,7 @@ function fan:init(x, y, r, screen)
 
 	self.link = r.link:split(";")
 	
-	self.maxheight = self.y - (r.maxheight * 16) or 0
+	self.maxheight = (self.y - (r.maxheight * 16)) or 0
 
 	self.air = true
 
@@ -55,16 +55,16 @@ end
 
 function fan:update(dt)
 	if self.air then
-		self.timer = self.timer + 16 * dt
-		self.particleTimer = self.particleTimer + dt
-		if self.particleTimer > 0.3 then
-			table.insert(objects["fan"], fanparticle:new(love.math.random(self.x + 2, self.x + self.width - 2), self.y, self.screen))
-			self.particleTimer = 0
-		end
-
 		local height = self.maxheight
 		if self.maxheight == 0 then
 			height = self.y
+		end
+
+		self.timer = self.timer + 16 * dt
+		self.particleTimer = self.particleTimer + dt
+		if self.particleTimer > 0.3 then
+			table.insert(objects["fan"], fanparticle:new(love.math.random(self.x + 2, self.x + self.width - 2), self.y, self.screen, self.maxheight))
+			self.particleTimer = 0
 		end
 
 		local obj = checkrectangle(self.x, self.maxheight, self.width, height, {"player", "box"}, self)
@@ -96,7 +96,7 @@ end
 
 fanparticle = class("fanparticle")
 
-function fanparticle:init(x, y, screen)
+function fanparticle:init(x, y, screen, maxheight)
 	self.x = x
 	self.y =  y
 	self.r = 1
@@ -112,12 +112,16 @@ function fanparticle:init(x, y, screen)
 	self.passive = true
 
 	self.screen = screen
+
+	self.maxheight = maxheight
+
+	self.originY = y
 end
 
 function fanparticle:update(dt)
 	self.y = self.y - self.speed * dt
-	self.life = self.life + dt
-	if self.life > 2 then
+
+	if self.y < (self.originY + self.maxheight) then
 		self.fade = math.max(self.fade - 0.6 * dt, 0)
 		if self.fade == 0 then
 			self.remove = true

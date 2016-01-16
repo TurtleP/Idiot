@@ -3,7 +3,7 @@ function gameInit()
 
 	currentLevel = 1
 
-	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate"}
+	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
 	gameLoadMap(currentLevel)
 
@@ -76,7 +76,7 @@ function cameraScroll()
 	local _MAPWIDTH = mapDimensions[self.screen][1]
 
 	if _MAPWIDTH > 25 then
-		if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= (_MAPWIDTH - 1) * 16 then
+		if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= _MAPWIDTH * 16 then
 			if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
 				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
 			elseif self.x < mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
@@ -86,8 +86,8 @@ function cameraScroll()
 
 		if mapScroll[self.screen][1] < 0 then
 			mapScroll[self.screen][1] = 0
-		elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= (_MAPWIDTH - 1) * 16 then
-			mapScroll[self.screen][1] = (_MAPWIDTH - 1) * 16 - gameFunctions.getWidth(self.screen)
+		elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= _MAPWIDTH * 16 then
+			mapScroll[self.screen][1] = _MAPWIDTH * 16 - gameFunctions.getWidth(self.screen)
 		end
 	end
 
@@ -440,6 +440,7 @@ function gameLoadObjects()
 	shakeIntensity = 0
 
 	for k = 1, #mapScripts do
+		print("Loaded!")
 		eventSystem:decrypt(mapScripts[k])
 	end
 end

@@ -20,6 +20,8 @@ function sensor:init(x, y, r, screen)
 	end
 
 	self.link = r.link
+	self.direction = r.direction or "ver"
+	print(r.direction, self.direction)
 
 	self.start = {false, false}
 
@@ -38,36 +40,73 @@ function sensor:update(dt)
 		self.particleTimer = 0
 	end
 
-	local leftTrigger = checkrectangle(self.x + 2, self.y, 1, self.height, {"player"}, self)
-	local rightTrigger = checkrectangle(self.x + self.width - 2, self.y, 1, self.height, {"player"}, self)
+	if self.direction == "ver" then
+		local leftTrigger = checkrectangle(self.x + 2, self.y, 1, self.height, {"player"}, self)
+		local rightTrigger = checkrectangle(self.x + self.width - 2, self.y, 1, self.height, {"player"}, self)
 
-	if #leftTrigger > 0 then
-		if leftTrigger[1][2].speedx > 0 then
-			if not self.start[1] and not self.start[2] then
-				self.start[1] = true
-				self:activate()
+		if #leftTrigger > 0 then
+			if leftTrigger[1][2].speedx > 0 then
+				if not self.start[1] and not self.start[2] then
+					self.start[1] = true
+					self:activate()
+				end
+			else
+				if self.start[2] then
+					self.start[2] = false
+					sensorSound[2]:play()
+					for k, v in pairs(self.particles) do
+						v:resetToggle()
+					end
+				end
 			end
-		else
-			if self.start[2] then
-				self.start[2] = false
-				sensorSound[2]:play()
-				for k, v in pairs(self.particles) do
-					v:resetToggle()
+		elseif #rightTrigger > 0 then
+			if rightTrigger[1][2].speedx < 0 then
+				if not self.start[1] and not self.start[2] then
+					self.start[2] = true
+					self:activate()
+				end
+			else
+				if self.start[1] then
+					self.start[1] = false
+					sensorSound[2]:play()
+					for k, v in pairs(self.particles) do
+						v:resetToggle()
+					end
 				end
 			end
 		end
-	elseif #rightTrigger > 0 then
-		if rightTrigger[1][2].speedx < 0 then
-			if not self.start[1] and not self.start[2] then
-				self.start[2] = true
-				self:activate()
+	else
+		local upTrigger = checkrectangle(self.x, self.y, self.width, 1, {"player"}, self)
+		local downTrigger = checkrectangle(self.x, self.y + self.height, self.width, 1, {"player"}, self)
+
+		if #upTrigger > 0 then
+			if upTrigger[1][2].speedy > 0 then
+				if not self.start[1] and not self.start[2] then
+					self.start[1] = true
+					self:activate()
+				end
+			else
+				if self.start[1] then
+					self.start[1] = false
+					sensorSound[2]:play()
+					for k, v in pairs(self.particles) do
+						v:resetToggle()
+					end
+				end
 			end
-		else
-			if self.start[1] then
-				self.start[1] = false
-				sensorSound[2]:play()
-				for k, v in pairs(self.particles) do
-					v:resetToggle()
+		elseif #downTrigger > 0 then
+			if downTrigger[1][2].speedy < 0 then
+				if not self.start[1] and not self.start[2] then
+					self.start[2] = true
+					self:activate()
+				end
+			else
+				if self.start[2] then
+					self.start[2] = false
+					sensorSound[2]:play()
+					for k, v in pairs(self.particles) do
+						v:resetToggle()
+					end
 				end
 			end
 		end

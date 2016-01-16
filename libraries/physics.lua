@@ -113,7 +113,6 @@ function checkrectangle(x, y, width, height, check, callback, allow)
 					local skip = false
 					if exclude then
 						if t.x == exclude.x and t.y == exclude.y then
-							print("Skip", t, t.x)
 							skip = true
 						end
 
