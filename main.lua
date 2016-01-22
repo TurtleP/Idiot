@@ -195,7 +195,7 @@ function love.load()
 		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
-	love.audio.setVolume(0)
+	--love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
