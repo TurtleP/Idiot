@@ -66,6 +66,8 @@ end
 function pipe:out(direction)
 	self.player.downKey = false
 	self.player.upKey = false
+	self.player.rightKey = false
+	self.player.leftKey = false
 	
 	self.player:setScreen(self.pipe.screen)
 

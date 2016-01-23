@@ -44,6 +44,10 @@ function dropper:update(dt)
 		end
 	end
 
+	if self.box.remove then
+		self:reLinkBox()
+	end
+
 	self.quadi = math.floor(self.timer % #dropperQuads) + 1
 end
 

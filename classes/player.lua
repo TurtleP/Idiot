@@ -152,8 +152,10 @@ end
 
 function player:upCollide(name, data)
 	if name == "pipe" then
-		if self.upKey then
-			data:use(self)
+		if data.direction == "down" then
+			if self.upKey then
+				data:use(self)
+			end
 		end
 	end
 end
@@ -167,8 +169,10 @@ function player:downCollide(name, data)
 	end
 
 	if name == "pipe" then
-		if self.downKey then
-			data:use(self)
+		if data.direction == "up" then
+			if self.downKey then
+				data:use(self)
+			end
 		end
 	end
 end
@@ -181,8 +185,10 @@ function player:leftCollide(name, data)
 	end
 
 	if name == "pipe" then
-		if self.leftKey then
-			data:use(self)
+		if data.direction == "right" then
+			if self.leftKey then
+				data:use(self)
+			end
 		end
 	end
 end
@@ -195,8 +201,10 @@ function player:rightCollide(name, data)
 	end
 
 	if name == "pipe" then
-		if self.rightKey then
-			data:use(self)
+		if data.direction == "left" then
+			if self.rightKey then
+				data:use(self)
+			end
 		end
 	end
 end
@@ -405,7 +413,7 @@ function player:moveDown(move)
 end
 
 function player:jump()
-	if not self.doUpdate then
+	if not self.doUpdate or self.speedy > 0 then
 		return
 	end
 	

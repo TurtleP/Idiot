@@ -75,7 +75,12 @@ function cameraScroll()
 
 	local _MAPWIDTH = mapDimensions[self.screen][1]
 
-	if _MAPWIDTH > 25 then
+	local _MAX = 25
+	if self.screen == "bottom" then
+		_MAX = 20
+	end
+
+	if _MAPWIDTH > _MAX then
 		if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= _MAPWIDTH * 16 then
 			if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
 				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
@@ -94,6 +99,7 @@ function cameraScroll()
 	--==VERTICAL SCROLL==--
 
 	local _MAPHEIGHT = mapDimensions[self.screen][2]
+
 
 	if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
 		if self.y + self.height / 2 > mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
