@@ -4,7 +4,7 @@ function eventsystem:init()
 	self.sleep = 0
 	self.i = 0
 	self.events = {}
-	self.running = true
+	self.running = false
 end
 
 function eventsystem:update(dt)
@@ -93,14 +93,14 @@ function eventsystem:decrypt(scriptString)
 	for k, v in ipairs(scriptString) do
 		local cmd, arg = v[1], v[2]
 		if cmd == "levelequals" then
-			print("!")
 			if currentLevel ~= arg then
-				print("INVALID LEVEL")
-				self.running = false
-				return
+				print("Script doesn't belong to this level: " .. arg)
+
+				break
 			end
-			self.running = true
 		end
+		self.running = true
+
 		self:queue(cmd, arg)
 	end
 end

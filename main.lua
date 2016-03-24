@@ -14,6 +14,8 @@ require 'states/game'
 require 'classes/player'
 require 'classes/ren'
 
+require 'classes/pausemenu'
+
 require 'classes/tile'
 require 'classes/sign'
 require 'classes/box'
@@ -35,7 +37,7 @@ require 'classes/andgate'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
-scale = 2
+scale = 1
 require 'libraries/3ds'
 
 function love.load()
@@ -246,7 +248,6 @@ end
 
 function love.update(dt)
 	dt = math.min(1/60, dt)
-	gdt = dt
 
 	if _G[state .. "Update"] then
 		_G[state .. "Update"](dt)
@@ -282,9 +283,7 @@ function love.keypressed(key)
 		_G[state .. "Keypressed"](key)
 	end
 
-	if key == controls["pause"] then
-		love.event.quit()
-	elseif key == controls["debug"] then
+	if key == controls["debug"] then
 		physdebug = not physdebug
 	end
 end
@@ -325,4 +324,14 @@ end
 
 function bool(string)
 	return string == "true"
+end
+
+function saveGame()
+	love.filesystem.write("save.txt", currentLevel)
+end
+
+function loadGame()
+	currentLevel = tonumber(love.filesystem.read("save.txt"))
+
+	gameLoad(currentLevel)
 end

@@ -49,7 +49,7 @@ function renhoek:update(dt)
 	self:animate(dt)
 
 	if self.isWalking then
-		if math.abs(math.floor(self.x + self.width /2) - self.distance) > 0 then
+		if math.floor(math.dist(self.x, self.y, self.distance, self.y)) > 0 then
 			if self.direction == "left" then
 				self.speedx = -75
 				self.scale = 2
@@ -67,7 +67,13 @@ end
 function renhoek:walk(direction, distance)
 	self.direction = direction
 
-	self.distance = math.abs(self.x - distance)
+	local dist = distance
+
+	if direction == "left" then
+		dist = -distance
+	end
+
+	self.distance = math.abs(self.x + dist)
 
 	self.isWalking = true
 end

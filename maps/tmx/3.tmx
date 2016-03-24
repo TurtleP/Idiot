@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="8">
- <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="18">
-  <image source="../../graphics/objects.png" width="306" height="17"/>
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
  </tileset>
  <layer name="top" width="25" height="15">
+  <properties>
+   <property name="height" value="15"/>
+   <property name="width" value="25"/>
+  </properties>
   <data>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -89,13 +93,13 @@
    <tile gid="1"/>
    <tile gid="1"/>
    <tile gid="0"/>
-   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>
    <tile gid="1"/>
@@ -383,13 +387,10 @@
   </data>
  </layer>
  <objectgroup name="topObjects">
-  <object id="1" name="pressureplate" x="192" y="160" width="16" height="16">
-   <properties>
-    <property name="link" value="top;320;208;"/>
-   </properties>
-  </object>
+  <object id="1" name="pressureplate" x="192" y="160" width="16" height="16"/>
   <object id="2" name="door" x="320" y="208" width="16" height="16">
    <properties>
+    <property name="link" value="top;192;160;"/>
     <property name="locked" value="true"/>
    </properties>
   </object>

@@ -88,7 +88,6 @@ function door:unlock(player)
 end
 
 function door:input(t)
-	print("Door input: " .. t)
 	if t == "on" then
 		self.unlocked = true
 	elseif t == "off" then

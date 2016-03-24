@@ -114,8 +114,7 @@ function player:update(dt)
 	end
 
 	if self.distance > 0 then
-		self.x = math.min(self.x, self.distance)
-		if math.floor(math.abs(self.x + (self.width / 2) - self.distance)) == 0 then
+		if math.floor(math.dist(self.x, self.y, self.distance, self.y)) <= 0 then
 			self.speedx = 0
 			self.distance = 0
 		end
@@ -220,7 +219,13 @@ function player:rightCollide(name, data)
 end
 
 function player:walk(direction, distance)
-	self.distance = math.abs(self.x - distance)
+	local dist = distance
+
+	if direction == "left" then
+		dist = -distance
+	end
+
+	self.distance = math.abs(self.x + distance)
 
 	if direction == "right" then
 		self.speedx = 100
@@ -562,11 +567,11 @@ function death:update(dt)
 	self.rotation = self.rotation + 4 * dt
 
 	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
-		local temp = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
-		temp:respawn()
-		table.insert(objects["player"], temp)
+		gameFadeOut = true
 
-		self.remove = true
+		if gameFade == 1 then
+			gameLoadMap(currentLevel)
+		end
 	end
 end
 

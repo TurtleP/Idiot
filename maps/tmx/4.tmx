@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="23">
- <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="18">
-  <image source="../../graphics/objects.png" width="306" height="17"/>
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
  </tileset>
- <layer name="top" width="25" height="15">
+ <layer name="top" width="25" height="15" visible="0">
   <properties>
    <property name="height" value="15"/>
    <property name="width" value="25"/>
@@ -386,7 +386,7 @@
    <tile gid="1"/>
   </data>
  </layer>
- <objectgroup name="topObjects">
+ <objectgroup name="topObjects" visible="0">
   <object id="1" name="pipe" x="192" y="16" width="16" height="16">
    <properties>
     <property name="direction" value="down"/>
@@ -420,7 +420,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="bottom" width="25" height="15" visible="0">
+ <layer name="bottom" width="25" height="15">
   <properties>
    <property name="height" value="15"/>
    <property name="width" value="25"/>
@@ -609,15 +609,15 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -634,15 +634,15 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="1"/>

@@ -1,7 +1,7 @@
-function gameInit()
+function gameInit(loadGame)
 	eventSystem = eventsystem:new()
 
-	currentLevel = 2
+	currentLevel = loadGame or 2
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
@@ -15,11 +15,20 @@ function gameInit()
 	gameFade = 0
 	otherFade = 1
 	gameScreen = "top"
+	fadeValue = 1
+
+	pauseMenu = pausemenu:new()
 end
 
 function gameUpdate(dt)
 	if not bgm:isPlaying() then
 		bgm:play()
+	end
+
+	if paused then
+		pauseMenu:update(dt)
+
+		return
 	end
 
 	for k, v in pairs(objects) do
@@ -148,6 +157,16 @@ function gameDraw()
 end
 
 function gameKeypressed(key)
+	if key == controls["pause"] then
+		paused = not paused
+	end
+
+	if paused then
+		pauseMenu:keypressed(key)
+
+		return
+	end
+
 	if #objects["player"] > 1 or  #objects["player"] == 0 then
 		return
 	end
@@ -371,6 +390,10 @@ function gameDrawEntities()
 		end
 	end
 
+	if paused then
+		pauseMenu:draw()
+	end
+
 	for k, v in pairs(objects) do
 		for j, w in pairs(v) do
 			if physdebug then
@@ -407,15 +430,7 @@ function gameUseRectangle(x, y, width, height)
 end
 
 function gameNextLevel()
-	if _EMULATEHOMEBREW then
-		read = love.filesystem.isFile
-		path = "maps/" .. currentLevel + 1 .. ".lua"
-	else
-		read = io.open
-		path = "sdmc:/3ds/Idiot/game/maps/" .. currentLevel + 1 .. ".lua"
-	end
-
-	if read(path) then
+	if love.filesystem.isFile("maps/" .. currentLevel + 1 .. ".lua") then
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	end
@@ -481,6 +496,8 @@ function gameLoadObjects()
 	for k = 1, #mapScripts do
 		eventSystem:decrypt(mapScripts[k])
 	end
+
+	gameFadeOut = false
 end
 
 function gameLoadMap(map)

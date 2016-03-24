@@ -6,7 +6,20 @@ return
 	{"sleep", 1},
 	{"dialog", {"idiot", "Oh great. What's all this?"}},
 	{"dialog", {"ren", "WELP! I screwed up!"}},
-	{"dialog", {"turtle", "... You're an idiot, Ren. I gave you one job!"}},
+	{"dialog", {"turtle", ".. You're an idiot, Gabe. I gave you one job!"}},
 	{"dialog", {"turret", "Haha! Thank god it wasn't me for once."}},
-	{"dialog", {"idiot", "Ren AND Turret? Turtle!?"}}
+	{"dialog", {"idiot", "Gabe AND Turret? Turtle!?"}},
+	{"dialog", {"turtle", "Of course, who else could it be?"}},
+	{"dialog", {"idiot", "You have a lot of explaining to do, Turtle!"}},
+	{"dialog", {"turret", "No he doesn't you do--that makes no sense."}},
+	{"dialog", {"turtle", "I have nothing to explain. You can't escape."}},
+	{"dialog", {"idiot", "Like hell I can't escape! Watch me!"}},
+	{"dialog", {"turtle", "Well this is an easy puzzle. There's more."}},
+	{"dialog", {"turret", "Lots of other things were built and stuff."}},
+	{"dialog", {"idiot", "Turret shut up. I don't care what you say."}},
+	{"dialog", {"turret", "Yeah, true. I'll go back to what I was doing."}},
+	{"dialog", {"turtle", "Anyhow--good luck, moron."}},
+	{"dialog", {"turtle", "I'll assume President of the Prime Universe."}},
+	{"dialog", {"idiot", "That's what this is about? Great. Stupidity.."}},
+	{"unfreezeplayer"}
 }

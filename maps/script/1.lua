@@ -18,7 +18,7 @@ return
 	{"dialog", {"ren", "Good job, Idiot. You fell for that one."}},
 	{"dialog", {"idiot", "Hey! What is this about?!"}},
 	{"dialog", {"ren", "Nyeheheh."}},
-	{"dialog", {"idiot", "Oh when I get out of here, you're dead, Ren!"}},
+	{"dialog", {"idiot", "Oh when I get out of here, you're dead, Gabe!"}},
 	{"dialog", {"ren", "Hah I'm not scared of you."}},
 	{"dialog", {"idiot", "Gah! You little!"}},
 	{"walkcharacter", {"ren", "right", 320}},
