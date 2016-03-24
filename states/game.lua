@@ -1,7 +1,7 @@
 function gameInit(loadGame)
 	eventSystem = eventsystem:new()
 
-	currentLevel = loadGame or 2
+	currentLevel = loadGame or 1
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
@@ -159,6 +159,10 @@ end
 function gameKeypressed(key)
 	if key == controls["pause"] then
 		paused = not paused
+
+		if paused then
+			pauseSound:play()
+		end
 	end
 
 	if paused then
@@ -382,16 +386,26 @@ function gameDrawEntities()
 
 	love.graphics.setColor(255, 255, 255, 255)
 
+	love.graphics.setFont(endFont)
+	love.graphics.print("IDIOT :: DEMO", gameFunctions.getWidth() / 2 - endFont:getWidth("IDIOT :: DEMO") / 2, gameFunctions.getHeight() / 2 - endFont:getHeight("IDIOT :: DEMO") / 2)
+	love.graphics.setFont(signFont)
+
 	love.graphics.pop()
 
-	for k, v in pairs(objects["dialog"]) do
-		if v.screen == p then
-			v:draw()
+	if not ENDDEMO then
+		for k, v in pairs(objects["dialog"]) do
+			if v.screen == p then
+				v:draw()
+			end
 		end
-	end
 
-	if paused then
-		pauseMenu:draw()
+		if paused then
+			pauseMenu:draw()
+		end
+	else
+		love.graphics.setScreen(p)
+		love.graphics.setFont(endFont)
+		love.graphics.print("Thanks for playing!", gameFunctions.getWidth() / 2 - endFont:getWidth("Thanks for playing!") / 2, 120 - endFont:getHeight("Thanks for playing!") / 2)
 	end
 
 	for k, v in pairs(objects) do
@@ -433,7 +447,10 @@ function gameNextLevel()
 	if love.filesystem.isFile("maps/" .. currentLevel + 1 .. ".lua") then
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
-	end
+	else
+		ENDDEMO = true
+		gameFadeOut = true
+	end	
 end
 
 function pushPop(self, start)

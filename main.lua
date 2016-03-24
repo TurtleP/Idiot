@@ -201,8 +201,10 @@ function love.load()
 	buttonSound = love.audio.newSource("audio/button.ogg")
 	timeSound = love.audio.newSource("audio/time.ogg")
 	sensorSound = { love.audio.newSource("audio/sensoron.ogg") , love.audio.newSource("audio/sensoroff.ogg") }
+	pauseSound = love.audio.newSource("audio/pause.ogg")
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
+	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
 
 	local mobileDevice =
 	{
@@ -241,7 +243,7 @@ function love.load()
 		end
 	end
 
-	love.audio.setVolume(0)
+--	love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
@@ -310,10 +312,8 @@ function gameFunctions.changeState(toState, args)
 end
 
 function gameFunctions.getWidth(screen)
-	if screen then
-		if screen == "bottom" then
-			return 320
-		end
+	if love.graphics.getScreen() == "bottom" then
+		return 320
 	end
 	return 400
 end
