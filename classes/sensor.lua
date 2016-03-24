@@ -113,11 +113,6 @@ function sensor:draw()
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
-	if self.direction == "ver" then
-		love.graphics.setColor(255, 0, 255)
-		love.graphics.rectangle("fill", (self.x + (self.width / 2)) - 0.5, self.y, 1, self.height)
-	end
-
 	pushPop(self)
 end
 

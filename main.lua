@@ -12,6 +12,8 @@ require 'states/game'
 
 --entities/objects
 require 'classes/player'
+require 'classes/ren'
+
 require 'classes/tile'
 require 'classes/sign'
 require 'classes/box'
@@ -33,6 +35,9 @@ require 'classes/andgate'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
+scale = 2
+require 'libraries/3ds'
+
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -51,6 +56,9 @@ function love.load()
 	dialogs = 
 	{
 		["idiot"] = love.graphics.newImage("graphics/dialog/idiot.png"),
+		["ren"] = love.graphics.newImage("graphics/dialog/ren.png"),
+		["turtle"] = love.graphics.newImage("graphics/dialog/turtle.png"),
+		["turret"] = love.graphics.newImage("graphics/dialog/turret.png")
 	}
 
 	objectSet = love.graphics.newImage("graphics/objects.png")
@@ -59,9 +67,16 @@ function love.load()
 		objectQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, objectSet:getWidth(), objectSet:getHeight())
 	end
 
+	tileSet = love.graphics.newImage("graphics/tiles.png")
+	tileQuads = {}
+	for k = 1, tileSet:getWidth() / 17 do
+		tileQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, tileSet:getWidth(), tileSet:getHeight())
+	end
+
 	scrollArrow = love.graphics.newImage("graphics/scroll.png")
 	
 	keyImage = love.graphics.newImage("graphics/objects/key.png")
+	keyNormalImage = love.graphics.newImage("graphics/objects/keyDropped.png")
 	keyQuads = {}
 	for k = 1, 4 do
 		keyQuads[k] = love.graphics.newQuad((k - 1) * 5, 0, 4, 10, keyImage:getWidth(), keyImage:getHeight())
@@ -123,6 +138,15 @@ function love.load()
 
 	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
 
+	renImage = love.graphics.newImage("graphics/enemy/ren.png")
+	renQuads = {}
+	for k = 1, 6 do
+		renQuads[k] = {}
+		for y = 1, 2 do
+			renQuads[k][y] = love.graphics.newQuad((k - 1) * 15, (y - 1) * 13, 15, 13, renImage:getWidth(), renImage:getHeight())
+		end
+	end
+
 	notImage = love.graphics.newImage("graphics/objects/not.png")
 	andImage = love.graphics.newImage("graphics/objects/and.png")
 
@@ -135,7 +159,9 @@ function love.load()
 		["jump"] = "z",
 		["use"] = "x",
 		["run"] = "c",
-		["pause"] = "return"
+		["pause"] = "return",
+
+		["debug"] = "rshift"
 	}
 
 	if love.system.getOS() == "3ds" then
@@ -148,33 +174,33 @@ function love.load()
 			["jump"] = "a",
 			["use"] = "b",
 			["run"] = "y",
-			["pause"] = "start"
+			["pause"] = "start",
+
+			["debug"] = "select"
 		}
 	end
 
 	mapScripts = {}
-	for k = 1, 1 do
+	for k = 1, 2 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
-	bgm = love.audio.newSource("audio/bgm.wav")
+	bgm = love.audio.newSource("audio/bgm.ogg")
 
-	jumpSound = love.audio.newSource("audio/jump.wav")
-	scrollSound = love.audio.newSource("audio/blip.wav")
-	textSound = love.audio.newSource("audio/text.wav")
-	keySound = love.audio.newSource("audio/key.wav")
-	plateSound = love.audio.newSource("audio/plate.wav")
-	teleportSound = love.audio.newSource("audio/teleport.wav")
-	deathSound = love.audio.newSource("audio/death.wav")
-	unlockSound = love.audio.newSource("audio/unlock.wav")
-	pipeSound = love.audio.newSource("audio/pipe.wav")
-	buttonSound = love.audio.newSource("audio/button.wav")
-	timeSound = love.audio.newSource("audio/time.wav")
-	sensorSound = { love.audio.newSource("audio/sensoron.wav") , love.audio.newSource("audio/sensoroff.wav") }
+	jumpSound = love.audio.newSource("audio/jump.ogg")
+	scrollSound = love.audio.newSource("audio/blip.ogg")
+	textSound = love.audio.newSource("audio/text.ogg")
+	keySound = love.audio.newSource("audio/key.ogg")
+	plateSound = love.audio.newSource("audio/plate.ogg")
+	teleportSound = love.audio.newSource("audio/teleport.ogg")
+	deathSound = love.audio.newSource("audio/death.ogg")
+	unlockSound = love.audio.newSource("audio/unlock.ogg")
+	pipeSound = love.audio.newSource("audio/pipe.ogg")
+	buttonSound = love.audio.newSource("audio/button.ogg")
+	timeSound = love.audio.newSource("audio/time.ogg")
+	sensorSound = { love.audio.newSource("audio/sensoron.ogg") , love.audio.newSource("audio/sensoroff.ogg") }
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
-
-	scale = 1
 
 	local mobileDevice =
 	{
@@ -193,9 +219,27 @@ function love.load()
 		touchControls = touchcontrol:new()
 
 		--love.window.setMode(love.window.getDesktopDimensions())
+	else
+		if _EMULATEHOMEBREW then --Not 3DS lel
+			currentBuild = 1
+
+			if love.filesystem.isFile("build.txt") then
+				build = love.filesystem.read("build.txt"):split("-")
+			
+				if build[1] == os.date("%m/%d/%y") then
+					currentBuild = tonumber(build[2])
+				
+					currentBuild = currentBuild + 1
+				end
+			end
+
+			buildVersion = os.date("%m/%d/%y") .. " - β " .. currentBuild
+
+			love.filesystem.write("build.txt",  os.date("%m/%d/%y") .. "-"..currentBuild)
+		end
 	end
 
-	--love.audio.setVolume(0)
+	love.audio.setVolume(0)
 
 	gameFunctions.changeState("game")
 end
@@ -218,10 +262,17 @@ function love.draw()
 		_G[state .. "Draw"]()
 	end
 
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, 5)
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6)
+	if physdebug then
+		love.graphics.setColor(0, 0, 0)
+		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, 5)
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6)
+
+		love.graphics.setColor(0, 0, 0)
+		love.graphics.print(buildVersion, love.graphics.getWidth() - signFont:getWidth(buildVersion) - 3, love.graphics.getHeight() - signFont:getHeight(buildVersion) - 1)
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print(buildVersion, love.graphics.getWidth() - signFont:getWidth(buildVersion) - 2, love.graphics.getHeight() - signFont:getHeight(buildVersion))
+	end
 
 	love.graphics.pop()
 end
@@ -233,6 +284,8 @@ function love.keypressed(key)
 
 	if key == controls["pause"] then
 		love.event.quit()
+	elseif key == controls["debug"] then
+		physdebug = not physdebug
 	end
 end
 
@@ -241,8 +294,6 @@ function love.keyreleased(key)
 		_G[state .. "Keyreleased"](key)
 	end
 end
-
-require 'libraries/3ds'
 
 --[[ GAME FUNCTIONS ]]--
 gameFunctions = {}

@@ -41,11 +41,13 @@ function door:init(x, y, r, screen)
 end
 
 function door:use(player)
-	if self.isStart then
-		return
-	end
-	self.open = true
-	self.player = player
+	--if player.speedy == 0 then
+		if self.isStart then
+			return
+		end
+		self.open = true
+		self.player = player
+	--end
 end
 
 function door:addLink()
@@ -86,6 +88,7 @@ function door:unlock(player)
 end
 
 function door:input(t)
+	print("Door input: " .. t)
 	if t == "on" then
 		self.unlocked = true
 	elseif t == "off" then
@@ -95,15 +98,27 @@ function door:input(t)
 	end
 end
 
+function door:toggleOpen()
+	self.open = not self.open
+
+	if not self.open then
+		self.closeAnimation = true
+	else
+		self.closeAnimation = false
+	end
+end
+
 function door:normalDoor(dt)
 	if self.open then
 		if self.quadi < 3 then
 			self.timer = self.timer + 16 * dt
 			self.quadi = math.floor(self.timer % 3) + 1
 		else
-			if self.player:enterObject(self, "door") then
-				self.open = false
-				self.closeAnimation = true
+			if self.player then
+				if self.player:enterObject(self, "door") then
+					self.open = false
+					self.closeAnimation = true
+				end
 			end
 		end
 	else
@@ -112,10 +127,12 @@ function door:normalDoor(dt)
 				self.timer = self.timer - 12 * dt
 				self.quadi = math.floor(self.timer % 3) + 1
 			else
-				self.player.remove = true
-				gameNextLevel()
-				self.closeAnimation = false
-				self.timer = 0
+				if self.player then
+					self.player.remove = true
+					gameNextLevel()
+					self.closeAnimation = false
+					self.timer = 0
+				end
 			end
 		end
 	end

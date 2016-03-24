@@ -6,7 +6,10 @@ function key:init(x, y, screen)
 	self.width = 4
 	self.height = 10
 
-	self.mask = {}
+	self.mask = 
+	{
+		["tile"] = true
+	}
 
 	self.speedx = 0
 	self.speedy = 0
@@ -15,18 +18,49 @@ function key:init(x, y, screen)
 	self.timer = 0
 
 	self.screen = screen
+
+	self.rotation = 0
 end
 
 function key:update(dt)
 	self.timer = self.timer + 8 * dt
 	self.quadi = math.floor(self.timer % 4) + 1
+
+	if self.active then
+		if self.timer < 8 then
+			self.rotation = self.rotation + 8 * dt
+		else
+			self.speedx = 0
+			self.speedy = 0
+		end
+	end
+end
+
+function key:drop()
+	self.active = true
+	self.gravity = 400
+	self.speedx = -20
+end
+
+function key:downCollide(name, data)
+	if name == "tile" then
+		if self.timer < 8 then
+			self.speedy = -math.floor(self.speedy * 0.6)
+
+			return false
+		end
+	end
 end
 
 function key:draw()
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
-	love.graphics.draw(keyImage, keyQuads[self.quadi], self.x, self.y + math.sin(love.timer.getTime() * 8))
+	if not self.active then
+		love.graphics.draw(keyImage, keyQuads[self.quadi], self.x, self.y + math.sin(love.timer.getTime() * 8))
+	else
+		love.graphics.draw(keyNormalImage, self.x + self.width / 2, self.y + self.height / 2, self.rotation, self.width / 2, self.height / 2)
+	end
 
 	pushPop(self)
 end

@@ -1,7 +1,7 @@
 function gameInit()
 	eventSystem = eventsystem:new()
 
-	currentLevel = 1
+	currentLevel = 2
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
@@ -40,9 +40,21 @@ function gameUpdate(dt)
 	end
 
 	if gameFadeOut then
-		gameFade = math.min(gameFade + 2 * dt, 1)
+		if gameFade < 1 then
+			gameFade = math.min(gameFade + fadeValue * dt, 1)
+		else
+			if fadeValue ~= 1 then
+				fadeValue = 1
+			end
+		end
 	else
-		gameFade = math.max(gameFade - 2 * dt, 0)
+		if gameFade > 0 then
+			gameFade = math.max(gameFade - fadeValue * dt, 0)
+		else
+			if fadeValue ~= 1 then
+				fadeValue = 1
+			end
+		end
 	end
 
 	if shakeIntensity > 0 then
@@ -100,19 +112,20 @@ function cameraScroll()
 
 	local _MAPHEIGHT = mapDimensions[self.screen][2]
 
-
-	if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
-		if self.y + self.height / 2 > mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
-			mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
-		elseif self.y + self.height / 2 < mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
-			mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
+	if _MAPHEIGHT > 15 then
+		if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
+			if self.y + self.height / 2 > mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
+				mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
+			elseif self.y + self.height / 2 < mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
+				mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
+			end
 		end
-	end
 
-	if mapScroll[self.screen][2] < 0 then
-		mapScroll[self.screen][2] = 0
-	elseif mapScroll[self.screen][2] + gameFunctions.getHeight() >= (_MAPHEIGHT) * 16 then
-		mapScroll[self.screen][2] = (_MAPHEIGHT) * 16 - gameFunctions.getHeight()
+		if mapScroll[self.screen][2] < 0 then
+			mapScroll[self.screen][2] = 0
+		elseif mapScroll[self.screen][2] + gameFunctions.getHeight() >= (_MAPHEIGHT) * 16 then
+			mapScroll[self.screen][2] = (_MAPHEIGHT) * 16 - gameFunctions.getHeight()
+		end
 	end
 end
 
@@ -145,6 +158,10 @@ function gameKeypressed(key)
 
 	if objects["player"][1].fade < 1 then
 		return
+	end
+
+	if key == controls["use"] then
+		objects["player"][1]:dialogScroll()
 	end
 
 	if _LOCKPLAYER then
@@ -327,7 +344,7 @@ function gameDrawEntities()
 		end
 	end
 
-	for k, v in pairs(objects["dialog"]) do
+	for k, v in pairs(objects["enemy"]) do
 		if v.screen == p then
 			v:draw()
 		end
@@ -347,6 +364,21 @@ function gameDrawEntities()
 	love.graphics.setColor(255, 255, 255, 255)
 
 	love.graphics.pop()
+
+	for k, v in pairs(objects["dialog"]) do
+		if v.screen == p then
+			v:draw()
+		end
+	end
+
+	for k, v in pairs(objects) do
+		for j, w in pairs(v) do
+			if physdebug then
+				love.graphics.setScreen(p)
+				love.graphics.rectangle("line", w.x, w.y, w.width, w.height)
+			end
+		end
+	end
 end
 
 function gameAddUseRectangle(x, y, width, height, self)
@@ -434,6 +466,7 @@ function gameLoadObjects()
 	objects["dropper"] = {}
 	objects["laser"] = {}
 	objects["logicgate"] = {}
+	objects["enemy"] = {}
 
 	objectUseRectangles = {}
 
@@ -446,7 +479,6 @@ function gameLoadObjects()
 	shakeIntensity = 0
 
 	for k = 1, #mapScripts do
-		print("Loaded!")
 		eventSystem:decrypt(mapScripts[k])
 	end
 end
@@ -533,9 +565,9 @@ function loadObjects(objectData, screen)
 end
 
 function loadTiles(mapWidth, mapHeight, properties, mapData, screen)
-	local w, h = {solid = 0, passive = 0}, 16
-	local pos = { solid = {}, passive = {} }
-	local first = {false, false}
+	local w, h = 0, 16
+	local pos = {}
+	local first = false
 	
 	mapDimensions[screen] = {tonumber(properties.width), tonumber(properties.height)}
 
@@ -546,35 +578,37 @@ function loadTiles(mapWidth, mapHeight, properties, mapData, screen)
 
 			if r == 1 then
 				--found a tile, add width
-				w.solid = w.solid + 16
+				w = w + 16
 				
 				--store START positions because it's big fuckin tile.. sometimes
-				if not first[1] then
-					table.insert(pos.solid, {x, y, 0, 16})
-					first[1] = true
+				if not first then
+					table.insert(pos, {x, y, 0, 16})
+					first = true
+				end
+			elseif r > 1 then
+				if getID(r) then
+					table.insert(objects["tile"], tile:new((x - 1) * 16, (y - 1) * 16, 16, 16, screen, getID(r)))
 				end
 			end
 
-			if first[1] then
+			if first then
 				if r ~= 1 then
-					pos["solid"][#pos["solid"]][3] = w.solid
-					w.solid = 0
-					first[1] = false
+					pos[#pos][3] = w
+					w = 0
+					first = false
 				end
 			end
 		end
 
 		--We made it to another level of the map on the y coord. Time to reset/store again
-		if first[1] then
-			pos["solid"][#pos["solid"]][3] = w.solid
-			w.solid = 0
-			first[1] = false
+		if first then
+			pos[#pos][3] = w
+			w = 0
+			first = false
 		end
 	end
 	
-	for index, value in pairs(pos) do
-		for k = 1, #pos[index] do
-			table.insert(objects["tile"], tile:new((pos[index][k][1] - 1) * 16, (pos[index][k][2] - 1) * 16, pos[index][k][3], pos[index][k][4], screen))
-		end
+	for k = 1, #pos do
+		table.insert(objects["tile"], tile:new((pos[k][1] - 1) * 16, (pos[k][2] - 1) * 16, pos[k][3], pos[k][4], screen, 1))
 	end
 end

@@ -47,7 +47,7 @@ end
 
 dialog = class("dialog")
 
-function dialog:init(text, character, autoscroll, sign, screen)
+function dialog:init(character, text, autoscroll, sign, screen)
 	self.drawText = ""
 	self.current = 0
 
@@ -149,13 +149,13 @@ function dialog:draw()
 		local off = 0
 		if self.character then
 			off = 26
-			love.graphics.draw(self.character, self.x + 2, self.y + (self.height / 2) - self.character:getHeight() / 2)
+			love.graphics.draw(self.character, (self.x + 13) - self.character:getWidth() / 2, self.y + (self.height / 2) - self.character:getHeight() / 2)
 		end
 
 		love.graphics.print(self.drawText, self.x + 4 + off, self.y + 3 + (self.height / 2) - signFont:getHeight() / 2)
 
 		if #self.drawText == #self.text and not self.doScroll then
-			love.graphics.draw(scrollArrow, self.x + off + love.graphics.getWidth() - 18, self.y + (self.height - 4) + math.sin(love.timer.getTime() * 8))
+			love.graphics.draw(scrollArrow, love.graphics.getWidth() - 18, self.y + (self.height - 4) + math.sin(love.timer.getTime() * 8))
 		end
 	end
 end

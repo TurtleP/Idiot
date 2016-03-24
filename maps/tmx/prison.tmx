@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="6">
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
+ </tileset>
+ <layer name="top" width="25" height="15">
+  <properties>
+   <property name="height" value="14"/>
+   <property name="width" value="25"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,1,0,1,0,0,1,1,1,1,0,0,0,1,1,1,1,0,0,0,1,0,1,
+1,0,0,0,0,0,0,0,1,1,1,0,0,1,0,1,1,0,0,0,1,0,0,1,1,
+1,1,1,0,0,0,0,0,0,0,1,0,0,1,1,0,1,0,0,0,1,1,0,1,1,
+1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,
+1,0,0,1,0,0,0,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1,
+1,0,0,1,1,1,0,1,1,0,1,1,0,0,0,0,1,0,1,1,1,1,0,1,1,
+1,0,0,0,1,0,0,1,0,0,1,0,0,1,1,1,1,1,1,1,0,0,0,1,1,
+1,1,0,0,1,1,1,1,1,1,1,0,1,1,0,1,1,1,0,1,1,1,1,1,1,
+1,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,0,0,0,0,1,1,0,0,1,
+1,1,0,0,0,0,0,1,0,0,0,1,1,0,1,1,1,0,0,0,0,1,1,0,1,
+1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+1,0,19,20,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <objectgroup name="topObjects">
+  <object id="2" name="door" x="112" y="208" width="16" height="16">
+   <properties>
+    <property name="locked" value="true"/>
+   </properties>
+  </object>
+  <object id="3" name="door" x="352" y="208" width="16" height="16">
+   <properties>
+    <property name="start" value="false"/>
+   </properties>
+  </object>
+  <object id="5" name="spawn" x="48" y="208" width="16" height="16"/>
+ </objectgroup>
+</map>

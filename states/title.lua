@@ -7,16 +7,8 @@ function titleUpdate(dt)
 end
 
 function titleDraw()
-	drawTitleScreen()
+	love.graphics.setScreen("top")
 
-	drawTitleScreenGUI()
-end
-
-function drawTitleScreen()
-	love.graphics.draw(titleImage)
-end
-
-function drawTitleScreenGUI()
-	--draw stuff
-	love.graphics.print("This is option A", love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+	love.graphics.setScreen("bottom")
+	love.graphics.draw(backgroundImage["bottom"], 0, 0)
 end

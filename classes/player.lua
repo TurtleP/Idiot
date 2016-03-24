@@ -72,6 +72,8 @@ function player:init(x, y)
 	self.screen = "top"
 
 	self.idleTimer = 0
+
+	self.distance = 0
 end
 
 function player:update(dt)
@@ -111,14 +113,22 @@ function player:update(dt)
 		return
 	end
 
-	local speed = 0
-	if self.rightKey then
-		speed = 100
-	elseif self.leftKey then
-		speed = -100
-	end
+	if self.distance > 0 then
+		self.x = math.min(self.x, self.distance)
+		if math.floor(math.abs(self.x + (self.width / 2) - self.distance)) == 0 then
+			self.speedx = 0
+			self.distance = 0
+		end
+	else
+		local speed = 0
+		if self.rightKey then
+			speed = 100
+		elseif self.leftKey then
+			speed = -100
+		end
 
-	self.speedx = speed
+		self.speedx = speed
+	end
 
 	self:animate(dt)
 end
@@ -209,6 +219,16 @@ function player:rightCollide(name, data)
 	end
 end
 
+function player:walk(direction, distance)
+	self.distance = math.abs(self.x - distance)
+
+	if direction == "right" then
+		self.speedx = 100
+	else
+		self.speedx = -100
+	end
+end
+
 function player:passiveCollide(name, data)
 	if name == "sign" then
 		if self.item then
@@ -255,7 +275,7 @@ function player:passiveCollide(name, data)
 	end
 end
 
-function player:dialogStuff(name, entity)
+function player:dialogStuff(name, data)
 	local data
 	for k, v in pairs(objects["dialog"]) do
 		if v.activated then
@@ -264,13 +284,27 @@ function player:dialogStuff(name, entity)
 		end
 	end
 
-	if data.current <= #data.text then
-		self.speedx = 0
-		self.doUpdate = false
-		self.timer = 0
-	else
-		self.doUpdate = true
+	if data then
+		if data.current <= #data.text then
+			self.speedx = 0
+			self.doUpdate = false
+			self.timer = 0
+		else
+			self.doUpdate = true
+		end
 	end
+end
+
+function player:dialogScroll()
+	for k, v in ipairs(objects["dialog"]) do
+		if v.activated then
+			v:scrollText()
+			self.useKey = false
+			break
+		end
+	end
+
+	self:dialogStuff()
 end
 
 function player:die()
@@ -355,7 +389,7 @@ function player:animate(dt)
 		
 	end
 
-	if self.state ~= "idle" and self.state ~= "waiting" then
+	if (self.state ~= "idle" and self.state ~= "waiting") or #objects["dialog"] > 0 then
 		self.idleTimer = 0
 	end
 
@@ -432,13 +466,7 @@ function player:useItem()
 	self.useKey = not self.useKey
 
 	if self.useKey then
-		for k, v in ipairs(objects["dialog"]) do
-			if v.activated then
-				v:scrollText()
-				self.useKey = false
-				break
-			end
-		end
+		self:dialogScroll()
 
 		--One tile
 		local squareSize = 16

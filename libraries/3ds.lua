@@ -6,9 +6,9 @@ if love.system.getOS() ~= "3ds" then
 		_SCREEN = screen
 
 		if screen == "top" then
-			love.graphics.setScissor(0, -(mapScrollY * scale), 400 * scale, 240 * scale)
+			love.graphics.setScissor(0, -(mapScrollY or 0 * scale), 400 * scale, 240 * scale)
 		elseif screen == "bottom" then
-			love.graphics.setScissor(40 * scale, (240 * scale) - (mapScrollY * scale), 320 * scale, 240 * scale)
+			love.graphics.setScissor(40 * scale, (240 * scale) - (mapScrollY or 0 * scale), 320 * scale, 240 * scale)
 		end
 	end
 
@@ -122,7 +122,7 @@ if love.system.getOS() ~= "3ds" then
 		end
 	end
 
-	love.window.setMode(400, 480, {vsync = true})
+	love.window.setMode(400 * scale, 480 * scale, {vsync = true})
 end
 
 if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then

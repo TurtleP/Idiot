@@ -13,29 +13,65 @@ function eventsystem:update(dt)
 			self.sleep = math.max(0, self.sleep - dt)
 		end
 
+		if #objects["dialog"] > 0 then
+			self.sleep = dt
+		end
+
 		if self.sleep == 0 and self.running then
 			self.i = self.i + 1
 
 			local v = self.events[self.i]
 
-			if v.cmd == "dialog" then
+			cmd = v.cmd:lower()
+
+			if cmd == "dialog" then
 				local temp = dialog:new(unpack(v.args))
 				temp:activate()
 				table.insert(objects["dialog"], temp)
-			elseif v.cmd == "wait" then
+			elseif cmd == "sleep" then
 				self.sleep = v.args
-			elseif v.cmd == "spawnPlayer" then
-				objects["player"][1] = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
-			elseif v.cmd == "freezeplayer" then
+			elseif cmd == "usedoor" then
+				for i, s in pairs(objects["door"]) do
+					if s.x == v.args[1] and s.y == v.args[2] then
+						s:toggleOpen()
+					end
+				end
+			elseif cmd == "spawncharacter" then
+				if v.args[1] == "idiot" then
+					objects["player"][1] = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
+				elseif v.args[1] == "ren" then
+					table.insert(objects["enemy"], renhoek:new(v.args[2], v.args[3], v.args[4]))
+				end
+			elseif cmd == "walkcharacter" then
+				if v.args[1] == "ren" then
+					objects["enemy"][1]:walk(v.args[2], v.args[3])
+				elseif v.args[1] == "idiot" then
+					objects["player"][1]:walk(v.args[2], v.args[3])
+				end
+			elseif cmd == "removecharacter" then
+				if v.args[1] == "ren" then
+					table.remove(objects["enemy"], 1)
+				end
+			elseif cmd == "spawnobject" then
+				if v.args[1] == "key" then
+					local temp = key:new(v.args[2], v.args[3], objects["player"][1].screen)
+					temp:drop()
+					table.insert(objects["key"], temp)
+				end
+			elseif cmd == "freezeplayer" then
 				_LOCKPLAYER = true
-			elseif v.cmd == "unfreezeplayer" then
+			elseif cmd == "unfreezeplayer" then
 				_LOCKPLAYER = false
-			elseif v.cmd == "shake" then
+			elseif cmd == "shake" then
 				shakeIntensity = v.args
-			elseif v.cmd == "changeState" then
+			elseif cmd == "changestate" then
 				gameFunctions.changeState(v.args)
-			elseif v.cmd == "killPlayer" then
+			elseif cmd == "killplayer" then
 				objects["player"][1]:die(true)
+			elseif cmd == "fadein" then
+				gameFade = 1
+				gameFadeOut = false
+				fadeValue = v.args
 			end
 		end
 	else
@@ -56,7 +92,7 @@ end
 function eventsystem:decrypt(scriptString)
 	for k, v in ipairs(scriptString) do
 		local cmd, arg = v[1], v[2]
-		if cmd == "levelEquals" then
+		if cmd == "levelequals" then
 			print("!")
 			if currentLevel ~= arg then
 				print("INVALID LEVEL")
