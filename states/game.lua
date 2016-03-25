@@ -444,7 +444,7 @@ function gameUseRectangle(x, y, width, height)
 end
 
 function gameNextLevel()
-	if love.filesystem.isFile("maps/" .. currentLevel + 1 .. ".lua") then
+	if io.open("maps/" .. currentLevel + 1 .. ".lua") then
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	else

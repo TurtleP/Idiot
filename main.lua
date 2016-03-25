@@ -183,25 +183,25 @@ function love.load()
 	end
 
 	mapScripts = {}
-	for k = 1, 3 do
+	for k = 1, 4 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
-	bgm = love.audio.newSource("audio/bgm.ogg")
+	bgm = love.audio.newSource("audio/bgm.wav", "stream")
 
-	jumpSound = love.audio.newSource("audio/jump.ogg")
-	scrollSound = love.audio.newSource("audio/blip.ogg")
-	textSound = love.audio.newSource("audio/text.ogg")
-	keySound = love.audio.newSource("audio/key.ogg")
-	plateSound = love.audio.newSource("audio/plate.ogg")
-	teleportSound = love.audio.newSource("audio/teleport.ogg")
-	deathSound = love.audio.newSource("audio/death.ogg")
-	unlockSound = love.audio.newSource("audio/unlock.ogg")
-	pipeSound = love.audio.newSource("audio/pipe.ogg")
-	buttonSound = love.audio.newSource("audio/button.ogg")
-	timeSound = love.audio.newSource("audio/time.ogg")
-	sensorSound = { love.audio.newSource("audio/sensoron.ogg") , love.audio.newSource("audio/sensoroff.ogg") }
-	pauseSound = love.audio.newSource("audio/pause.ogg")
+	jumpSound = love.audio.newSource("audio/jump.wav", "static")
+	scrollSound = love.audio.newSource("audio/blip.wav", "static")
+	textSound = love.audio.newSource("audio/text.wav", "static")
+	keySound = love.audio.newSource("audio/key.wav", "static")
+	plateSound = love.audio.newSource("audio/plate.wav", "static")
+	teleportSound = love.audio.newSource("audio/teleport.wav", "static")
+	deathSound = love.audio.newSource("audio/death.wav", "static")
+	unlockSound = love.audio.newSource("audio/unlock.wav", "static")
+	pipeSound = love.audio.newSource("audio/pipe.wav", "static")
+	buttonSound = love.audio.newSource("audio/button.wav", "static")
+	timeSound = love.audio.newSource("audio/time.wav", "static")
+	sensorSound = { love.audio.newSource("audio/sensoron.wav", "static") , love.audio.newSource("audio/sensoroff.wav", "static") }
+	pauseSound = love.audio.newSource("audio/pause.wav", "static")
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
 	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
@@ -327,11 +327,11 @@ function bool(string)
 end
 
 function saveGame()
-	love.filesystem.write("save.txt", currentLevel)
+	--love.filesystem.write("save.txt", currentLevel)
 end
 
 function loadGame()
-	currentLevel = tonumber(love.filesystem.read("save.txt"))
+	--currentLevel = tonumber(love.filesystem.read("save.txt"))
 
-	gameLoad(currentLevel)
+	--gameLoad(currentLevel)
 end

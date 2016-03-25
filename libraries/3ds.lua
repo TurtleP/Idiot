@@ -127,6 +127,12 @@ end
 
 if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 
+	if not love.filesystem then
+		love.filesystem = {}
+
+		love.filesystem.exists = function(path) return io.open(path) ~= nil end
+	end
+
 	if not _EMULATEHOMEBREW then
 		love.graphics.scale = function() end
 		love.math = { random = math.random }
