@@ -11,7 +11,7 @@ return
 	{"usedoor", {352, 192}},
 	{"sleep", 0.4},
 	{"spawncharacter", {"ren", 352, 211, "top"}},
-	{"walkcharacter", {"ren", "left", 220}},
+	{"walkcharacter", {"ren", "left", 230}},
 	{"sleep", 0.2},
 	{"usedoor", {352, 192}},
 	{"sleep", 2.5},

@@ -38,6 +38,9 @@ function door:init(x, y, r, screen)
 	self.playSound = false
 
 	self.screen = screen
+
+	self.endLevel = false
+	self.endTimer = 0
 end
 
 function door:use(player)
@@ -128,11 +131,19 @@ function door:normalDoor(dt)
 			else
 				if self.player then
 					self.player.remove = true
-					gameNextLevel()
 					self.closeAnimation = false
 					self.timer = 0
+					self.endLevel = true
 				end
 			end
+		end
+	end
+
+	if self.endLevel then
+		if self.endTimer < 0.3 then
+			self.endTimer = self.endTimer + dt
+		else
+			gameNextLevel()
 		end
 	end
 end

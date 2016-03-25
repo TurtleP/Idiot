@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="12">
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
+ </tileset>
+ <layer name="top" width="25" height="15">
+  <properties>
+   <property name="height" value="15"/>
+   <property name="width" value="25"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,13,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,1,
+1,8,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,
+1,1,1,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,1,1,0,0,0,1,
+1,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,8,0,0,1,
+1,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,1,
+13,4,0,0,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,1,1,1,0,0,1,
+1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,
+1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,
+1,0,0,4,0,0,8,0,0,0,0,1,1,1,0,0,0,0,0,0,6,0,0,7,1,
+1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,5,0,0,0,0,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+ <objectgroup name="topObjects">
+  <object id="1" name="pressureplate" x="320" y="160" width="16" height="16">
+   <properties>
+    <property name="start" value="true"/>
+   </properties>
+  </object>
+  <object id="2" name="door" x="336" y="64" width="16" height="16"/>
+  <object id="3" name="box" x="48" y="160" width="16" height="16"/>
+  <object id="4" name="door" x="16" y="32" width="16" height="16">
+   <properties>
+    <property name="start" value="true"/>
+   </properties>
+  </object>
+  <object id="5" name="pipe" x="0" y="96" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="link" value="top;192;0;"/>
+   </properties>
+  </object>
+  <object id="6" name="pipe" x="192" y="0" width="16" height="16">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="link" value="top;0;96;"/>
+   </properties>
+  </object>
+  <object id="7" name="notgate" x="384" y="160" width="16" height="16">
+   <properties>
+    <property name="link" value="top;320;160;"/>
+   </properties>
+  </object>
+  <object id="8" name="fan" x="368" y="160" width="16" height="16">
+   <properties>
+    <property name="link" value="top;384;160;"/>
+    <property name="maxheight" value="6"/>
+   </properties>
+  </object>
+  <object id="9" name="door" x="96" y="160" width="16" height="16">
+   <properties>
+    <property name="locked" value="true"/>
+   </properties>
+  </object>
+  <object id="10" name="key" x="192" y="192" width="16" height="16"/>
+  <object id="11" name="box" x="16" y="96" width="16" height="16"/>
+ </objectgroup>
+</map>

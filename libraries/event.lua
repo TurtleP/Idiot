@@ -8,6 +8,10 @@ function eventsystem:init()
 end
 
 function eventsystem:update(dt)
+	if not self.running then
+		return
+	end
+	
 	if self.i < #self.events then
 		if self.sleep > 0 then
 			self.sleep = math.max(0, self.sleep - dt)
@@ -94,9 +98,11 @@ function eventsystem:decrypt(scriptString)
 		local cmd, arg = v[1], v[2]
 		if cmd == "levelequals" then
 			if currentLevel ~= arg then
-				print("Script doesn't belong to this level: " .. arg)
+				print("Won't load script {Level Equals: " .. arg .. "} (doesn't belong to level!)")
 
 				break
+			else
+				print("Using script {Level Equals: " .. arg .. "}")
 			end
 		end
 		self.running = true

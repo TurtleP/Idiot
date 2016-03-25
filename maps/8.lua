@@ -8,7 +8,7 @@ return {
   height = 15,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 14,
+  nextobjectid = 12,
   properties = {},
   tilesets = {
     {
@@ -49,21 +49,21 @@ return {
       },
       encoding = "lua",
       data = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 6, 0, 8, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 5, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 6, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 0, 0, 1, 1, 1, 1, 1,
-        1, 8, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 8, 0, 8, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 13, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1,
+        1, 8, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1,
+        1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 8, 0, 0, 1,
+        1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+        13, 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 4, 0, 0, 8, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 6, 0, 0, 7, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
     {
@@ -77,10 +77,10 @@ return {
       objects = {
         {
           id = 1,
-          name = "door",
+          name = "pressureplate",
           type = "",
           shape = "rectangle",
-          x = 16,
+          x = 320,
           y = 160,
           width = 16,
           height = 16,
@@ -92,11 +92,11 @@ return {
         },
         {
           id = 2,
-          name = "box",
+          name = "door",
           type = "",
           shape = "rectangle",
-          x = 128,
-          y = 208,
+          x = 336,
+          y = 64,
           width = 16,
           height = 16,
           rotation = 0,
@@ -108,8 +108,8 @@ return {
           name = "box",
           type = "",
           shape = "rectangle",
-          x = 256,
-          y = 208,
+          x = 48,
+          y = 160,
           width = 16,
           height = 16,
           rotation = 0,
@@ -118,50 +118,89 @@ return {
         },
         {
           id = 4,
-          name = "box",
-          type = "",
-          shape = "rectangle",
-          x = 256,
-          y = 144,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 5,
-          name = "box",
-          type = "",
-          shape = "rectangle",
-          x = 192,
-          y = 48,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 6,
-          name = "key",
-          type = "",
-          shape = "rectangle",
-          x = 272,
-          y = 64,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 7,
           name = "door",
           type = "",
           shape = "rectangle",
-          x = 64,
-          y = 64,
+          x = 16,
+          y = 32,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["start"] = "true"
+          }
+        },
+        {
+          id = 5,
+          name = "pipe",
+          type = "",
+          shape = "rectangle",
+          x = 0,
+          y = 96,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["direction"] = "right",
+            ["link"] = "top;192;0;"
+          }
+        },
+        {
+          id = 6,
+          name = "pipe",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 0,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["direction"] = "down",
+            ["link"] = "top;0;96;"
+          }
+        },
+        {
+          id = 7,
+          name = "notgate",
+          type = "",
+          shape = "rectangle",
+          x = 384,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;320;160;"
+          }
+        },
+        {
+          id = 8,
+          name = "fan",
+          type = "",
+          shape = "rectangle",
+          x = 368,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;384;160;",
+            ["maxheight"] = "6"
+          }
+        },
+        {
+          id = 9,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 96,
+          y = 160,
           width = 16,
           height = 16,
           rotation = 0,
@@ -171,27 +210,12 @@ return {
           }
         },
         {
-          id = 9,
-          name = "andgate",
-          type = "",
-          shape = "rectangle",
-          x = 336,
-          y = 176,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["link"] = "top;32;64;top;192;112;"
-          }
-        },
-        {
           id = 10,
-          name = "pressureplate",
+          name = "key",
           type = "",
           shape = "rectangle",
           x = 192,
-          y = 112,
+          y = 192,
           width = 16,
           height = 16,
           rotation = 0,
@@ -200,40 +224,11 @@ return {
         },
         {
           id = 11,
-          name = "pressureplate",
+          name = "box",
           type = "",
           shape = "rectangle",
-          x = 32,
-          y = 64,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 12,
-          name = "door",
-          type = "",
-          shape = "rectangle",
-          x = 336,
-          y = 208,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["link"] = "top;336;176;",
-            ["locked"] = "true"
-          }
-        },
-        {
-          id = 13,
-          name = "door",
-          type = "",
-          shape = "rectangle",
-          x = 368,
-          y = 208,
+          x = 16,
+          y = 96,
           width = 16,
           height = 16,
           rotation = 0,

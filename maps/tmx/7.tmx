@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="10">
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
+  <tile id="0">
+   <properties>
+    <property name="height" value="15"/>
+    <property name="width" value="20"/>
+   </properties>
+  </tile>
+ </tileset>
+ <objectgroup name="bottomObjects" visible="0">
+  <object id="7" name="pipe" x="32" y="160" width="16" height="16">
+   <properties>
+    <property name="link" value="top;96;176;"/>
+   </properties>
+  </object>
+  <object id="8" name="box" x="160" y="80" width="16" height="16"/>
+  <object id="9" name="pressureplate" x="272" y="160" width="16" height="16"/>
+ </objectgroup>
+ <layer name="bottom" width="25" height="15">
+  <properties>
+   <property name="height" value="15"/>
+   <property name="width" value="20"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,
+1,1,1,0,0,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,0,0,0,0,0,
+1,1,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+1,1,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,1,1,0,0,0,0,0,
+1,1,1,0,0,0,0,0,1,1,1,1,0,1,0,0,0,1,1,1,0,0,0,0,0,
+1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,
+1,0,13,0,0,0,1,0,0,0,0,0,0,0,0,0,0,6,0,1,0,0,0,0,0,
+1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="topObjects" visible="0">
+  <object id="1" name="pipe" x="96" y="176" width="16" height="16">
+   <properties>
+    <property name="link" value="bottom;32;160;"/>
+   </properties>
+  </object>
+  <object id="2" name="door" x="16" y="144" width="16" height="16">
+   <properties>
+    <property name="start" value="true"/>
+   </properties>
+  </object>
+  <object id="3" name="door" x="368" y="144" width="16" height="16"/>
+  <object id="5" name="fan" x="192" y="224" width="16" height="16">
+   <properties>
+    <property name="link" value="top;112;224;"/>
+    <property name="maxheight" value="6"/>
+   </properties>
+  </object>
+  <object id="6" name="notgate" x="112" y="224" width="16" height="16">
+   <properties>
+    <property name="link" value="bottom;272;160;"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="top" width="25" height="15" visible="0">
+  <properties>
+   <property name="height" value="15"/>
+   <property name="width" value="25"/>
+  </properties>
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,
+1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,
+1,1,1,1,0,0,1,1,0,0,1,1,1,1,1,0,0,1,1,0,0,1,1,1,1,
+1,1,1,0,0,1,1,1,1,0,0,1,1,1,0,0,1,1,1,1,0,0,1,1,1,
+1,1,1,0,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,
+1,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,1,1,
+1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,1,
+1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+1,1,1,0,0,1,13,1,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,7,0,0,0,0,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>

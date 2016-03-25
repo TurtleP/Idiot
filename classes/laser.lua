@@ -4,16 +4,18 @@ function laser:init(x, y, properties, screen)
 	self.x = x
 	self.y = y
 
-	self.width = 1
-	self.height = (tonumber(properties.height) * 16) or 16
-	self.originalHeight = self.height
-
 	if properties.width then
 		self.width = tonumber(properties.width) * 16
 		self.height = 1
 
 		self.x = x - 7.5
 		self.y = y + 7.5
+	end
+
+	if properties.height then
+		self.width = 1
+		self.height = (tonumber(properties.height) * 16) or 16
+		self.originalHeight = self.height
 	end
 
 	self.link = properties.link:split(";")

@@ -183,7 +183,7 @@ function love.load()
 	end
 
 	mapScripts = {}
-	for k = 1, 2 do
+	for k = 1, 3 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 

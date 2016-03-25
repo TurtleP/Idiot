@@ -154,7 +154,7 @@ function dialog:draw()
 
 		love.graphics.print(self.drawText, self.x + 4 + off, self.y + 3 + (self.height / 2) - signFont:getHeight() / 2)
 
-		if #self.drawText == #self.text and not self.doScroll then
+		if #self.drawText == #self.text and not self.doScroll and not self.autoscroll then
 			love.graphics.draw(scrollArrow, love.graphics.getWidth() - 18, self.y + (self.height - 4) + math.sin(love.timer.getTime() * 8))
 		end
 	end

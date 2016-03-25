@@ -258,7 +258,7 @@ function player:passiveCollide(name, data)
 
 	if name == "door" then
 		if not data.isLocked then
-			if self.item or self.fade == 0 then
+			if self.speedx ~= 0 or self.item or self.fade == 0 or math.floor(self.speedy) ~= 6 then
 				return
 			end
 
@@ -303,6 +303,9 @@ end
 function player:dialogScroll()
 	for k, v in ipairs(objects["dialog"]) do
 		if v.activated then
+			if v.autoscroll then
+				return
+			end
 			v:scrollText()
 			self.useKey = false
 			break

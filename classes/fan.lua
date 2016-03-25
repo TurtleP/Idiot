@@ -45,9 +45,9 @@ end
 
 function fan:input(t)
 	if t == "on" then
-		self.air = true
-	elseif t == "off" then
 		self.air = false
+	elseif t == "off" then
+		self.air = true
 	elseif t == "toggle" then
 		self.air = not self.air
 	end
@@ -74,6 +74,7 @@ function fan:update(dt)
 				if v[1] == "player" then
 					entity.state = "jump"
 					entity.falling = false
+					entity.jumping = true
 				end
 				entity.speedy = -60
 			end
