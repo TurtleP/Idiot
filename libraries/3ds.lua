@@ -154,7 +154,7 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 
 			function love.filesystem.write(path, data)
 				if path and data then
-					local file = io.open(path)
+					local file = io.open(path, "w")
 
 					if file then
 						file:write(data)
@@ -172,7 +172,7 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 
 			function love.filesystem.read(path)
 				if path then
-					local file = io.open(path)
+					local file = io.open(path, "r")
 
 					if file then
 						return file:read()
@@ -187,8 +187,6 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 			function love.filesystem.remove(path)
 				if path then
 					os.remove(path)
-				else
-
 				end
 			end
 		end

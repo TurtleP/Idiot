@@ -311,7 +311,7 @@ function loadGame()
 end
 
 function saveSettings()
-	local data = tostring(directionalPadEnabled) .. ";" ..controls["jump"] .. ";" .. controls["use"] .. ";"
+	local data = tostring(directionalPadEnabled) .. ";" .. controls["jump"] .. ";" .. controls["use"] .. ";"
 
 	love.filesystem.write("options.txt", data)
 end

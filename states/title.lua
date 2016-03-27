@@ -2,7 +2,7 @@ function titleInit()
 	love.graphics.setBackgroundColor(255, 255, 255)
 
 	idiotChar = player:new(-13, gameFunctions.getHeight() - 48)
-	idiotChar:walk("right", gameFunctions.getWidth() / 2)
+	idiotChar:walk("right", 206)
 
 	titleY = -endFont:getHeight("Idiot")
 	titleTimer = 0
@@ -14,7 +14,7 @@ function titleInit()
 	titleOptions =
 	{
 		{"New Game", 
-			function() 
+			function()
 				gameFunctions.changeState("game") 
 			end
 		},
@@ -116,7 +116,7 @@ end
 function titleDraw()
 	love.graphics.setScreen("top")
 
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(backgroundImage.top)
 
 	love.graphics.draw(titleImage, 0, 0)

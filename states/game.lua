@@ -18,6 +18,8 @@ function gameInit(loadGame)
 	fadeValue = 1
 
 	pauseMenu = pausemenu:new()
+
+	titleMusic:stop()
 end
 
 function gameUpdate(dt)
