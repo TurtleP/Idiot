@@ -64,6 +64,16 @@ function renhoek:update(dt)
 	end
 end
 
+function renhoek:jump()
+	if not self.jumping then
+		self.speedy = -100
+
+		self.animation = "jump"
+
+		self.jumping = true
+	end
+end
+
 function renhoek:walk(direction, distance)
 	self.direction = direction
 

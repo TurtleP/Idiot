@@ -1,5 +1,8 @@
 io.stdout:setvbuf("no")
 
+--misc
+require 'data'
+
 --libraries
 class = require 'libraries/middleclass'
 require 'libraries/physics'
@@ -36,9 +39,6 @@ require 'classes/delayer'
 require 'classes/andgate'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
-
-scale = 1
-require 'libraries/3ds'
 
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
@@ -149,25 +149,14 @@ function love.load()
 		end
 	end
 
+	titleImage = love.graphics.newImage("maps/title.png")
+	optionsImage = love.graphics.newImage("maps/options.png")
+
 	notImage = love.graphics.newImage("graphics/objects/not.png")
+
 	andImage = love.graphics.newImage("graphics/objects/and.png")
 
 	controls =
-	{
-		["right"] = "right",
-		["left"] = "left",
-		["up"] = "up",
-		["down"] = "down",
-		["jump"] = "z",
-		["use"] = "x",
-		["run"] = "c",
-		["pause"] = "return",
-
-		["debug"] = "rshift"
-	}
-
-	if love.system.getOS() == "3ds" then
-		controls =
 		{
 			["right"] = "cpadright",
 			["left"] = "cpadleft",
@@ -180,14 +169,15 @@ function love.load()
 
 			["debug"] = "select"
 		}
-	end
 
 	mapScripts = {}
 	for k = 1, 4 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
-	bgm = love.audio.newSource("audio/bgm.wav", "stream")
+	backgroundMusic = love.audio.newSource("audio/bgm.wav", "stream")
+
+	titleMusic = love.audio.newSource("audio/title.wav", "stream")
 
 	jumpSound = love.audio.newSource("audio/jump.wav", "static")
 	scrollSound = love.audio.newSource("audio/blip.wav", "static")
@@ -204,7 +194,7 @@ function love.load()
 	pauseSound = love.audio.newSource("audio/pause.wav", "static")
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
-	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
+	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 32)
 
 	local mobileDevice =
 	{
@@ -223,29 +213,16 @@ function love.load()
 		touchControls = touchcontrol:new()
 
 		--love.window.setMode(love.window.getDesktopDimensions())
-	else
-		if _EMULATEHOMEBREW then --Not 3DS lel
-			currentBuild = 1
-
-			if love.filesystem.isFile("build.txt") then
-				build = love.filesystem.read("build.txt"):split("-")
-			
-				if build[1] == os.date("%m/%d/%y") then
-					currentBuild = tonumber(build[2])
-				
-					currentBuild = currentBuild + 1
-				end
-			end
-
-			buildVersion = os.date("%m/%d/%y") .. " - β " .. currentBuild
-
-			love.filesystem.write("build.txt",  os.date("%m/%d/%y") .. "-"..currentBuild)
-		end
 	end
 
---	love.audio.setVolume(0)
+	enableAudio = false
+	love.audio.setVolume(0)
 
-	gameFunctions.changeState("game")
+	buildVersion = "1.0-dev"
+
+	loadSettings()
+
+	gameFunctions.changeState("title")
 end
 
 function love.update(dt)
@@ -265,17 +242,13 @@ function love.draw()
 		_G[state .. "Draw"]()
 	end
 
-	if physdebug then
-		love.graphics.setColor(0, 0, 0)
-		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, 5)
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, 6)
-
-		love.graphics.setColor(0, 0, 0)
-		love.graphics.print(buildVersion, love.graphics.getWidth() - signFont:getWidth(buildVersion) - 3, love.graphics.getHeight() - signFont:getHeight(buildVersion) - 1)
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.print(buildVersion, love.graphics.getWidth() - signFont:getWidth(buildVersion) - 2, love.graphics.getHeight() - signFont:getHeight(buildVersion))
-	end
+	love.graphics.setFont(signFont)
+	love.graphics.setScreen('top')
+	love.graphics.setColor(0, 0, 0)
+	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS() - 1))
+	
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS()))
 
 	love.graphics.pop()
 end
@@ -296,18 +269,18 @@ function love.keyreleased(key)
 	end
 end
 
+require 'libraries/3ds'
+
 --[[ GAME FUNCTIONS ]]--
 gameFunctions = {}
 
-function gameFunctions.changeState(toState, args)
+function gameFunctions.changeState(toState, ...)
 	state = toState
 
-	if not args then
-		args = {}
-	end
+	local arg = {...}
 
 	if _G[state .. "Init"] then
-		_G[state .. "Init"](unpack(args))
+		_G[state .. "Init"](unpack(arg))
 	end
 end
 
@@ -327,11 +300,56 @@ function bool(string)
 end
 
 function saveGame()
-	--love.filesystem.write("save.txt", currentLevel)
+	love.filesystem.write("save.txt", "0x" .. tonumber(currentLevel, 16))
 end
 
 function loadGame()
-	--currentLevel = tonumber(love.filesystem.read("save.txt"))
+	currentLevel = tonumber(love.filesystem.read("save.txt"):gsub("0x", ""), 10)
 
-	--gameLoad(currentLevel)
+	print("Loading from file: " .. currentLevel)
+
+	gameFunctions.changeState("game", currentLevel)
+end
+
+function saveSettings()
+	local data = tostring(directionalPadEnabled) .. ";" ..controls["jump"] .. ";" .. controls["use"] .. ";"
+
+	love.filesystem.write("options.txt", data)
+end
+
+function loadSettings()
+	if love.filesystem.isFile("options.txt") then
+		local data = love.filesystem.read("options.txt")
+
+		local split = data:split(";")
+
+		toggleDPad(bool(split[1]))
+
+		controls["jump"] = split[2]
+
+		controls["use"] = split[3]
+
+		print(unpack(split))
+	end
+end
+
+function toggleDPad(set)
+	local enable = not directionalPadEnabled
+	if set ~= nil then
+		enable = set
+	end
+
+	directionalPadEnabled = enable
+
+	if directionalPadEnabled then
+		controls["up"] = "dup"
+		controls["down"] = "ddown"
+		controls["left"] = "dleft"
+		controls["right"] = "dright"
+	else
+		controls["right"] = "cpadright"
+		controls["left"] = "cpadleft"
+		controls["up"] = "cpadup"
+		controls["down"] = "cpaddown"
+	end
 end

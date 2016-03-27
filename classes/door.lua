@@ -17,6 +17,10 @@ function door:init(x, y, r, screen)
 
 	if r.link then
 		self.link = r.link:split(";")
+
+		if r.link ~= "" then
+			self.linkRequired = true
+		end
 	end
 
 	self.open = false
@@ -82,7 +86,7 @@ function door:update(dt)
 end
 
 function door:unlock(player)
-	if #self.link > 1 then
+	if self.linkRequired then
 		return
 	end
 

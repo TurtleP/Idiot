@@ -182,7 +182,7 @@ return {
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "top;32;64;top;192;112;"
+            ["link"] = "top;32;64-top;192;112;"
           }
         },
         {

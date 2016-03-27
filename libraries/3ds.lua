@@ -1,6 +1,21 @@
 if love.system.getOS() ~= "3ds" then
 	_SCREEN = "top"
 
+	models = {"3DS", "3DSXL"}
+	function love.system.getModel()
+		return models[scale]
+	end
+
+	function love.system.setModel(s)
+		scale = s
+
+		love.window.setMode(400 * scale, 480 * scale, {vsync = true})
+
+		love.window.setTitle(love.filesystem.getIdentity() .. " :: " .. love.system.getModel())
+	end
+
+	love.system.setModel(1)
+
 	function love.graphics.setScreen(screen)
 		assert(type(screen) == "string", "String expected, got " .. type(screen))
 		_SCREEN = screen
@@ -53,24 +68,24 @@ if love.system.getOS() ~= "3ds" then
 		"cpadright", "cpadleft", "cpadup", "cpaddown"
 	}
 
-	local _CONFIG =
+	BUTTONCONFIG =
 	{
-		["a"] = "u",
-		["b"] = "i",
-		["y"] = "o",
-		["x"] = "p",
+		["a"] = "z",
+		["b"] = "x",
+		["y"] = "c",
+		["x"] = "v",
 		["start"] = "return",
 		["select"] = "rshift",
-		["dup"] = "up",
-		["dleft"] = "left",
-		["dright"] = "right",
-		["ddown"] = "down",
+		["dup"] = "w",
+		["dleft"] = "a",
+		["dright"] = "d",
+		["ddown"] = "s",
 		["rbutton"] = "/",
 		["lbutton"] = "rcontrol",
-		["cpadright"] = "d",
-		["cpadleft"] = "a",
-		["cpadup"] = "w",
-		["cpaddown"] = "s",
+		["cpadright"] = "right",
+		["cpadleft"] = "left",
+		["cpadup"] = "up",
+		["cpaddown"] = "down",
 		["cstickleft"] = "",
 		["cstickright"] ="",
 		["cstickup"] = "",
@@ -121,23 +136,62 @@ if love.system.getOS() ~= "3ds" then
 			oldMouseReleased(x, y, 1)
 		end
 	end
-
-	love.window.setMode(400 * scale, 480 * scale, {vsync = true})
 end
 
 if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
-
-	if not love.filesystem then
-		love.filesystem = {}
-
-		love.filesystem.exists = function(path) return io.open(path) ~= nil end
-	end
-
 	if not _EMULATEHOMEBREW then
 		love.graphics.scale = function() end
 		love.math = { random = math.random }
 		love.graphics.setDefaultFilter = function() end
 		love.audio.setVolume = function() end
+
+		if not love.filesystem then
+			love.filesystem = {}
+
+			function love.filesystem.isFile(path)
+				return io.open(path)
+			end
+
+			function love.filesystem.write(path, data)
+				if path and data then
+					local file = io.open(path)
+
+					if file then
+						file:write(data)
+
+						file:flush()
+
+						file:close()
+					else
+						error("Could not create file!")
+					end
+				else
+					error("Could not write file: " .. path .. "!")
+				end
+			end
+
+			function love.filesystem.read(path)
+				if path then
+					local file = io.open(path)
+
+					if file then
+						return file:read()
+					else
+						error("Could not read file, does not exist!")
+					end
+				else
+					assert(type(path) == "string", "String expected, got " .. type(path))
+				end
+			end
+
+			function love.filesystem.remove(path)
+				if path then
+					os.remove(path)
+				else
+
+				end
+			end
+		end
 	else
 		local olddraw = love.graphics.draw
 		function love.graphics.draw(...)
@@ -201,5 +255,42 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 			oldPrint(text, x, y, r, scalex, scaley, sx, sy)
 		end
 		
+		if love.keypressed then
+			local oldKey = love.keypressed
+
+			function love.keypressed(key)
+				for k, v in pairs(BUTTONCONFIG) do
+					if key == v then
+						oldKey(k)
+						break
+					end
+				end
+			end
+		end
+
+		if love.keyreleased then
+			local oldKey = love.keyreleased
+
+			function love.keyreleased(key)
+				for k, v in pairs(BUTTONCONFIG) do
+					if key == v then
+						oldKey(k)
+						break
+					end
+				end
+
+				if key == "1" or key == "2" then
+					love.system.setModel(tonumber(key))
+				elseif key == "3" then
+					enableAudio = not enableAudio
+
+					if enableAudio then
+						love.audio.setVolume(1)
+					else
+						love.audio.setVolume(0)
+					end
+				end
+			end
+		end
 	end
 end

@@ -7,8 +7,9 @@ function pipe:init(x, y, r, screen)
 	self.width = 16
 	self.height = 16
 
-	self.active = false
-
+	self.active = true
+	self.static = true
+	
 	self.mask = {}
 
 	local directions = 

@@ -21,8 +21,8 @@ function gameInit(loadGame)
 end
 
 function gameUpdate(dt)
-	if not bgm:isPlaying() then
-		bgm:play()
+	if not backgroundMusic:isPlaying() then
+		backgroundMusic:play()
 	end
 
 	if paused then
@@ -156,6 +156,12 @@ function gameDraw()
 	love.graphics.pop()
 end
 
+function restartMap()
+	gameFadeOut = true
+
+	gameInit(currentLevel)
+end
+
 function gameKeypressed(key)
 	if key == controls["pause"] then
 		paused = not paused
@@ -183,7 +189,7 @@ function gameKeypressed(key)
 		return
 	end
 
-	if key == controls["use"] then
+	if key == controls["jump"] then
 		objects["player"][1]:dialogScroll()
 	end
 
@@ -376,36 +382,27 @@ function gameDrawEntities()
 	love.graphics.push()
 
 	love.graphics.origin()
+	love.graphics.scale(scale, scale)
 	love.graphics.setScreen(p)
 	love.graphics.setColor(0, 0, 0, 255 * gameFade)
-	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
+	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
 
 	love.graphics.setScreen(other)
 	love.graphics.setColor(0, 0, 0, 255 * otherFade)
-	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth() * scale, gameFunctions.getHeight() * scale)
+	love.graphics.rectangle("fill", 0, 0, gameFunctions.getWidth(), gameFunctions.getHeight())
 
 	love.graphics.setColor(255, 255, 255, 255)
 
-	love.graphics.setFont(endFont)
-	love.graphics.print("IDIOT :: DEMO", gameFunctions.getWidth() / 2 - endFont:getWidth("IDIOT :: DEMO") / 2, gameFunctions.getHeight() / 2 - endFont:getHeight("IDIOT :: DEMO") / 2)
-	love.graphics.setFont(signFont)
-
 	love.graphics.pop()
 
-	if not ENDDEMO then
-		for k, v in pairs(objects["dialog"]) do
-			if v.screen == p then
-				v:draw()
-			end
+	for k, v in pairs(objects["dialog"]) do
+		if v.screen == p then
+			v:draw()
 		end
+	end
 
-		if paused then
-			pauseMenu:draw()
-		end
-	else
-		love.graphics.setScreen(p)
-		love.graphics.setFont(endFont)
-		love.graphics.print("Thanks for playing!", gameFunctions.getWidth() / 2 - endFont:getWidth("Thanks for playing!") / 2, 120 - endFont:getHeight("Thanks for playing!") / 2)
+	if paused then
+		pauseMenu:draw()
 	end
 
 	for k, v in pairs(objects) do
@@ -444,7 +441,7 @@ function gameUseRectangle(x, y, width, height)
 end
 
 function gameNextLevel()
-	if io.open("maps/" .. currentLevel + 1 .. ".lua") then
+	if love.filesystem.isFile("maps/" .. currentLevel + 1 .. ".lua") then
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	else
@@ -455,6 +452,11 @@ end
 
 function pushPop(self, start)
 	local v
+
+	if not objects then
+		return
+	end
+	
 	if objects["player"][1] then
 		v = objects["player"][1]
 	end
@@ -510,11 +512,11 @@ function gameLoadObjects()
 
 	shakeIntensity = 0
 
+	gameFadeOut = false
+
 	for k = 1, #mapScripts do
 		eventSystem:decrypt(mapScripts[k])
 	end
-
-	gameFadeOut = false
 end
 
 function gameLoadMap(map)

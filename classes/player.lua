@@ -397,7 +397,7 @@ function player:animate(dt)
 		
 	end
 
-	if (self.state ~= "idle" and self.state ~= "waiting") or #objects["dialog"] > 0 then
+	if (self.state ~= "idle" and self.state ~= "waiting") or (objects and objects["dialog"] and #objects["dialog"] > 0) then
 		self.idleTimer = 0
 	end
 
@@ -474,12 +474,10 @@ function player:useItem()
 	self.useKey = not self.useKey
 
 	if self.useKey then
-		self:dialogScroll()
-
 		--One tile
-		local squareSize = 16
+		local squareSize = 14
 		if self.direction == 2 then
-			squareSize = -16
+			squareSize = -14
 		end
 
 		local collide = gameUseRectangle(self.x + (self.width / 2) - squareSize / 2, self.y + (self.height / 2) - squareSize / 2, squareSize, squareSize)
@@ -505,7 +503,7 @@ function player:useItem()
 			end
 
 			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item}, nil, true)
-
+			print(#ret)
 			if #ret > 0 then
 				table.insert(objects["box"], newBoxGhost(self.x + add, self.y, self.screen))
 				self.useKey = true
@@ -540,7 +538,12 @@ function player:setScreen(screen)
 end
 
 function player:offscreenCheck()
-	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then		self:die()
+	if not objects then
+		return
+	end
+
+	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then		
+		self:die()
 	end
 end
 
@@ -570,11 +573,7 @@ function death:update(dt)
 	self.rotation = self.rotation + 4 * dt
 
 	if self.y > gameFunctions.getHeight() + mapScroll[self.screen][2] then
-		gameFadeOut = true
-
-		if gameFade == 1 then
-			gameLoadMap(currentLevel)
-		end
+		restartMap()
 	end
 end
 

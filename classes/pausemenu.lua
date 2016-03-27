@@ -21,6 +21,13 @@ function pausemenu:init()
 
 				gameFunctions.changeState("title")
 			end
+		},
+		{"Restart map",
+			function()
+				paused = false
+
+				restartMap()
+			end
 		}
 	}
 
@@ -38,7 +45,7 @@ end
 function pausemenu:draw()
 	love.graphics.setScreen(objects["player"][1].screen)
 
-	local x, y, w, h = gameFunctions.getWidth() / 2 - 72, gameFunctions.getHeight() / 2 - 32, 144, 64
+	local x, y, w, h = gameFunctions.getWidth() / 2 - 72, gameFunctions.getHeight() / 2 - 36, 144, 72
 
 	love.graphics.setColor(0, 0, 0, 200)
 
