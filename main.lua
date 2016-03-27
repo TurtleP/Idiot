@@ -157,18 +157,15 @@ function love.load()
 	andImage = love.graphics.newImage("graphics/objects/and.png")
 
 	controls =
-		{
-			["right"] = "cpadright",
-			["left"] = "cpadleft",
-			["up"] = "cpadup",
-			["down"] = "cpaddown",
-			["jump"] = "a",
-			["use"] = "b",
-			["run"] = "y",
-			["pause"] = "start",
-
-			["debug"] = "select"
-		}
+	{
+		["right"] = "cpadright",
+		["left"] = "cpadleft",
+		["up"] = "cpadup",
+		["down"] = "cpaddown",
+		["jump"] = "a",
+		["use"] = "b",
+		["pause"] = "start"
+	}
 
 	mapScripts = {}
 	for k = 1, 4 do
@@ -314,6 +311,25 @@ function saveSettings()
 	local data = tostring(directionalPadEnabled) .. ";" .. controls["jump"] .. ";" .. controls["use"] .. ";"
 
 	love.filesystem.write("options.txt", data)
+end
+
+function deleteData()
+	love.filesystem.remove("options.txt")
+
+	love.filesystem.remove("save.txt")
+
+	toggleDPad(false)
+
+	controls =
+	{
+		["right"] = "cpadright",
+		["left"] = "cpadleft",
+		["up"] = "cpadup",
+		["down"] = "cpaddown",
+		["jump"] = "a",
+		["use"] = "b",
+		["pause"] = "start"
+	}
 end
 
 function loadSettings()
