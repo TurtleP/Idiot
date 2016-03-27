@@ -181,7 +181,6 @@ function love.load()
 
 	jumpSound = love.audio.newSource("audio/jump.wav", "static")
 	scrollSound = love.audio.newSource("audio/blip.wav", "static")
-	textSound = love.audio.newSource("audio/text.wav", "static")
 	keySound = love.audio.newSource("audio/key.wav", "static")
 	plateSound = love.audio.newSource("audio/plate.wav", "static")
 	teleportSound = love.audio.newSource("audio/teleport.wav", "static")

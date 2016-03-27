@@ -246,7 +246,7 @@ function titleKeypressed(key)
 		elseif titleState == "options" then
 			titleChangeOptions(1)
 		end
-	elseif key == controls["jump"] then
+	elseif key == "a" then
 		if titleState == "select" then
 			titleOptions[titleSelection][2]()
 		elseif titleState == "options" then
@@ -254,7 +254,7 @@ function titleKeypressed(key)
 		end
 	end
 
-	if key == controls["use"] then
+	if key == "b" then
 		if titleState == "select" then
 			titleState = "main"
 		elseif titleState == "options" then
