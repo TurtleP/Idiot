@@ -190,6 +190,26 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 				end
 			end
 		end
+		
+		local olddraw = love.graphics.draw
+		function love.draw(...)
+			--draw what's IN the camera! Optimise shit! (Should help with Old 3DS models?)
+
+			local arg = {...}
+
+			local image = arg[1]
+
+			local width = 16
+			if image == backgroundImage.top or image == backgroundImage.bottom then
+				width = image:getWidth()
+			end
+
+			if x + width < getMapScrollX() or x > gameFunctions.getWidth() + getMapScrollX() then
+				return
+			end
+
+			olddraw(...)
+		end
 	else
 		local olddraw = love.graphics.draw
 		function love.graphics.draw(...)
