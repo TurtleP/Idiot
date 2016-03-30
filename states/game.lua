@@ -1,7 +1,7 @@
 function gameInit(loadGame)
 	eventSystem = eventsystem:new()
 
-	currentLevel = loadGame or 1
+	currentLevel = loadGame or 10
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
@@ -57,6 +57,11 @@ function gameUpdate(dt)
 			if fadeValue ~= 1 then
 				fadeValue = 1
 			end
+
+			if gameFade == 1 and deathRestart then
+				gameLoadMap(currentLevel)
+				deathRestart = false
+			end
 		end
 	else
 		if gameFade > 0 then
@@ -94,6 +99,10 @@ function cameraScroll()
 
 	local self = objects["player"][1]
 
+	if not self.animations then
+		return
+	end
+	
 	--==HORIZONTAL SCROLL==--
 
 	local _MAPWIDTH = mapDimensions[self.screen][1]
@@ -140,6 +149,22 @@ function cameraScroll()
 	end
 end
 
+function getMapScrollX()
+	if not objects then
+		return 0
+	end
+
+	return mapScroll[objects["player"][1].screen][1]
+end
+
+function getMapScrollY()
+	if not objects then
+		return 0
+	end
+
+	return mapScroll[objects["player"][1].screen][2]
+end
+
 function gameDraw()
 	love.graphics.push()
 
@@ -158,10 +183,14 @@ function gameDraw()
 	love.graphics.pop()
 end
 
-function restartMap()
+function restartMap(paused)
 	gameFadeOut = true
 
-	gameInit(currentLevel)
+	if paused then
+		gameLoadMap(currentLevel)
+	else
+		deathRestart = true
+	end
 end
 
 function gameKeypressed(key)
@@ -286,12 +315,6 @@ function gameDrawEntities()
 	end
 	
 	for k, v in pairs(objects["tile"]) do
-		if v.screen == p then
-			v:draw()
-		end
-	end
-
-	for k, v in pairs(objects["logicgate"]) do
 		if v.screen == p then
 			v:draw()
 		end
@@ -571,7 +594,7 @@ function loadObjects(objectData, screen)
 		elseif w.name == "sign" then
 			table.insert(objects["sign"], sign:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "spikes" then
-			table.insert(objects["spikes"], spikes:new(w.x, w.y + 8, screen))
+			table.insert(objects["spikes"], spikes:new(w.x, w.y + 8, w.width, screen))
 		elseif w.name == "teleporter" then
 			table.insert(objects["teleporter"], teleporter:new(w.x, w.y - 16, w.properties, screen))
 		elseif w.name == "sensor" then

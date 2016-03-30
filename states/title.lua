@@ -4,7 +4,7 @@ function titleInit()
 	idiotChar = player:new(-13, gameFunctions.getHeight() - 48)
 	idiotChar:walk("right", 206)
 
-	titleY = -endFont:getHeight("Idiot")
+	titleY = -titleLogo:getHeight()
 	titleTimer = 0
 
 	titleDoSine = false
@@ -121,17 +121,12 @@ function titleDraw()
 
 	love.graphics.draw(titleImage, 0, 0)
 
-	love.graphics.setFont(endFont)
-
 	local off = 0
 	if titleDoSine then
 		off = math.sin(love.timer.getTime()) * 6
 	end
 
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("Idiot", gameFunctions.getWidth() / 2 - endFont:getWidth("Idiot") / 2 - 2,  (titleY - 2) + off)
-	love.graphics.setColor(255, 0, 0)
-	love.graphics.print("Idiot", gameFunctions.getWidth() / 2 - endFont:getWidth("Idiot") / 2, titleY + off)
+	love.graphics.draw(titleLogo, gameFunctions.getWidth() / 2 - titleLogo:getWidth() / 2, math.floor(titleY + off))
 
 	love.graphics.setFont(signFont)
 
@@ -210,7 +205,7 @@ end
 function shadowPrint(text, x, y, a)
 	local alpha = a or 1
 	love.graphics.setColor(0, 0, 0, 255 * alpha)
-	love.graphics.print(text, x - 0.5, y - 0.5)
+	love.graphics.print(text, x - 1, y - 1)
 	love.graphics.setColor(255, 255, 255, 255 * alpha)
 	love.graphics.print(text, x, y)
 end

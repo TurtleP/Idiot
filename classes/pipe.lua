@@ -36,7 +36,7 @@ function pipe:init(x, y, r, screen)
 end
 
 function pipe:use(player)
-	if not self.link or player.item then
+	if self.link == "" or player.item then
 		return
 	end
 
@@ -141,6 +141,10 @@ function pipe:transfer(player, dt)
 end
 
 function pipe:update(dt)
+	if self.link == "" then
+		return
+	end
+	
 	if self.player then
 		if not self.output then
 			if self.direction == "up" or self.direction == "down" then

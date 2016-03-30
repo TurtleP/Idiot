@@ -7,7 +7,7 @@ function delayer:init(x, y, properties, screen)
 	self.time = tonumber(properties.time) or 2
 	self.isTimer = bool(properties.timer)
 
-	self.out = false
+	self.out = true
 
 	self.width = 9
 	self.height = 9
@@ -42,6 +42,7 @@ end
 
 function delayer:update(dt)
 	if self.out then
+		self.quadi = math.floor( (self.timer / self.time) * (#delayerQuads - 1) ) + 1
 		if not self.isTimer then
 			if self.timer < self.time then
 				self.timer = self.timer + dt
@@ -91,9 +92,7 @@ function delayer:draw()
 	love.graphics.setScreen(self.screen)
 
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.draw(delayerImage, delayerQuads[1], self.x, self.y)
-	love.graphics.setColor(unpack(colorfade(self.timer, self.time, {0, 200, 0}, {200, 0, 0})))
-	love.graphics.draw(delayerImage, delayerQuads[2], self.x, self.y)
+	love.graphics.draw(delayerImage, delayerQuads[self.quadi], self.x, self.y)
 	love.graphics.setColor(255, 255, 255)
 
 	pushPop(self)

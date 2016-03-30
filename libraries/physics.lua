@@ -62,21 +62,15 @@ function checkCollision(objTable, obj2Table, objData, objName, obj2Name, dt)
 		if objData.screen == obj2Data.screen then
 			if objData ~= obj2Data then
 				if not obj2Data.passive then
-
 					if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
 
 						if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
-							if verticalCollide(objName, objData, obj2Name, obj2Data) then
-								ver = true
-							end
+							ver = verticalCollide(objName, objData, obj2Name, obj2Data)
 						elseif aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
-							if horizontalCollide(objName, objData, obj2Name, obj2Data) then
-								hor = true
-							end
+							hor = horizontalCollide(objName, objData, obj2Name, obj2Data)
 						end
 
 					end
-
 				else 
 					checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
 				end

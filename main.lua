@@ -1,6 +1,6 @@
 io.stdout:setvbuf("no")
 
---misc
+--variables
 require 'data'
 
 --libraries
@@ -12,13 +12,16 @@ require 'libraries/gamefunctions'
 --states
 require 'states/title'
 require 'states/game'
+require 'states/intro'
 
---entities/objects
+--characters
 require 'classes/player'
 require 'classes/ren'
 
+--pause menu (forever alone!)
 require 'classes/pausemenu'
 
+--objects
 require 'classes/tile'
 require 'classes/sign'
 require 'classes/box'
@@ -134,8 +137,10 @@ function love.load()
 
 	delayerImage = love.graphics.newImage("graphics/objects/delayer.png")
 	delayerQuads = {}
-	for k = 1, 2 do
-		delayerQuads[k] = love.graphics.newQuad((k - 1) * 16, 0, 16, 16, delayerImage:getWidth(), delayerImage:getHeight())
+	for y = 1, 4 do
+		for x = 1, 5 do
+			table.insert(delayerQuads, love.graphics.newQuad((x - 1) * 15, (y - 1) * 19, 15, 19, delayerImage:getWidth(), delayerImage:getHeight()))
+		end
 	end
 
 	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
@@ -151,11 +156,15 @@ function love.load()
 
 	titleImage = love.graphics.newImage("maps/title.png")
 	optionsImage = love.graphics.newImage("maps/options.png")
+	titleLogo = love.graphics.newImage("graphics/title/logo.png")
 
 	notImage = love.graphics.newImage("graphics/objects/not.png")
 
 	andImage = love.graphics.newImage("graphics/objects/and.png")
 
+	introImage = love.graphics.newImage("graphics/intro/intro.png")
+	potionImage = love.graphics.newImage("graphics/intro/potionLogo.png")
+	
 	controls =
 	{
 		["right"] = "cpadright",
@@ -168,7 +177,7 @@ function love.load()
 	}
 
 	mapScripts = {}
-	for k = 1, 4 do
+	for k = 1, 5 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
@@ -190,7 +199,7 @@ function love.load()
 	pauseSound = love.audio.newSource("audio/pause.wav", "static")
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
-	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 32)
+	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
 
 	local mobileDevice =
 	{
@@ -207,8 +216,6 @@ function love.load()
 		require 'mobile/touchcontrol'
 
 		touchControls = touchcontrol:new()
-
-		--love.window.setMode(love.window.getDesktopDimensions())
 	end
 
 	enableAudio = false
@@ -218,7 +225,7 @@ function love.load()
 
 	loadSettings()
 
-	gameFunctions.changeState("title")
+	gameFunctions.changeState("intro")
 end
 
 function love.update(dt)
@@ -300,7 +307,13 @@ function saveGame()
 end
 
 function loadGame()
-	currentLevel = tonumber(love.filesystem.read("save.txt"):gsub("0x", ""), 10)
+	if love.filesystem.isFile("save.txt") then
+		currentLevel = tonumber(love.filesystem.read("save.txt"):gsub("0x", ""), 10)
+
+		if not currentLevel then
+			return
+		end
+	end
 
 	print("Loading from file: " .. currentLevel)
 
@@ -318,6 +331,10 @@ function deleteData()
 
 	love.filesystem.remove("save.txt")
 
+	defaultSettings()
+end
+
+function defaultSettings()
 	toggleDPad(false)
 
 	controls =
@@ -330,6 +347,13 @@ function deleteData()
 		["use"] = "b",
 		["pause"] = "start"
 	}
+
+	titleOptions[1] =
+	{"New Game", 
+		function()
+			gameFunctions.changeState("game") 
+		end
+	}
 end
 
 function loadSettings()
@@ -337,6 +361,12 @@ function loadSettings()
 		local data = love.filesystem.read("options.txt")
 
 		local split = data:split(";")
+
+		if #split ~= 3 then
+			love.filesystem.remove("options.txt")
+
+			defaultSettings()
+		end
 
 		toggleDPad(bool(split[1]))
 

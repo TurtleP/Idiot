@@ -20,7 +20,7 @@ function fan:init(x, y, r, screen)
 
 	self.link = r.link:split(";")
 	
-	self.maxheight = (self.y - (r.maxheight * 16)) or 0
+	self.maxheight = r.maxheight * 16 or 0
 
 	self.air = true
 
@@ -67,7 +67,7 @@ function fan:update(dt)
 			self.particleTimer = 0
 		end
 
-		local obj = checkrectangle(self.x, self.maxheight, self.width, height, {"player", "box"}, self)
+		local obj = checkrectangle(self.x, self.y - self.maxheight, self.width, self.maxheight, {"player", "box"}, self)
 		if #obj > 0 then
 			for k, v in pairs(obj) do
 				local entity = v[2]

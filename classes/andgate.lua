@@ -22,15 +22,6 @@ function andgate:init(x, y, properties, screen)
 	self.out = 0
 end
 
-function andgate:draw()
-	pushPop(self, true)
-	love.graphics.setScreen(self.screen)
-
-	love.graphics.draw(andImage, self.x + 4.5, self.y + 4.5)
-
-	pushPop(self)
-end
-
 function andgate:input(t)
 	if t == "on" then
 		self.out = math.min(self.out + 1, #self.link)

@@ -71,10 +71,14 @@ function pausemenu:keypressed(key)
 	if key == controls["down"] then
 		if self.currentOption < #self.options then
 			self.currentOption = self.currentOption + 1
+
+			self.sineTimer = 0
 		end
 	elseif key == controls["up"] then
 		if self.currentOption > 1 then
 			self.currentOption = self.currentOption - 1
+
+			self.sineTimer = 0
 		end
 	elseif key == controls["jump"] then
 		self.options[self.currentOption][2]()

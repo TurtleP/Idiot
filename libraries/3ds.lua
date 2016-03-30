@@ -11,10 +11,10 @@ if love.system.getOS() ~= "3ds" then
 
 		love.window.setMode(400 * scale, 480 * scale, {vsync = true})
 
-		love.window.setTitle(love.filesystem.getIdentity() .. " :: " .. love.system.getModel())
+		love.window.setTitle(love.filesystem.getIdentity() .. " :: Nintendo " .. love.system.getModel())
 	end
 
-	love.system.setModel(1)
+	love.system.setModel(2)
 
 	function love.graphics.setScreen(screen)
 		assert(type(screen) == "string", "String expected, got " .. type(screen))
@@ -197,22 +197,32 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 
 			local image = args[1]
 			local quad
-			local x, y, r
+			local x, y, r = 0, 0, 0
 			local scalex, scaley
 
 			if type(args[2]) == "userdata" then
 				quad = args[2]
-				x = args[3]
-				y = args[4]
+				x = args[3] or 0
+				y = args[4] or 0
 				scalex, scaley = args[5], args[6]
 			else
-				x, y = args[2], args[3]
-				r = args[4]
+				x, y = args[2] or 0, args[3] or 0
+				r = args[4] or 0
 			end
 
 			if love.graphics.getScreen() == "bottom" then
 				x = x + 40
 				y = y + 240
+			end
+
+			--draw what's IN the camera! Optimise shit! (Should help with Old 3DS models?)
+			local width = 16
+			if image == backgroundImage.top or image == backgroundImage.bottom then
+				width = image:getWidth()
+			end
+
+			if x + width < getMapScrollX() or x > gameFunctions.getWidth() + getMapScrollX() then
+				return
 			end
 
 			if not quad then
