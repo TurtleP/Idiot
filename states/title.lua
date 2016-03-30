@@ -69,6 +69,8 @@ function titleInit()
 		"Display the credits."
 	}
 
+	bossSong = nil
+
 	if not titleMusic then
 		titleMusic = love.audio.newSource("audio/title.wav", "stream")
 	end
