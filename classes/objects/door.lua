@@ -107,6 +107,10 @@ end
 function door:toggleOpen()
 	self.open = not self.open
 
+	if self.isLocked then
+		self.unlocked = not self.unlocked
+	end
+
 	if not self.open then
 		self.closeAnimation = true
 	else

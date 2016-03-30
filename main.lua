@@ -15,31 +15,32 @@ require 'states/game'
 require 'states/intro'
 
 --characters
-require 'classes/player'
-require 'classes/ren'
+require 'classes/characters/player'
+require 'classes/characters/ren'
+require 'classes/characters/turret'
 
 --pause menu (forever alone!)
-require 'classes/pausemenu'
+require 'classes/misc/pausemenu'
 
 --objects
-require 'classes/tile'
-require 'classes/sign'
-require 'classes/box'
-require 'classes/key'
-require 'classes/pressureplate'
-require 'classes/fan'
-require 'classes/door'
-require 'classes/teleporter'
-require 'classes/spikes'
-require 'classes/pipe'
-require 'classes/hud'
-require 'classes/button'
-require 'classes/sensor'
-require 'classes/dropper'
-require 'classes/laser'
-require 'classes/notgate'
-require 'classes/delayer'
-require 'classes/andgate'
+require 'classes/objects/tile'
+require 'classes/objects/sign'
+require 'classes/objects/box'
+require 'classes/objects/key'
+require 'classes/objects/pressureplate'
+require 'classes/objects/fan'
+require 'classes/objects/door'
+require 'classes/objects/teleporter'
+require 'classes/objects/spikes'
+require 'classes/objects/pipe'
+require 'classes/objects/hud'
+require 'classes/objects/button'
+require 'classes/objects/sensor'
+require 'classes/objects/dropper'
+require 'classes/objects/laser'
+require 'classes/objects/notgate'
+require 'classes/objects/delayer'
+require 'classes/objects/andgate'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
@@ -154,6 +155,15 @@ function love.load()
 		end
 	end
 
+	turretImage = love.graphics.newImage("graphics/enemy/turret.png")
+	turretQuads = {}
+	for x = 1, 5 do
+		turretQuads[x] = {}
+		for y = 1, 2 do
+			turretQuads[x][y] = love.graphics.newQuad((x - 1) * 13, (y - 1) * 14, 13, 14, turretImage:getWidth(), turretImage:getHeight())
+		end
+	end
+
 	titleImage = love.graphics.newImage("maps/title.png")
 	optionsImage = love.graphics.newImage("maps/options.png")
 	titleLogo = love.graphics.newImage("graphics/title/logo.png")
@@ -177,7 +187,7 @@ function love.load()
 	}
 
 	mapScripts = {}
-	for k = 1, 5 do
+	for k = 1, 6 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 

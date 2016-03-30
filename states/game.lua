@@ -1,7 +1,7 @@
 function gameInit(loadGame)
 	eventSystem = eventsystem:new()
 
-	currentLevel = loadGame or 10
+	currentLevel = loadGame or 11
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
 
@@ -152,6 +152,8 @@ end
 function getMapScrollX()
 	if not objects then
 		return 0
+	elseif not objects["player"][1] then
+		return 0
 	end
 
 	return mapScroll[objects["player"][1].screen][1]
@@ -220,6 +222,7 @@ function gameKeypressed(key)
 		return
 	end
 
+	print(controls["jump"], key)
 	if key == controls["jump"] then
 		objects["player"][1]:dialogScroll()
 	end

@@ -45,6 +45,8 @@ function eventsystem:update(dt)
 					objects["player"][1] = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
 				elseif v.args[1] == "ren" then
 					table.insert(objects["enemy"], renhoek:new(v.args[2], v.args[3], v.args[4]))
+				elseif v.args[1] == "turret" then
+					table.insert(objects["enemy"], turret:new(v.args[2], v.args[3], v.args[4]))
 				end
 			elseif cmd == "walkcharacter" then
 				if v.args[1] == "ren" then
@@ -61,6 +63,10 @@ function eventsystem:update(dt)
 					local temp = key:new(v.args[2], v.args[3], objects["player"][1].screen)
 					temp:drop()
 					table.insert(objects["key"], temp)
+				end
+			elseif cmd == "facedirection" then
+				if v.args[1] == "enemy" then
+					objects["enemy"][1]:faceDirection(v.args[2])
 				end
 			elseif cmd == "freezeplayer" then
 				_LOCKPLAYER = true

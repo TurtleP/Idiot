@@ -303,9 +303,9 @@ end
 function player:dialogScroll()
 	for k, v in ipairs(objects["dialog"]) do
 		if v.activated then
-			if v.autoscroll then
+			--[[if v.autoscroll then
 				return
-			end
+			end]]
 			v:scrollText()
 			self.useKey = false
 			break
