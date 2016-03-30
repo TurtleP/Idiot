@@ -11,11 +11,8 @@ return
 	{"shake", 10},
 	{"dialog", {"turret", "Ow! Alright.. Fine. I deserved that."}},
 	{"dialog", {"idiot", "Oh come on, this can't be happening."}},
-	{"dialog", {"turret", "Can't see me now, my time is now--"}},
-	{"dialog", {"idiot", "Wow. I have no response to this."}},
-	{"dialog", {"turret", "AND MY NAME IS TURREEEETT!"}},
-	{"shake", 10},
-	{"spawncharacter", {"turret", 352, 160, "top"}},
+	{"spawncharacter", {"turret", 352, 176, "top"}},
 	{"facedirection", {"enemy", 2}},
-	{"unfreezeplayer"}
+	{"unfreezeplayer"},
+	{"disable"}
 }

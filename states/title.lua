@@ -69,6 +69,10 @@ function titleInit()
 		"Display the credits."
 	}
 
+	if not titleMusic then
+		titleMusic = love.audio.newSource("audio/title.wav", "stream")
+	end
+	
 	backgroundMusic:stop()
 end
 

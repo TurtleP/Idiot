@@ -1,11 +1,9 @@
 function gameInit(loadGame)
 	eventSystem = eventsystem:new()
 
-	currentLevel = loadGame or 11
+	currentLevel = loadGame or 1
 
 	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
-
-	gameLoadMap(currentLevel)
 
 	love.graphics.setBackgroundColor(67, 67, 67)
 
@@ -20,11 +18,25 @@ function gameInit(loadGame)
 	pauseMenu = pausemenu:new()
 
 	titleMusic:stop()
+
+	titleMusic = nil
+
+	if not bossSong then
+		bossSong = love.audio.newSource("audio/boss.wav")
+	end
+
+	gameLoadMap(currentLevel)
 end
 
 function gameUpdate(dt)
-	if not backgroundMusic:isPlaying() then
-		backgroundMusic:play()
+	if not objects["enemy"][1] then
+		if not backgroundMusic:isPlaying() then
+			backgroundMusic:play()
+		end
+	else
+		if not bossSong:isPlaying() then
+			bossSong:play()
+		end
 	end
 
 	if paused then
@@ -222,7 +234,6 @@ function gameKeypressed(key)
 		return
 	end
 
-	print(controls["jump"], key)
 	if key == controls["jump"] then
 		objects["player"][1]:dialogScroll()
 	end
@@ -359,6 +370,12 @@ function gameDrawEntities()
 		end
 	end
 
+	for k, v in pairs(objects["lava"]) do
+		if v.screen == p then
+			v:draw()
+		end
+	end
+
 	for k, v in pairs(objects["fan"]) do
 		if v.screen == p then
 			v:draw()
@@ -473,8 +490,7 @@ function gameNextLevel()
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	else
-		ENDDEMO = true
-		gameFadeOut = true
+		gameFunctions.changeState("title")
 	end	
 end
 
@@ -529,6 +545,7 @@ function gameLoadObjects()
 	objects["laser"] = {}
 	objects["logicgate"] = {}
 	objects["enemy"] = {}
+	objects["lava"] = {}
 
 	objectUseRectangles = {}
 
@@ -543,12 +560,21 @@ function gameLoadObjects()
 	gameFadeOut = false
 
 	for k = 1, #mapScripts do
+		if k == 7 then
+			return
+		end
 		eventSystem:decrypt(mapScripts[k])
 	end
 end
 
 function gameLoadMap(map)
 	currentLevel = map
+
+	backgroundMusic:stop()
+
+	if bossSong then
+		bossSong:stop()
+	end
 
 	gameLoadObjects()
 
@@ -606,6 +632,8 @@ function loadObjects(objectData, screen)
 			table.insert(objects["dropper"], dropper:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "laser" then
 			table.insert(objects["laser"], laser:new(w.x + 7.5, w.y, w.properties, screen))
+		elseif w.name == "lava" then
+			table.insert(objects["lava"], lava:new(w.x, w.y + 8, w.width, screen))
 		elseif w.name == "spawn" then
 			_PLAYERSPAWNX, _PLAYERSPAWNY = w.x, w.y
 		elseif w.name == "notgate" then

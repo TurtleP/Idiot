@@ -14,7 +14,8 @@ function player:init(x, y)
 		["fan"] = true,
 		["spikes"] = true,
 		["door"] = true,
-		["pipe"] = true
+		["pipe"] = true,
+		["enemy"] = true
 	}
 
 	self.active = true
@@ -167,6 +168,13 @@ function player:upCollide(name, data)
 			end
 		end
 	end
+
+	if name == "enemy" then
+		if not data.dead then
+			self:die()
+		end
+		return false
+	end
 end
 
 function player:downCollide(name, data)
@@ -181,6 +189,25 @@ function player:downCollide(name, data)
 		if data.direction == "up" then
 			if self.downKey then
 				data:use(self)
+			end
+		end
+	end
+
+	if name == "enemy" then
+		if data.name == "turret" then
+			if data.speedy < 0 then
+				data:die()
+				
+				self.jumping = false
+
+				self:jump(true)
+
+				return false
+			else
+				if not data.dead then
+					self:die()
+					return false
+				end
 			end
 		end
 	end
@@ -200,6 +227,13 @@ function player:leftCollide(name, data)
 			end
 		end
 	end
+
+	if name == "enemy" then
+		if not data.dead then
+			self:die()
+		end
+		return false
+	end
 end
 
 function player:rightCollide(name, data)
@@ -215,6 +249,13 @@ function player:rightCollide(name, data)
 				data:use(self)
 			end
 		end
+	end
+
+	if name == "enemy" then
+		if not data.dead then
+			self:die()
+		end
+		return false
 	end
 end
 
@@ -454,8 +495,8 @@ function player:moveDown(move)
 	self.downKey = move
 end
 
-function player:jump()
-	if not self.doUpdate or self.speedy > 0 then
+function player:jump(force)
+	if not self.doUpdate or (self.speedy > 0 and not force) then
 		return
 	end
 	

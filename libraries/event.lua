@@ -81,7 +81,15 @@ function eventsystem:update(dt)
 			elseif cmd == "fadein" then
 				gameFade = 1
 				gameFadeOut = false
-				fadeValue = v.args
+				fadeValue = v.args or 1
+			elseif cmd == "disable" then
+				self.disabled = true
+			elseif cmd == "fadeout" then
+				gameFade = 0
+				gameFadeOut = true
+				fadeValue = v.args or 1
+			elseif cmd == "nextlevel" then
+				gameNextLevel()
 			end
 		end
 	else
@@ -105,7 +113,6 @@ function eventsystem:decrypt(scriptString)
 		if cmd == "levelequals" then
 			if currentLevel ~= arg then
 				print("Won't load script {Level Equals: " .. arg .. "} (doesn't belong to level!)")
-
 				break
 			else
 				print("Using script {Level Equals: " .. arg .. "}")

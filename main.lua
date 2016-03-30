@@ -41,6 +41,7 @@ require 'classes/objects/laser'
 require 'classes/objects/notgate'
 require 'classes/objects/delayer'
 require 'classes/objects/andgate'
+require 'classes/objects/lava'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
@@ -164,6 +165,12 @@ function love.load()
 		end
 	end
 
+	lavaImage = love.graphics.newImage("graphics/objects/lava.png")
+	lavaQuads = {}
+	for k = 1, 4 do
+		lavaQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 8, lavaImage:getWidth(), lavaImage:getHeight())
+	end
+
 	titleImage = love.graphics.newImage("maps/title.png")
 	optionsImage = love.graphics.newImage("maps/options.png")
 	titleLogo = love.graphics.newImage("graphics/title/logo.png")
@@ -187,13 +194,11 @@ function love.load()
 	}
 
 	mapScripts = {}
-	for k = 1, 6 do
+	for k = 1, 7 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
 	backgroundMusic = love.audio.newSource("audio/bgm.wav", "stream")
-
-	titleMusic = love.audio.newSource("audio/title.wav", "stream")
 
 	jumpSound = love.audio.newSource("audio/jump.wav", "static")
 	scrollSound = love.audio.newSource("audio/blip.wav", "static")
@@ -229,7 +234,7 @@ function love.load()
 	end
 
 	enableAudio = false
-	love.audio.setVolume(0)
+	--love.audio.setVolume(0)
 
 	buildVersion = "1.0-dev"
 
