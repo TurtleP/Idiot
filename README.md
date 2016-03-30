@@ -2,7 +2,7 @@
 A remake of [Idiot: Puzzles](http://forum.stabyourself.net/viewtopic.php?f=11&t=3311) for Nintendo 3DS and PC
 
 <p align="center"
-  <img src="http://imgur.com/jN4E68E"/>
+  <img src="http://i.imgur.com/jN4E68E.png"/>
 </p>
 
 # How do I run this on {platform}?
