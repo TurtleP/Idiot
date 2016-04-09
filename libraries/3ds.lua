@@ -1,20 +1,28 @@
 if love.system.getOS() ~= "3ds" then
 	_SCREEN = "top"
 
-	models = {"3DS", "3DSXL"}
+	models = {"PC", "3DS", "3DSXL"}
 	function love.system.getModel()
 		return models[scale]
 	end
 
 	function love.system.setModel(s)
-		scale = s
+		if s == 2 then
+			s = 1
+		end
 
-		love.window.setMode(400 * scale, 480 * scale, {vsync = true})
+		scale = s
+		
+		if love.system.getModel() ~= "PC" then
+			love.window.setMode(400 * scale, 480 * scale, {vsync = true})
+		else
+			love.window.setMode(400 * scale, 240 * scale, {vsync = true})
+		end
 
 		love.window.setTitle(love.filesystem.getIdentity() .. " :: Nintendo " .. love.system.getModel())
 	end
 
-	love.system.setModel(2)
+	love.system.setModel(1)
 
 	function love.graphics.setScreen(screen)
 		assert(type(screen) == "string", "String expected, got " .. type(screen))
@@ -192,12 +200,17 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 		end
 		
 		local olddraw = love.graphics.draw
-		function love.draw(...)
+		function love.graphics.draw(...)
 			--draw what's IN the camera! Optimise shit! (Should help with Old 3DS models?)
 
 			local arg = {...}
 
 			local image = arg[1]
+
+			local x = arg[2] or 0
+			if type(arg[2]) == "userdata" then
+				x = arg[3] or 0
+			end
 
 			local width = 16
 			if image == backgroundImage.top or image == backgroundImage.bottom then
@@ -233,16 +246,6 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 			if love.graphics.getScreen() == "bottom" then
 				x = x + 40
 				y = y + 240
-			end
-
-			--draw what's IN the camera! Optimise shit! (Should help with Old 3DS models?)
-			local width = 16
-			if image == backgroundImage.top or image == backgroundImage.bottom then
-				width = image:getWidth()
-			end
-
-			if x + width < getMapScrollX() or x > gameFunctions.getWidth() + getMapScrollX() then
-				return
 			end
 
 			if not quad then

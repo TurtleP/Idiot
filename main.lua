@@ -260,13 +260,13 @@ function love.draw()
 		_G[state .. "Draw"]()
 	end
 
-	love.graphics.setFont(signFont)
-	love.graphics.setScreen('top')
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS() - 1))
-	
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 2, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS()))
+	if physdebug then
+		love.graphics.setFont(signFont)
+		love.graphics.setScreen('top')
+		
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS() - 3))
+	end
 
 	love.graphics.pop()
 end
@@ -363,12 +363,14 @@ function defaultSettings()
 		["pause"] = "start"
 	}
 
-	titleOptions[1] =
-	{"New Game", 
-		function()
-			gameFunctions.changeState("game") 
-		end
-	}
+	if titleOptions then
+		titleOptions[1] =
+		{"New Game", 
+			function()
+				gameFunctions.changeState("game") 
+			end
+		}
+	end
 end
 
 function loadSettings()

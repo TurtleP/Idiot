@@ -34,8 +34,10 @@ function gameUpdate(dt)
 			backgroundMusic:play()
 		end
 	else
-		if not bossSong:isPlaying() then
-			bossSong:play()
+		if not eventSystem.running then
+			if not bossSong:isPlaying() then
+				bossSong:play()
+			end
 		end
 	end
 
@@ -321,107 +323,74 @@ function gameDrawEntities()
 	love.graphics.pop()
 
 	for k, v in pairs(objects["sensor"]) do
-		if v.screen == p then
-			if v.draw then
-				v:draw()
-			end
+		if v.draw then
+			v:draw()
 		end
 	end
 	
 	for k, v in pairs(objects["tile"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["door"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["teleporter"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["plate"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["sign"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
+		
 	end
 
 	for k,v in pairs(objects["spikes"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["key"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["lava"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["fan"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["player"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["laser"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["box"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["dropper"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["pipe"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 	
 	for k, v in pairs(objects["button"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	for k, v in pairs(objects["enemy"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	love.graphics.push()
@@ -441,9 +410,7 @@ function gameDrawEntities()
 	love.graphics.pop()
 
 	for k, v in pairs(objects["dialog"]) do
-		if v.screen == p then
-			v:draw()
-		end
+		v:draw()
 	end
 
 	if paused then
@@ -521,7 +488,15 @@ function pushPop(self, start)
 		else
 			love.graphics.pop()
 		end
+
+		if self.screen ~= objects["player"][1].screen or not insideCamera(self) then
+			return
+		end
 	end
+end
+
+function insideCamera(self)
+	return (self.x + self.width < getMapScrollX() or self.x > gameFunctions.getWidth() + getMapScrollX())
 end
 
 function gameLoadObjects()
