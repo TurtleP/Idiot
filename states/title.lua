@@ -26,6 +26,11 @@ function titleInit()
 		{"Quit Idiot", love.event.quit}
 	}
 
+	if isMobile() then
+		titleOptions[2][1] = "View Credits"
+		titleOptions[2][2] = function() end
+	end
+
 	if love.filesystem.isFile("save.txt") then
 		titleOptions[1] = {"Continue Game", loadGame}
 	end
@@ -217,6 +222,11 @@ function shadowPrint(text, x, y, a)
 end
 
 function titleKeypressed(key)
+	local accept, back = "a", "b"
+	if isMobile() then
+		accept, back = controls["jump"], controls["use"]
+	end
+
 	if setControls[1] then
 		if key == controls["pause"] then
 			setControls = {false, false}
@@ -247,7 +257,7 @@ function titleKeypressed(key)
 		elseif titleState == "options" then
 			titleChangeOptions(1)
 		end
-	elseif key == "a" then
+	elseif key == accept then
 		if titleState == "select" then
 			titleOptions[titleSelection][2]()
 		elseif titleState == "options" then
@@ -255,7 +265,7 @@ function titleKeypressed(key)
 		end
 	end
 
-	if key == "b" then
+	if key == back then
 		if titleState == "select" then
 			titleState = "main"
 		elseif titleState == "options" then

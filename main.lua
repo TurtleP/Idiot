@@ -45,6 +45,16 @@ require 'classes/objects/lava'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
+local mobileDevice =
+{
+	["Android"] = true,
+	["iOS"] = true
+}
+		
+function isMobile()
+	return mobileDevice[love.system.getOS()]
+end
+
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -215,18 +225,23 @@ function love.load()
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
 	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
-
-	local mobileDevice =
-	{
-		["Android"] = true,
-		["iOS"] = true
-	}
 	
-	if mobileDevice[love.system.getOS()] then
+	if isMobile() then
 		local w, h = love.graphics.getDimensions()
 		scale = math.floor(math.max(w / 400, h / 240))
 
 		buttonFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
+
+		controls =
+		{
+			["right"] = "right",
+			["left"] = "left",
+			["up"] = "up",
+			["down"] = "down",
+			["jump"] = "space",
+			["use"] = "z",
+			["pause"] = "escape"
+		}
 
 		require 'mobile/touchcontrol'
 
@@ -248,6 +263,20 @@ function love.update(dt)
 
 	if _G[state .. "Update"] then
 		_G[state .. "Update"](dt)
+	end
+
+	if _EMULATEHOMEBREW then
+		if state == "game" then
+			if objects["player"][1] then
+				local v = objects["player"][1]
+
+				if v.screen == "bottom" then
+					mapScrollY = math.min(mapScrollY + 480 * dt, 240)
+				else
+					mapScrollY = math.max(mapScrollY - 480 * dt, 0)
+				end
+			end
+		end
 	end
 end
 
