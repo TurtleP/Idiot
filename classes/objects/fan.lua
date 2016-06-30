@@ -71,12 +71,15 @@ function fan:update(dt)
 		if #obj > 0 then
 			for k, v in pairs(obj) do
 				local entity = v[2]
-				if v[1] == "player" then
-					entity.state = "jump"
-					entity.falling = false
-					entity.jumping = true
+
+				if not entity.passive then
+					if v[1] == "player" then
+						entity.state = "jump"
+						entity.falling = false
+						entity.jumping = true
+					end
+					entity.speedy = -60
 				end
-				entity.speedy = -60
 			end
 		end
 	else

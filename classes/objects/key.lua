@@ -59,7 +59,7 @@ function key:draw()
 	if not self.active then
 		love.graphics.draw(keyImage, keyQuads[self.quadi], self.x, self.y + math.sin(love.timer.getTime() * 8))
 	else
-		love.graphics.draw(keyNormalImage, self.x + self.width / 2, self.y + self.height / 2, self.rotation, self.width / 2, self.height / 2)
+		love.graphics.draw(keyNormalImage, self.x, self.y, self.rotation)
 	end
 
 	pushPop(self)

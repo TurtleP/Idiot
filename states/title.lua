@@ -26,15 +26,6 @@ function titleInit()
 		{"Quit Idiot", love.event.quit}
 	}
 
-	if isMobile() then
-		titleOptions[2][1] = "View Credits"
-		titleOptions[2][2] = function() end
-	end
-
-	if love.filesystem.isFile("save.txt") then
-		titleOptions[1] = {"Continue Game", loadGame}
-	end
-
 	titleSelection = 1
 
 	titleSineValue = 1
@@ -74,10 +65,16 @@ function titleInit()
 		"Display the credits."
 	}
 
-	bossSong = nil
+	if bossSong then
+		bossSong = nil
+
+		collectgarbage()
+		
+		collectgarbage()
+	end
 
 	if not titleMusic then
-		titleMusic = love.audio.newSource("audio/title.wav", "stream")
+		titleMusic = love.audio.newSource("audio/title.ogg", "static")
 	end
 	
 	backgroundMusic:stop()

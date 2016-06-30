@@ -10,9 +10,13 @@ function laser:init(x, y, properties, screen)
 
 		self.x = x - 7.5
 		self.y = y + 7.5
+
+		self.dir = "hor"
+		self.originalWidth = self.width
 	end
 
 	if properties.height then
+		self.dir = "ver"
 		self.width = 1
 		self.height = (tonumber(properties.height) * 16) or 16
 		self.originalHeight = self.height
@@ -24,6 +28,7 @@ function laser:init(x, y, properties, screen)
 
 	self.timer = love.math.random(0.2, 0.5)
 	self.dotY = self.y
+	self.dotX = self.x
 	self.on = true
 end
 
@@ -66,10 +71,18 @@ function laser:update(dt)
 			self.doAnimation = true
 		end
 	else
-		self.dotY = self.dotY + 60 * dt
-		if self.dotY > self.y + self.height then
-			self.timer = love.math.random(1)
-			self.doAnimation = false
+		if self.dir == "ver" then
+			self.dotY = self.dotY + 60 * dt
+			if self.dotY > self.y + self.height then
+				self.timer = love.math.random(1)
+				self.doAnimation = false
+			end
+		else
+			self.dotX = self.dotX + 60 * dt
+			if self.dotX > self.x + self.width then
+				self.timer = love.math.random(1)
+				self.doAnimation = false
+			end
 		end
 	end
 end
@@ -83,9 +96,18 @@ function laser:updateLength()
 				return
 			end
 		end
-		self.height = check[1][2].y - self.y
+
+		if self.dir == "ver" then
+			self.height = check[1][2].y - self.y
+		else
+			self.width = check[1][2].x - self.x
+		end
 	else
-		self.height = self.originalHeight
+		if self.dir == "ver" then
+			self.height = self.originalHeight
+		else
+			self.width = self.originalWidth
+		end
 	end
 end
 
@@ -99,7 +121,11 @@ function laser:draw()
 		love.graphics.setColor(255, 255, 255)
 
 		if self.doAnimation then
-			love.graphics.rectangle("fill", self.x, self.dotY, self.width, self.width)
+			if self.dir == "ver" then
+				love.graphics.rectangle("fill", self.x, self.dotY, self.width, self.width)
+			else
+				love.graphics.rectangle("fill", self.dotX, self.y, self.height, self.height)
+			end
 		end
 	end
 

@@ -33,6 +33,10 @@ function getID(id)
 end
 
 function tile:draw()
+	if self.quadi == 1 then
+		return
+	end
+	
 	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 

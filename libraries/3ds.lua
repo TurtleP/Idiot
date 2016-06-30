@@ -160,6 +160,10 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 				return io.open(path)
 			end
 
+			function love.filesystem.isDirectory(path)
+				return love.filesystem.isFile(path):read(1) == 21
+			end
+
 			function love.filesystem.write(path, data)
 				if path and data then
 					local file = io.open(path, "w")
@@ -198,32 +202,10 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 				end
 			end
 		end
-		
-		local olddraw = love.graphics.draw
-		function love.graphics.draw(...)
-			--draw what's IN the camera! Optimise shit! (Should help with Old 3DS models?)
-
-			local arg = {...}
-
-			local image = arg[1]
-
-			local x = arg[2] or 0
-			if type(arg[2]) == "userdata" then
-				x = arg[3] or 0
-			end
-
-			local width = 16
-			if image == backgroundImage.top or image == backgroundImage.bottom then
-				width = image:getWidth()
-			end
-
-			if x + width < getMapScrollX() or x > gameFunctions.getWidth() + getMapScrollX() then
-				return
-			end
-
-			olddraw(...)
-		end
 	else
+		love.graphics.set3D = function() end
+		love.graphics.setDepth = function() end
+		
 		local olddraw = love.graphics.draw
 		function love.graphics.draw(...)
 			local args = {...}

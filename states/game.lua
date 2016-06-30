@@ -21,29 +21,22 @@ function gameInit(loadGame)
 
 	titleMusic = nil
 
+	collectgarbage()
+	collectgarbage()
+
 	if not bossSong then
-		bossSong = love.audio.newSource("audio/boss.wav")
+		bossSong = love.audio.newSource("audio/boss.ogg")
+		bossSong:setLooping(true)
 	end
+
+	backgroundMusic:play()
 
 	gameLoadMap(currentLevel)
 end
 
 function gameUpdate(dt)
-	if not objects["enemy"][1] then
-		if not backgroundMusic:isPlaying() then
-			backgroundMusic:play()
-		end
-	else
-		if not eventSystem.running then
-			if not bossSong:isPlaying() then
-				bossSong:play()
-			end
-		end
-	end
-
 	if paused then
 		pauseMenu:update(dt)
-
 		return
 	end
 
@@ -185,7 +178,7 @@ function gameDraw()
 	love.graphics.push()
 
 		love.graphics.translate(0, -math.floor(mapScrollY))
-
+		
 		if shakeIntensity > 0 then
 			love.graphics.translate( math.floor( (math.random() * 2 - 1) * shakeIntensity ), math.floor( (math.random() * 2 - 1) * shakeIntensity ) ) 
 		end
@@ -322,6 +315,26 @@ function gameDrawEntities()
 
 	love.graphics.pop()
 
+	love.graphics.push()
+
+	love.graphics.translate(-math.floor(mapScroll["top"][1]), 0)
+
+	love.graphics.setScreen("top")
+	love.graphics.draw(maps[currentLevel].top, 0, 0)
+
+	love.graphics.pop()
+
+	if maps[currentLevel].bottom then
+		love.graphics.push()
+			
+		love.graphics.translate(-math.floor(mapScroll["bottom"][1]), 0)
+
+		love.graphics.setScreen("bottom")
+		love.graphics.draw(maps[currentLevel].bottom, 0, 0)
+
+		love.graphics.pop()
+	end
+
 	for k, v in pairs(objects["sensor"]) do
 		if v.draw then
 			v:draw()
@@ -453,7 +466,7 @@ function gameUseRectangle(x, y, width, height)
 end
 
 function gameNextLevel()
-	if love.filesystem.isFile("maps/" .. currentLevel + 1 .. ".lua") then
+	if maps[currentLevel + 1] then
 		table.remove(objects["player"], 1)
 		gameLoadMap(currentLevel + 1)
 	else
@@ -545,15 +558,13 @@ end
 function gameLoadMap(map)
 	currentLevel = map
 
-	backgroundMusic:stop()
-
-	if bossSong then
+	if bossSong:isPlaying() then
 		bossSong:stop()
 	end
 
 	gameLoadObjects()
 
-	local newMap = require("maps/" .. map)
+	local newMap = maps[map].map
 
 	local mapData = newMap.layers
 

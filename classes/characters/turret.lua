@@ -42,6 +42,9 @@ function turret:init(x, y, screen)
 	self.state = "idle"
 
 	self.name = "turret"
+
+	backgroundMusic:stop()
+	bossSong:play()
 end
 
 function turret:update(dt)
@@ -53,6 +56,9 @@ function turret:update(dt)
 
 			if self.y > gameFunctions.getHeight() then
 				eventSystem:decrypt(mapScripts[7])
+				
+				bossSong:stop()
+				backgroundMusic:play()
 				
 				table.remove(objects["enemy"], 1)
 			end

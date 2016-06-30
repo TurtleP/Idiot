@@ -45,16 +45,6 @@ require 'classes/objects/lava'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
 
-local mobileDevice =
-{
-	["Android"] = true,
-	["iOS"] = true
-}
-		
-function isMobile()
-	return mobileDevice[love.system.getOS()]
-end
-
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
@@ -208,50 +198,45 @@ function love.load()
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
-	backgroundMusic = love.audio.newSource("audio/bgm.wav", "stream")
+	maps = {}
+	for k = 1, 11 do
+		maps[k] = {map = require("maps/" .. k), top = love.graphics.newImage("graphics/maps/top/" .. k .. ".png"), bottom = nil}
+	end
+	maps[7].bottom = love.graphics.newImage("graphics/maps/bottom/7.png")
+	maps[9].bottom = love.graphics.newImage("graphics/maps/bottom/9.png")
 
-	jumpSound = love.audio.newSource("audio/jump.wav", "static")
-	scrollSound = love.audio.newSource("audio/blip.wav", "static")
-	keySound = love.audio.newSource("audio/key.wav", "static")
-	plateSound = love.audio.newSource("audio/plate.wav", "static")
-	teleportSound = love.audio.newSource("audio/teleport.wav", "static")
-	deathSound = love.audio.newSource("audio/death.wav", "static")
-	unlockSound = love.audio.newSource("audio/unlock.wav", "static")
-	pipeSound = love.audio.newSource("audio/pipe.wav", "static")
-	buttonSound = love.audio.newSource("audio/button.wav", "static")
-	timeSound = love.audio.newSource("audio/time.wav", "static")
-	sensorSound = { love.audio.newSource("audio/sensoron.wav", "static") , love.audio.newSource("audio/sensoroff.wav", "static") }
-	pauseSound = love.audio.newSource("audio/pause.wav", "static")
+	backgroundMusic = love.audio.newSource("audio/bgm.ogg", "static")
+	backgroundMusic:setLooping(true)
+	
+	jumpSound = love.audio.newSource("audio/jump.ogg", "static")
+	scrollSound = love.audio.newSource("audio/blip.ogg", "static")
+	keySound = love.audio.newSource("audio/key.ogg", "static")
+	plateSound = love.audio.newSource("audio/plate.ogg", "static")
+	teleportSound = love.audio.newSource("audio/teleport.ogg", "static")
+	deathSound = love.audio.newSource("audio/death.ogg", "static")
+	unlockSound = love.audio.newSource("audio/unlock.ogg", "static")
+	pipeSound = love.audio.newSource("audio/pipe.ogg", "static")
+	buttonSound = love.audio.newSource("audio/button.ogg", "static")
+	timeSound = love.audio.newSource("audio/time.ogg", "static")
+	sensorSound = { love.audio.newSource("audio/sensoron.ogg", "static") , love.audio.newSource("audio/sensoroff.ogg", "static") }
+	pauseSound = love.audio.newSource("audio/pause.ogg", "static")
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
 	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
-	
-	if isMobile() then
-		local w, h = love.graphics.getDimensions()
-		scale = math.floor(math.max(w / 400, h / 240))
-
-		buttonFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
-
-		controls =
-		{
-			["right"] = "right",
-			["left"] = "left",
-			["up"] = "up",
-			["down"] = "down",
-			["jump"] = "space",
-			["use"] = "z",
-			["pause"] = "escape"
-		}
-
-		require 'mobile/touchcontrol'
-
-		touchControls = touchcontrol:new()
-	end
 
 	enableAudio = false
 	--love.audio.setVolume(0)
 
+	mapScrollY = 0
+
 	buildVersion = "1.0-dev"
+
+	--[[BACKGROUNDLAYER = 1.5
+	NORMALLAYER = 0
+	ENTITYLAYER = -1.5
+	INTERFACELAYER = -3
+
+	love.graphics.set3D(true)]]
 
 	loadSettings()
 
@@ -289,24 +274,12 @@ function love.draw()
 		_G[state .. "Draw"]()
 	end
 
-	if physdebug then
-		love.graphics.setFont(signFont)
-		love.graphics.setScreen('top')
-		
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - signFont:getWidth("FPS: " .. love.timer.getFPS()) - 3, gameFunctions.getHeight() - signFont:getHeight("FPS: " .. love.timer.getFPS() - 3))
-	end
-
 	love.graphics.pop()
 end
 
 function love.keypressed(key)
 	if _G[state .. "Keypressed"] then
 		_G[state .. "Keypressed"](key)
-	end
-
-	if key == controls["debug"] then
-		physdebug = not physdebug
 	end
 end
 
@@ -322,12 +295,12 @@ require 'libraries/3ds'
 gameFunctions = {}
 
 function gameFunctions.changeState(toState, ...)
-	state = toState
-
 	local arg = {...}
 
-	if _G[state .. "Init"] then
-		_G[state .. "Init"](unpack(arg))
+	if _G[toState .. "Init"] then
+		_G[toState .. "Init"](unpack(arg))
+		
+		state = toState
 	end
 end
 
@@ -350,16 +323,21 @@ function saveGame()
 	love.filesystem.write("save.txt", "0x" .. tonumber(currentLevel, 16))
 end
 
-function loadGame()
-	if love.filesystem.isFile("save.txt") then
+function loadSavedGame()
+	if pcall(love.filesystem.read, "save.txt") then
+
+		local data = love.filesystem.read("save.txt")
+
+		if not data then
+			return
+		end
+
 		currentLevel = tonumber(love.filesystem.read("save.txt"):gsub("0x", ""), 10)
 
 		if not currentLevel then
 			return
 		end
 	end
-
-	print("Loading from file: " .. currentLevel)
 
 	gameFunctions.changeState("game", currentLevel)
 end
@@ -403,24 +381,26 @@ function defaultSettings()
 end
 
 function loadSettings()
-	if love.filesystem.isFile("options.txt") then
+	local succ = pcall(love.filesystem.read, "options.txt")
+
+	if succ then
 		local data = love.filesystem.read("options.txt")
 
-		local split = data:split(";")
+		if data then
+			local split = data:split(";")
 
-		if #split ~= 3 then
-			love.filesystem.remove("options.txt")
+			if #split ~= 3 then
+				love.filesystem.remove("options.txt")
 
-			defaultSettings()
+				defaultSettings()
+			end
+
+			toggleDPad(bool(split[1]))
+
+			controls["jump"] = split[2]
+
+			controls["use"] = split[3]
 		end
-
-		toggleDPad(bool(split[1]))
-
-		controls["jump"] = split[2]
-
-		controls["use"] = split[3]
-
-		print(unpack(split))
 	end
 end
 
