@@ -3,7 +3,7 @@ function gameInit(loadGame)
 
 	currentLevel = loadGame or 1
 
-	outputs = {"plate", "button", "pipe", "teleporter", "sensor", "logicgate", "box"}
+	outputs = {"plate", "button", "pipe", "sensor", "logicgate", "box"}
 
 	love.graphics.setBackgroundColor(67, 67, 67)
 
@@ -23,6 +23,9 @@ function gameInit(loadGame)
 
 	collectgarbage()
 	collectgarbage()
+
+	backgroundMusic = love.audio.newSource("audio/bgm.ogg")
+	backgroundMusic:setLooping(true)
 
 	if not bossSong then
 		bossSong = love.audio.newSource("audio/boss.ogg")
@@ -112,7 +115,7 @@ function cameraScroll()
 	
 	--==HORIZONTAL SCROLL==--
 
-	local _MAPWIDTH = mapDimensions[self.screen][1]
+	local _MAPWIDTH = mapDimensions[self.screen][1] or 25
 
 	local _MAX = 25
 	if self.screen == "bottom" then
@@ -137,7 +140,7 @@ function cameraScroll()
 
 	--==VERTICAL SCROLL==--
 
-	local _MAPHEIGHT = mapDimensions[self.screen][2]
+	local _MAPHEIGHT = mapDimensions[self.screen][2] or 15
 
 	if _MAPHEIGHT > 15 then
 		if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
@@ -309,9 +312,7 @@ function gameDrawEntities()
 
 	love.graphics.setScreen(p)
 
-	for x = 1, math.floor(mapDimensions[p][1] / (backgroundImage[p]:getWidth() / 16)) + 1 do
-		love.graphics.draw(backgroundImage[p], (x - 1) * backgroundImage[p]:getWidth(), 0)
-	end
+	love.graphics.draw(backgroundImage[p], 0, 0)
 
 	love.graphics.pop()
 
@@ -349,17 +350,8 @@ function gameDrawEntities()
 		v:draw()
 	end
 
-	for k, v in pairs(objects["teleporter"]) do
-		v:draw()
-	end
-
 	for k, v in pairs(objects["plate"]) do
 		v:draw()
-	end
-
-	for k, v in pairs(objects["sign"]) do
-		v:draw()
-		
 	end
 
 	for k,v in pairs(objects["spikes"]) do
@@ -375,6 +367,10 @@ function gameDrawEntities()
 	end
 
 	for k, v in pairs(objects["fan"]) do
+		v:draw()
+	end
+
+	for k, v in pairs(objects["fanparticle"]) do
 		v:draw()
 	end
 
@@ -428,15 +424,6 @@ function gameDrawEntities()
 
 	if paused then
 		pauseMenu:draw()
-	end
-
-	for k, v in pairs(objects) do
-		for j, w in pairs(v) do
-			if physdebug then
-				love.graphics.setScreen(p)
-				love.graphics.rectangle("line", w.x, w.y, w.width, w.height)
-			end
-		end
 	end
 end
 
@@ -517,13 +504,12 @@ function gameLoadObjects()
 
 	objects["tile"] = {}
 	objects["player"] = {}
-	objects["sign"] = {}
 	objects["box"] = {}
 	objects["key"] = {}
 	objects["plate"] = {}
 	objects["fan"] = {}
+	objects["fanparticle"] = {}
 	objects["door"] = {}
-	objects["teleporter"] = {}
 	objects["spikes"] = {}
 	objects["dialog"] = {}
 	objects["pipe"] = {}
@@ -548,10 +534,9 @@ function gameLoadObjects()
 	gameFadeOut = false
 
 	for k = 1, #mapScripts do
-		if k == 7 then
-			return
+		if k ~= 7 then
+			eventSystem:decrypt(mapScripts[k])
 		end
-		eventSystem:decrypt(mapScripts[k])
 	end
 end
 
@@ -606,12 +591,8 @@ function loadObjects(objectData, screen)
 			table.insert(objects["key"], key:new(w.x + 6, w.y, screen))
 		elseif w.name == "pressureplate" then
 			table.insert(objects["plate"], plate:new(w.x, w.y, screen))
-		elseif w.name == "sign" then
-			table.insert(objects["sign"], sign:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "spikes" then
 			table.insert(objects["spikes"], spikes:new(w.x, w.y + 8, w.width, screen))
-		elseif w.name == "teleporter" then
-			table.insert(objects["teleporter"], teleporter:new(w.x, w.y - 16, w.properties, screen))
 		elseif w.name == "sensor" then
 			table.insert(objects["sensor"], sensor:new(w.x, w.y, w.properties, screen))
 		elseif w.name == "dropper" then

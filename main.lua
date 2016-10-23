@@ -194,25 +194,21 @@ function love.load()
 	}
 
 	mapScripts = {}
-	for k = 1, 7 do
+	for k = 1, 8 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
 	maps = {}
-	for k = 1, 11 do
+	for k = 1, 12 do
 		maps[k] = {map = require("maps/" .. k), top = love.graphics.newImage("graphics/maps/top/" .. k .. ".png"), bottom = nil}
 	end
 	maps[7].bottom = love.graphics.newImage("graphics/maps/bottom/7.png")
 	maps[9].bottom = love.graphics.newImage("graphics/maps/bottom/9.png")
-
-	backgroundMusic = love.audio.newSource("audio/bgm.ogg", "static")
-	backgroundMusic:setLooping(true)
 	
 	jumpSound = love.audio.newSource("audio/jump.ogg", "static")
 	scrollSound = love.audio.newSource("audio/blip.ogg", "static")
 	keySound = love.audio.newSource("audio/key.ogg", "static")
 	plateSound = love.audio.newSource("audio/plate.ogg", "static")
-	teleportSound = love.audio.newSource("audio/teleport.ogg", "static")
 	deathSound = love.audio.newSource("audio/death.ogg", "static")
 	unlockSound = love.audio.newSource("audio/unlock.ogg", "static")
 	pipeSound = love.audio.newSource("audio/pipe.ogg", "static")
@@ -224,8 +220,8 @@ function love.load()
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
 	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
 
-	enableAudio = false
-	--love.audio.setVolume(0)
+	--enableAudio = false
+	love.audio.setVolume(0)
 
 	mapScrollY = 0
 
@@ -238,7 +234,9 @@ function love.load()
 
 	love.graphics.set3D(true)]]
 
-	loadSettings()
+	savePath = "sdmc:/LovePotion/Idiot/"
+
+	--loadSettings()
 
 	gameFunctions.changeState("intro")
 end
@@ -246,10 +244,12 @@ end
 function love.update(dt)
 	dt = math.min(1/60, dt)
 
-	if _G[state .. "Update"] then
-		_G[state .. "Update"](dt)
+	if state then
+		if _G[state .. "Update"] then
+			_G[state .. "Update"](dt)
+		end
 	end
-
+	
 	if _EMULATEHOMEBREW then
 		if state == "game" then
 			if objects["player"][1] then
@@ -270,20 +270,33 @@ function love.draw()
 
 	love.graphics.scale(scale, scale)
 
-	if _G[state .. "Draw"] then
-		_G[state .. "Draw"]()
+	if state then
+		if _G[state .. "Draw"] then
+			_G[state .. "Draw"]()
+		end
 	end
 
 	love.graphics.pop()
+
+	love.graphics.setScreen("top")
+	shadowPrint(love.timer.getFPS(), 0, 6)
 end
 
 function love.keypressed(key)
+	if not state then
+		return
+	end
+
 	if _G[state .. "Keypressed"] then
 		_G[state .. "Keypressed"](key)
 	end
 end
 
 function love.keyreleased(key)
+	if not state then
+		return
+	end
+
 	if _G[state .. "Keyreleased"] then
 		_G[state .. "Keyreleased"](key)
 	end
@@ -320,7 +333,7 @@ function bool(string)
 end
 
 function saveGame()
-	love.filesystem.write("save.txt", "0x" .. tonumber(currentLevel, 16))
+	love.filesystem.write(savePath .. "save.txt", "0x" .. tonumber(currentLevel, 16))
 end
 
 function loadSavedGame()
@@ -345,7 +358,7 @@ end
 function saveSettings()
 	local data = tostring(directionalPadEnabled) .. ";" .. controls["jump"] .. ";" .. controls["use"] .. ";"
 
-	love.filesystem.write("options.txt", data)
+	love.filesystem.write(savePath .. "options.txt", data)
 end
 
 function deleteData()
@@ -381,16 +394,16 @@ function defaultSettings()
 end
 
 function loadSettings()
-	local succ = pcall(love.filesystem.read, "options.txt")
+	local succ = pcall(love.filesystem.read, savePath .. "options.txt")
 
 	if succ then
-		local data = love.filesystem.read("options.txt")
+		local data = love.filesystem.read(savePath .. "options.txt")
 
 		if data then
 			local split = data:split(";")
 
 			if #split ~= 3 then
-				love.filesystem.remove("options.txt")
+				love.filesystem.remove(savePath .. "options.txt")
 
 				defaultSettings()
 			end

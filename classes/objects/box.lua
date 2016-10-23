@@ -52,6 +52,12 @@ function box:update(dt)
 		return
 	end
 
+	if self.speedx > 0 then
+		self.speedx = self.speedx - 64 * dt
+	elseif self.speedx < 0 then
+		self.speedx = self.speedx + 64 * dt
+	end
+	
 	self.useRectangle.x = self.x
 	self.useRectangle.y = self.y
 
@@ -77,6 +83,12 @@ function box:downCollide(name, data)
 			self:destroy()
 		end
 	end
+end
+
+function box:rightCollide(name, data)
+end
+
+function box:leftCollide(name, data)
 end
 
 function box:draw()

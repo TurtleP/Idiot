@@ -76,8 +76,6 @@ function titleInit()
 	if not titleMusic then
 		titleMusic = love.audio.newSource("audio/title.ogg", "static")
 	end
-	
-	backgroundMusic:stop()
 end
 
 function titleUpdate(dt)
@@ -219,11 +217,6 @@ function shadowPrint(text, x, y, a)
 end
 
 function titleKeypressed(key)
-	local accept, back = "a", "b"
-	if isMobile() then
-		accept, back = controls["jump"], controls["use"]
-	end
-
 	if setControls[1] then
 		if key == controls["pause"] then
 			setControls = {false, false}
@@ -242,19 +235,19 @@ function titleKeypressed(key)
 		end
 	end
 		
-	if key == controls["up"] then
+	if key == "cpadup" or key == "up" then
 		if titleState == "select" then 
 			titleChangeSelection(-1)
 		elseif titleState == "options" then
 			titleChangeOptions(-1)
 		end
-	elseif key == controls["down"] then
+	elseif key == "cpaddown" or key == "down" then
 		if titleState == "select" then
 			titleChangeSelection(1)
 		elseif titleState == "options" then
 			titleChangeOptions(1)
 		end
-	elseif key == accept then
+	elseif key == "a" then
 		if titleState == "select" then
 			titleOptions[titleSelection][2]()
 		elseif titleState == "options" then
@@ -262,7 +255,7 @@ function titleKeypressed(key)
 		end
 	end
 
-	if key == back then
+	if key == "b" then
 		if titleState == "select" then
 			titleState = "main"
 		elseif titleState == "options" then

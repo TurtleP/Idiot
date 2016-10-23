@@ -268,41 +268,39 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 			oldPrint(text, x, y, r, scalex, scaley, sx, sy)
 		end
 		
-		if not isMobile() then
-			if love.keypressed then
-				local oldKey = love.keypressed
+		if love.keypressed then
+			local oldKey = love.keypressed
 
-				function love.keypressed(key)
-					for k, v in pairs(BUTTONCONFIG) do
-						if key == v then
-							oldKey(k)
-							break
-						end
+			function love.keypressed(key)
+				for k, v in pairs(BUTTONCONFIG) do
+					if key == v then
+						oldKey(k)
+						break
+					end
+					end
+			end
+		end
+
+		if love.keyreleased then
+			local oldKey = love.keyreleased
+
+			function love.keyreleased(key)
+				for k, v in pairs(BUTTONCONFIG) do
+					if key == v then
+						oldKey(k)
+						break
 					end
 				end
-			end
 
-			if love.keyreleased then
-				local oldKey = love.keyreleased
+				if key == "1" or key == "2" then
+					love.system.setModel(tonumber(key))
+				elseif key == "3" then
+					enableAudio = not enableAudio
 
-				function love.keyreleased(key)
-					for k, v in pairs(BUTTONCONFIG) do
-						if key == v then
-							oldKey(k)
-							break
-						end
-					end
-
-					if key == "1" or key == "2" then
-						love.system.setModel(tonumber(key))
-					elseif key == "3" then
-						enableAudio = not enableAudio
-
-						if enableAudio then
-							love.audio.setVolume(1)
-						else
-							love.audio.setVolume(0)
-						end
+					if enableAudio then
+						love.audio.setVolume(1)
+					else
+						love.audio.setVolume(0)
 					end
 				end
 			end

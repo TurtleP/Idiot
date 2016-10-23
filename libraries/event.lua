@@ -99,6 +99,10 @@ function eventsystem:update(dt)
 	end
 end
 
+function eventsystem:isRunning()
+	return self.running
+end
+
 function eventsystem:queue(e, args)
 	table.insert(self.events, {cmd = e, args = args})
 end
@@ -108,6 +112,10 @@ function eventsystem:clear()
 end
 
 function eventsystem:decrypt(scriptString)
+	if mapRestarted then
+		return
+	end
+	
 	for k, v in ipairs(scriptString) do
 		local cmd, arg = v[1], v[2]
 		if cmd == "levelequals" then

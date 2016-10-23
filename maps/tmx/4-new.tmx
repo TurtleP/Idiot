@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="15">
  <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
   <image source="../../graphics/objects.png" width="340" height="17"/>
  </tileset>
@@ -10,18 +10,18 @@
   </properties>
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
-1,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1,1,1,1,
-1,1,0,0,0,0,0,0,0,0,1,0,4,0,0,0,0,0,1,1,1,1,1,1,1,
-1,1,6,0,8,0,0,0,0,0,1,1,1,1,1,0,0,5,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,1,1,1,1,1,
+1,1,1,1,1,1,0,0,0,0,1,0,0,0,1,0,0,0,0,1,1,1,1,1,1,
+1,1,1,1,1,0,0,0,0,0,0,0,5,0,0,0,0,0,1,1,1,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,
 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,0,0,0,0,6,0,0,1,1,0,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,
 1,1,1,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,1,1,1,1,1,1,
 1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,4,0,0,0,1,1,1,1,1,
-1,8,0,0,0,0,1,1,1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,1,1,
-1,1,1,0,0,0,0,0,0,1,1,0,0,0,1,1,0,0,0,0,0,1,1,1,1,
-1,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,
+1,8,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1,1,
+1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,
 1,1,1,1,1,0,0,0,4,0,0,0,0,0,0,0,4,0,0,0,0,8,0,8,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 </data>
@@ -35,26 +35,12 @@
   <object id="2" name="box" x="128" y="208" width="16" height="16"/>
   <object id="3" name="box" x="256" y="208" width="16" height="16"/>
   <object id="4" name="box" x="256" y="144" width="16" height="16"/>
-  <object id="5" name="box" x="192" y="48" width="16" height="16"/>
-  <object id="6" name="key" x="272" y="64" width="16" height="16"/>
-  <object id="7" name="door" x="64" y="64" width="16" height="16">
-   <properties>
-    <property name="locked" value="true"/>
-   </properties>
-  </object>
-  <object id="9" name="andgate" x="336" y="176" width="16" height="16">
-   <properties>
-    <property name="link" value="top;32;64;top;192;112;"/>
-   </properties>
-  </object>
-  <object id="10" name="pressureplate" x="192" y="112" width="16" height="16"/>
-  <object id="11" name="pressureplate" x="32" y="64" width="16" height="16"/>
   <object id="12" name="door" x="336" y="208" width="16" height="16">
    <properties>
-    <property name="link" value="top;336;176;"/>
     <property name="locked" value="true"/>
    </properties>
   </object>
   <object id="13" name="door" x="368" y="208" width="16" height="16"/>
+  <object id="14" name="key" x="192" y="48" width="16" height="16"/>
  </objectgroup>
 </map>

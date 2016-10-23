@@ -220,6 +220,10 @@ function player:leftCollide(name, data)
 		end
 	end
 
+	if name == "box" then
+		data.speedx = -16
+	end
+
 	if name == "pipe" then
 		if data.direction == "right" then
 			if self.leftKey then
@@ -241,6 +245,10 @@ function player:rightCollide(name, data)
 		if self.keys > 0 then
 			data:unlock(self)
 		end
+	end
+
+	if name == "box" then
+		data.speedx = 16
 	end
 
 	if name == "pipe" then

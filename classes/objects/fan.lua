@@ -63,7 +63,9 @@ function fan:update(dt)
 		self.timer = self.timer + 16 * dt
 		self.particleTimer = self.particleTimer + dt
 		if self.particleTimer > 0.3 then
-			table.insert(objects["fan"], fanparticle:new(love.math.random(self.x + 2, self.x + self.width - 2), self.y, self.screen, self.maxheight))
+			if #objects["fanparticle"] < 16 then
+				table.insert(objects["fanparticle"], fanparticle:new(love.math.random(self.x + 2, self.x + self.width - 2), self.y, self.screen, self.maxheight))
+			end
 			self.particleTimer = 0
 		end
 
@@ -128,10 +130,9 @@ function fanparticle:update(dt)
 	if self.y < (self.originY + self.maxheight) then
 		self.fade = math.max(self.fade - 0.6 * dt, 0)
 		if self.fade == 0 then
-			self.remove = true
+			self.y = self.originY
+			self.fade = 1
 		end
-	elseif self.y < 0 then
-		self.remove = true
 	end
 end
 

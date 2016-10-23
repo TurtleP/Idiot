@@ -8,7 +8,7 @@ return {
   height = 15,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 47,
+  nextobjectid = 27,
   properties = {},
   tilesets = {
     {
@@ -43,27 +43,24 @@ return {
       opacity = 1,
       offsetx = 0,
       offsety = 0,
-      properties = {
-        ["height"] = "15",
-        ["width"] = "25"
-      },
+      properties = {},
       encoding = "lua",
       data = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 17, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1,
-        1, 0, 0, 0, 6, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1,
-        1, 0, 0, 10, 1, 10, 0, 0, 0, 0, 0, 1, 1, 8, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1,
-        1, 0, 10, 1, 1, 1, 10, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
-        1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 7, 1,
-        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1
+        1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1,
+        1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 8, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1,
+        1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 1, 17, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
+        1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1,
+        1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
+        1, 0, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 0, 1,
+        1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
+        1, 0, 1, 1, 1, 0, 0, 1, 7, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 0, 1, 1, 1, 0, 1,
+        1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1,
+        1, 6, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 8, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 6, 1,
+        1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1
       }
     },
     {
@@ -77,12 +74,12 @@ return {
       properties = {},
       objects = {
         {
-          id = 31,
-          name = "box",
+          id = 4,
+          name = "door",
           type = "",
           shape = "rectangle",
-          x = 64,
-          y = 160,
+          x = 192,
+          y = 32,
           width = 16,
           height = 16,
           rotation = 0,
@@ -90,27 +87,54 @@ return {
           properties = {}
         },
         {
-          id = 32,
-          name = "pressureplate",
+          id = 5,
+          name = "laser",
           type = "",
           shape = "rectangle",
-          x = 64,
-          y = 80,
+          x = 128,
+          y = 64,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "top;208;64;"
+            ["link"] = "top;192;80;",
+            ["width"] = 9
           }
         },
         {
-          id = 33,
-          name = "door",
+          id = 6,
+          name = "box",
+          type = "",
+          shape = "rectangle",
+          x = 48,
+          y = 144,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 7,
+          name = "box",
           type = "",
           shape = "rectangle",
           x = 336,
-          y = 48,
+          y = 144,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 8,
+          name = "door",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 208,
           width = 16,
           height = 16,
           rotation = 0,
@@ -120,118 +144,99 @@ return {
           }
         },
         {
-          id = 34,
-          name = "fan",
+          id = 17,
+          name = "pressureplate",
+          type = "",
+          shape = "rectangle",
+          x = 16,
+          y = 208,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;192;80;"
+          }
+        },
+        {
+          id = 18,
+          name = "pressureplate",
           type = "",
           shape = "rectangle",
           x = 368,
+          y = 208,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 19,
+          name = "andgate",
+          type = "",
+          shape = "rectangle",
+          x = 192,
+          y = 80,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;16;208;-top;368;208;"
+          }
+        },
+        {
+          id = 20,
+          name = "fan",
+          type = "",
+          shape = "rectangle",
+          x = 128,
           y = 176,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
           properties = {
-            ["maxheight"] = "7"
+            ["maxheight"] = "9"
           }
         },
         {
-          id = 35,
+          id = 21,
+          name = "fan",
+          type = "",
+          shape = "rectangle",
+          x = 256,
+          y = 176,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["maxheight"] = "9"
+          }
+        },
+        {
+          id = 22,
           name = "spikes",
           type = "",
           shape = "rectangle",
           x = 48,
-          y = 96,
-          width = 16,
+          y = 224,
+          width = 64,
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {
-            ["width"] = "1"
-          }
+          properties = {}
         },
         {
-          id = 36,
+          id = 24,
           name = "spikes",
           type = "",
           shape = "rectangle",
-          x = 48,
-          y = 96,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["width"] = "16"
-          }
-        },
-        {
-          id = 40,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 32,
-          y = 112,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["width"] = "16"
-          }
-        },
-        {
-          id = 41,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 80,
-          y = 96,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["width"] = "16"
-          }
-        },
-        {
-          id = 42,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 96,
-          y = 112,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["width"] = "16"
-          }
-        },
-        {
-          id = 43,
-          name = "laser",
-          type = "",
-          shape = "rectangle",
-          x = 208,
-          y = 64,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["width"] = "1"
-          }
-        },
-        {
-          id = 45,
-          name = "door",
-          type = "",
-          shape = "rectangle",
-          x = 208,
-          y = 96,
-          width = 16,
+          x = 288,
+          y = 224,
+          width = 64,
           height = 16,
           rotation = 0,
           visible = true,
