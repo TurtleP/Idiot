@@ -7,6 +7,8 @@ function dropper:init(x, y, properties, screen)
 	self.width = 16
 	self.height = 16
 
+	self.category = 6
+	
 	self.link = properties.link:split(";")
 
 	self.screen = screen
@@ -85,10 +87,7 @@ function dropper:input(t)
 end
 
 function dropper:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	love.graphics.draw(dropperImage, dropperQuads[self.quadi], self.x, self.y)
-
-	pushPop(self)
 end

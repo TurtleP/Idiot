@@ -7,6 +7,8 @@ function sensor:init(x, y, r, screen)
 	self.width = 16
 	self.height = 16
 
+	self.active = true
+	self.static = true
 	self.passive = true
 
 	self.particleTimer = 0
@@ -21,7 +23,6 @@ function sensor:init(x, y, r, screen)
 
 	self.link = r.link
 	self.direction = r.direction or "ver"
-	print(r.direction, self.direction)
 	
 	self.dir = "left"
 	self.triggered = false
@@ -40,21 +41,6 @@ end
 function sensor:addOut(obj)
 	table.insert(self.outtable, obj)
 end
-
---[[
-	14:47 PM - HugoBDesigner: We'll make the trigger be the size of all blocks that the sensor reaches
-	14:47 PM - HugoBDesigner: I know, sounds counter-intuitive, but hear me out
-	14:47 PM - HugoBDesigner: We'll detect when the player is in that region
-	14:48 PM - HugoBDesigner: Then immediately set on a variable on which side he's in (left, right, up, down)
-	14:48 PM - HugoBDesigner: If he crosses the middle, we change the side to that and fire output
-	14:49 PM - HugoBDesigner: For example
-	14:49 PM - HugoBDesigner: if side == "left" and player.x+player.width > self.x+self.width/2 then
-								side = "right"
-								fire()
-							end
-	14:49 PM - HugoBDesigner: Of course
-	14:49 PM - HugoBDesigner: You'll only do the side checking if the player is within the overall trigger
---]]
 
 function sensor:update(dt)
 	self.particleTimer = self.particleTimer + dt
@@ -109,13 +95,6 @@ function sensor:activate()
 	self.reset = true
 end
 
-function sensor:draw()
-	pushPop(self, true)
-	love.graphics.setScreen(self.screen)
-
-	pushPop(self)
-end
-
 sensorparticle = class("sensorparticle")
 
 function sensorparticle:init(x, y, speed, max, screen, sensor)
@@ -129,7 +108,10 @@ function sensorparticle:init(x, y, speed, max, screen, sensor)
 
 	self.max = max
 
+	self.active = true
 	self.passive = true
+
+	self.gravity = 0
 
 	self.width = 1
 	self.height = 1
@@ -170,12 +152,10 @@ function sensorparticle:update(dt)
 end
 
 function sensorparticle:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	love.graphics.setColor(unpack(self.color))
 	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+	
 	love.graphics.setColor(255, 255, 255, 255)
-
-	pushPop(self)
 end

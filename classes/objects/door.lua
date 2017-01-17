@@ -4,6 +4,8 @@ function door:init(x, y, r, screen)
 	self.x = x
 	self.y = y
 
+	self.category = 3
+
 	self.width = 16
 	self.height = 32
 
@@ -30,12 +32,14 @@ function door:init(x, y, r, screen)
 
 	self.unlocked = false
 
+	self.static = true
 	if self.isLocked then
 		self.active = true
 		self.static = true
 		self.passive = false
 		self.width = 5
 	else
+		self.active = true
 		self.passive = true
 	end
 
@@ -181,7 +185,7 @@ function door:lockDoor(dt)
 end
 
 function door:draw()
-	pushPop(self, true)
+	
 
 	love.graphics.setScreen(self.screen)
 
@@ -197,5 +201,5 @@ function door:draw()
 	love.graphics.draw(doorImage, doorQuads[self.quadi][image], self.x, self.y)	
 	love.graphics.setColor(255, 255, 255)
 
-	pushPop(self)
+	
 end

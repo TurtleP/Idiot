@@ -7,6 +7,8 @@ function fan:init(x, y, r, screen)
 	self.width = 16
 	self.height = 16
 
+	self.category = 10
+	
 	self.active = true
 	self.static = true
 
@@ -74,7 +76,7 @@ function fan:update(dt)
 			for k, v in pairs(obj) do
 				local entity = v[2]
 
-				if not entity.passive then
+				if not entity.passive and entity.screen == self.screen then
 					if v[1] == "player" then
 						entity.state = "jump"
 						entity.falling = false
@@ -92,12 +94,9 @@ function fan:update(dt)
 end
 
 function fan:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	love.graphics.draw(fanImage, fanQuads[self.quadi], self.x, self.y)
-
-	pushPop(self)
 end
 
 fanparticle = class("fanparticle")
@@ -115,6 +114,8 @@ function fanparticle:init(x, y, screen, maxheight)
 	self.width = 2
 	self.height = 2
 
+	self.active = true
+	self.static = true
 	self.passive = true
 
 	self.screen = screen
@@ -137,12 +138,9 @@ function fanparticle:update(dt)
 end
 
 function fanparticle:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 	
 	love.graphics.setColor(255, 255, 255, 255 * self.fade)
 	love.graphics.rectangle("fill", self.x, self.y, self.r, self.r)
 	love.graphics.setColor(255, 255, 255, 255)
-
-	pushPop(self)
 end

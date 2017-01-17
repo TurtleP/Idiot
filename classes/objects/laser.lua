@@ -4,6 +4,21 @@ function laser:init(x, y, properties, screen)
 	self.x = x
 	self.y = y
 
+	--self.category = 8
+	
+	--self.active = true
+	--self.static = true
+	self.passive = true
+
+	self.mask =
+	{
+		true, true, false, false
+	}
+
+	self.gravity = 0
+	self.speedx = 0
+	self.speedy = 0
+
 	if properties.width then
 		self.width = tonumber(properties.width) * 16
 		self.height = 1
@@ -88,11 +103,12 @@ function laser:update(dt)
 end
 
 function laser:updateLength()
-	local check = checkrectangle(self.x, self.y, self.width, self.height + 16, {"box", "player"}, self, true)
-
+	local check = checkrectangle(self.x, self.y, self.width, self.height + 16, {"box", "player"})
+	--print(#check)
 	if #check > 0 then
+		--print(check[1][1])
 		if check[1][1] == "player" then
-			if not check[1][1].mask then
+			if not check[1][2].mask then
 				return
 			end
 		end
@@ -111,8 +127,11 @@ function laser:updateLength()
 	end
 end
 
+function laser:passiveCollide(name, data)
+	print(name)
+end
+
 function laser:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	if self.on then
@@ -128,6 +147,4 @@ function laser:draw()
 			end
 		end
 	end
-
-	pushPop(self)
 end

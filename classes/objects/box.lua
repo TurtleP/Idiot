@@ -9,6 +9,8 @@ function box:init(x, y, link, screen)
 
 	self.active = true
 
+	self.category = 4
+
 	self.speedx = 0
 	self.speedy = 0
 
@@ -17,12 +19,9 @@ function box:init(x, y, link, screen)
 
 	self.mask =
 	{
-		["tile"] = true,
-		["spikes"] = true,
-		["box"] = true,
-		["pipe"] = true,
-		["fan"] = true,
-		["player"] = true
+		true, true, true, true,
+		true, false, false, false,
+		true, true
 	}
 
 	self.passive = false
@@ -53,9 +52,9 @@ function box:update(dt)
 	end
 
 	if self.speedx > 0 then
-		self.speedx = self.speedx - 64 * dt
+		self.speedx = math.max(self.speedx - 64 * dt, 0)
 	elseif self.speedx < 0 then
-		self.speedx = self.speedx + 64 * dt
+		self.speedx = math.min(self.speedx + 64 * dt, 0)
 	end
 	
 	self.useRectangle.x = self.x
@@ -78,10 +77,8 @@ function box:destroy()
 end
 
 function box:downCollide(name, data)
-	if name == "spikes" then
-		if self.speedy > 200 then
-			self:destroy()
-		end
+	if name == "lava" then
+		self:destroy()
 	end
 end
 
@@ -91,13 +88,12 @@ end
 function box:leftCollide(name, data)
 end
 
-function box:draw()
-	pushPop(self, true)
+function box:upCollide(name, data)
+end
 
+function box:draw()
 	love.graphics.setScreen(self.screen)
 	love.graphics.draw(objectSet, objectQuads[4], self.x, self.y)
-
-	pushPop(self)
 end
 
 --BEWARE

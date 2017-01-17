@@ -11,6 +11,9 @@ function plate:init(x, y, screen)
 
 	self.playSound = false
 
+	self.static = true
+	self.passive = true
+	
 	self.outtable = {}
 
 	self.screen = screen
@@ -59,7 +62,6 @@ function plate:out(t)
 end
 
 function plate:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	local addx, addy = 0, 11
@@ -68,6 +70,4 @@ function plate:draw()
 	end
 
 	love.graphics.draw(plateImage, plateQuads[self.quadi], self.x + addx, self.y + addy)
-
-	pushPop(self)
 end

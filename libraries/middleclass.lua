@@ -45,7 +45,7 @@ end
 
 local function _setClassMetatable(aClass)
   setmetatable(aClass, {
-    __tostring = function() return "class " .. aClass.name end,
+    __tostring = function() return aClass.name end,
     __index    = aClass.static,
     __newindex = aClass.__instanceDict,
     __call     = function(self, ...) return self:new(...) end
@@ -156,7 +156,7 @@ end
 
 function Object:init() end
 
-function Object:__tostring() return "instance of " .. tostring(self.class) end
+function Object:__tostring() return tostring(self.class) end
 
 function Object:isInstanceOf(aClass)
   return type(self)                == 'table' and

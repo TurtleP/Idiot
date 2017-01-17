@@ -6,75 +6,130 @@
 	v1.2
 --]]
 
+--[[
+
+	CATEGORIES:
+
+	1. TILE
+	2. PLAYER
+	3. DOOR
+	4. BOX
+	5. PIPE
+	6. DROPPER
+	7. KEY
+	8. LASER
+	9. SPIKES
+	10. FAN
+	11. ENEMY
+	12. BOMB
+	
+--]]
+
 function physicsupdate(dt)
-	local obj = objects
+	for cameraIndex = 1, #cameraObjects do
+		local objName, objData, objIndex = cameraObjects[cameraIndex][1], cameraObjects[cameraIndex][2], cameraObjects[cameraIndex][3]
+		
+		if cameraObjects[cameraIndex][1] ~= "tile" then
+			if objData.active and not objData.static then
+				local hor, ver = false, false
 
-	for name, objectT in pairs(obj) do
-		if name ~= "tile" then --not updating tiles!
-			for _, objData in pairs(objectT) do --check object variables
-				if objData.active and not objData.static then
+				objData.speedy = math.min(objData.speedy + objData.gravity * dt, 15 * 60) --add gravity to objects
 
-					local hor, ver = false, false 
+				if objData.mask and not objData.passive then
+					for i = 1, #cameraObjects do
+						if objData ~= cameraObjects[i][2] then
+							if objData.screen == cameraObjects[i][2].screen then
+								if objData.mask[cameraObjects[i][2].category] then
+									local obj2Data = cameraObjects[i][2]
 
-					objData.speedy = math.min(objData.speedy + objData.gravity * dt, 15 * 16) --add gravity to objects
-
-					for name2, object2T in pairs(obj) do
-						if objData.mask then
-							if objData.mask[name2] and not objData.passive then
-								hor, ver = checkCollision(objectT, object2T, objData, name, name2, dt)
+									hor, ver = checkCollision(objData, cameraObjects[cameraIndex][1], cameraObjects[i][2], cameraObjects[i][1], dt)
+								else
+									checkPassive(objData, objName, cameraObjects[i][2], tostring(cameraObjects[i][2]), dt)
+								end
 							end
 						end
 					end
+				end
 
-					if hor == false then
-						objData.x = objData.x + objData.speedx * dt
-					end
+				if hor == false then
+					objData.x = objData.x + objData.speedx * dt
+				end
 
-					if ver == false then
-						objData.y = objData.y + objData.speedy * dt
+				if ver == false then
+					objData.y = objData.y + objData.speedy * dt
+				end
+			end
+		end
+
+		local screen = "top"
+		if objects["player"][1] then
+			screen = objects["player"][1].screen
+		end
+
+		if objData.screen == screen then
+			if objData.remove then
+				table.remove(objects[objName], objIndex)
+
+				for k, v in ipairs(objectUseRectangles) do
+					if v.callback == w then
+						table.remove(objectUseRectangles, k)
 					end
 				end
+			end
+
+			if objData.update then
+				objData:update(dt)
 			end
 		end
 	end
 end
 
-function checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
-	for _, obj2Data in pairs(obj2Table) do
-		if objData.screen == obj2Data.screen then
-			if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) or aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
-				if objData.passiveCollide then
-					objData:passiveCollide(obj2Name, obj2Data)
-				end
-			end
+function checkPassive(objData, objName, obj2Data, obj2Name, dt)
+	if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
+		if objData.passiveCollide then
+			objData:passiveCollide(obj2Name, obj2Data)
 		end
 	end
 end
 
-function checkCollision(objTable, obj2Table, objData, objName, obj2Name, dt)
+function checkCollision(objData, objName, obj2Data, obj2Name, dt)
 	local hor, ver = false, false
 
-	for _, obj2Data in pairs(obj2Table) do
-		if objData.screen == obj2Data.screen then
-			if objData ~= obj2Data then
-				if not obj2Data.passive then
-					if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
-
-						if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
-							ver = verticalCollide(objName, objData, obj2Name, obj2Data)
-						elseif aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
-							hor = horizontalCollide(objName, objData, obj2Name, obj2Data)
-						end
-
-					end
-				else 
-					checkPassive(objTable, obj2Table, objData, objName, obj2Name, dt)
+	if not obj2Data.passive then
+		if aabb(objData.x + objData.speedx * dt, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
+			if aabb(objData.x, objData.y + objData.speedy * dt, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then --was vertical
+				ver = verticalCollide(objName, objData, obj2Name, obj2Data)
+			elseif aabb(objData.x + objData.speedx * dt, objData.y, objData.width, objData.height, obj2Data.x, obj2Data.y, obj2Data.width, obj2Data.height) then
+				hor = horizontalCollide(objName, objData, obj2Name, obj2Data)
+			else
+				if math.abs(objData.speedy - objData.gravity * dt) > math.abs(objData.speedx) then
+					ver = verticalCollide(objName, objData, obj2Name, obj2Data)
+				else
+					hor = horizontalCollide(objName, objData, obj2Name, obj2Data)
 				end
 			end
 		end
+	else
+		checkPassive(objData, objName, obj2Data, obj2Name, dt)
 	end
 
 	return hor, ver
+end
+
+function checkCamera(x, y, width, height)
+	local ret = {}
+
+	for k, v in pairs(objects) do
+		for j, w in ipairs(v) do
+			if w.active or w.passive then
+				if aabb(x, y, width, height, w.x, w.y, w.width, w.height) then
+					table.insert(ret, {k, w, j})
+				end
+			end
+		end
+	end
+
+	return ret
 end
 
 function checkrectangle(x, y, width, height, check, callback, allow)
@@ -161,7 +216,7 @@ function horizontalCollide(objName, objData, obj2Name, obj2Data)
 				obj2Data.speedx = 0
 			end
 		end
-	else
+	elseif objData.speedx < 0 then
 		if objData.leftCollide then
 			if objData:leftCollide(obj2Name, obj2Data) ~= false then
 				if objData.speedx < 0 then
@@ -205,7 +260,7 @@ function verticalCollide(objName, objData, obj2Name, obj2Data)
 				objData.y = obj2Data.y - objData.height
 				return true
 			end
-		else 
+		else
 			if objData.speedy > 0 then
 				objData.speedy = 0
 			end
@@ -225,7 +280,7 @@ function verticalCollide(objName, objData, obj2Name, obj2Data)
 				obj2Data.speedy = 0
 			end
 		end
-	else
+	elseif objData.speedy < 0 then
 		if objData.upCollide then
 			if objData:upCollide(obj2Name, obj2Data) ~= false then
 				if objData.speedy < 0 then

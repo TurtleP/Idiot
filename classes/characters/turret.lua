@@ -8,6 +8,7 @@ function turret:init(x, y, screen)
 	self.height = 14
 
 	self.active = true
+	self.category = 11
 
 	self.gravity = 300
 
@@ -16,8 +17,7 @@ function turret:init(x, y, screen)
 
 	self.mask =
 	{
-		["tile"] = true,
-		["player"] = false
+		true, true
 	}
 
 	self.animations =
@@ -55,9 +55,10 @@ function turret:update(dt)
 			end
 
 			if self.y > gameFunctions.getHeight() then
-				eventSystem:decrypt(mapScripts[7])
-				
 				bossSong:stop()
+				
+				eventSystem:decrypt(mapScripts[6])
+				
 				backgroundMusic:play()
 				
 				table.remove(objects["enemy"], 1)
@@ -126,16 +127,38 @@ function turret:faceDirection(dir)
 end
 
 function turret:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	love.graphics.draw(turretImage, turretQuads[self.quadi][self.scale], self.x, self.y)
+end
 
-	pushPop(self)
+function turret:upCollide(name, data)
+	if name == "player" then
+		return false
+	end
+end
+
+function turret:leftCollide(name, data)
+	if name == "player" then
+		data:die()
+		return false
+	end
+end
+
+function turret:rightCollide(name, data)
+	if name == "player" then
+		data:die()
+		return false
+	end
 end
 
 function turret:downCollide(name, data)
 	self.jumping = false
+
+	if name == "player" then
+		data:die()
+		return false
+	end
 end
 
 function turret:die()

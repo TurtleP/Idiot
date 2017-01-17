@@ -12,6 +12,8 @@ function pipe:init(x, y, r, screen)
 	
 	self.mask = {}
 
+	self.category = 5
+	
 	local directions = 
 	{
 		["up"] = 1,
@@ -186,10 +188,7 @@ function pipe:update(dt)
 end
 
 function pipe:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 	
 	love.graphics.draw(pipeImage, pipeQuads[self.quadi], self.x, self.y)
-
-	pushPop(self)
 end

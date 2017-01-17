@@ -1,14 +1,14 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "0.15.2",
+  tiledversion = "0.17.0",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 25,
   height = 15,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 27,
+  nextobjectid = 12,
   properties = {},
   tilesets = {
     {
@@ -39,7 +39,7 @@ return {
       y = 0,
       width = 25,
       height = 15,
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
@@ -49,39 +49,40 @@ return {
       },
       encoding = "lua",
       data = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1,
+        1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1,
+        1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1,
+        1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1,
+        0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
         1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-        1, 13, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1, 1, 1, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 8, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4, 0, 1,
-        1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 8, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
-        1, 1, 1, 1, 10, 10, 10, 10, 1, 1, 1, 1, 1, 1, 13, 1, 1, 10, 10, 10, 10, 1, 1, 1, 1
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
       }
     },
     {
       type = "objectgroup",
       name = "topObjects",
-      visible = false,
+      visible = true,
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      draworder = "topdown",
       properties = {},
       objects = {
         {
           id = 1,
-          name = "door",
+          name = "pressureplate",
           type = "",
           shape = "rectangle",
-          x = 192,
-          y = 48,
+          x = 320,
+          y = 160,
           width = 16,
           height = 16,
           rotation = 0,
@@ -92,211 +93,67 @@ return {
         },
         {
           id = 2,
-          name = "pipe",
+          name = "door",
           type = "",
           shape = "rectangle",
-          x = 224,
-          y = 224,
+          x = 336,
+          y = 64,
           width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["link"] = "bottom;288;96;"
-          }
-        },
-        {
-          id = 4,
-          name = "spikes",
-          type = "",
-          shape = "rectangle",
-          x = 64,
-          y = 224,
-          width = 64,
           height = 16,
           rotation = 0,
           visible = true,
           properties = {}
         },
         {
-          id = 5,
-          name = "spikes",
+          id = 3,
+          name = "box",
           type = "",
           shape = "rectangle",
-          x = 272,
-          y = 224,
-          width = 64,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {}
-        },
-        {
-          id = 6,
-          name = "fan",
-          type = "",
-          shape = "rectangle",
-          x = 160,
-          y = 176,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["maxheight"] = "4"
-          }
-        },
-        {
-          id = 7,
-          name = "fan",
-          type = "",
-          shape = "rectangle",
-          x = 224,
-          y = 176,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["maxheight"] = "4"
-          }
-        },
-        {
-          id = 8,
-          name = "laser",
-          type = "",
-          shape = "rectangle",
-          x = 64,
-          y = 16,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["height"] = "3"
-          }
-        },
-        {
-          id = 13,
-          name = "pipe",
-          type = "",
-          shape = "rectangle",
-          x = 16,
+          x = 48,
           y = 160,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {
-            ["direction"] = "down",
-            ["link"] = "top;16;0;"
-          }
-        },
-        {
-          id = 16,
-          name = "box",
-          type = "",
-          shape = "rectangle",
-          x = 352,
-          y = 192,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
           properties = {}
         },
         {
-          id = 17,
+          id = 4,
           name = "door",
           type = "",
           shape = "rectangle",
-          x = 32,
-          y = 192,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["locked"] = "true"
-          }
-        },
-        {
-          id = 18,
-          name = "key",
-          type = "",
-          shape = "rectangle",
-          x = 32,
+          x = 16,
           y = 32,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {}
+          properties = {
+            ["start"] = "true"
+          }
         },
         {
-          id = 19,
-          name = "door",
+          id = 5,
+          name = "pipe",
           type = "",
           shape = "rectangle",
-          x = 192,
-          y = 208,
+          x = 0,
+          y = 96,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
-          properties = {}
-        }
-      }
-    },
-    {
-      type = "tilelayer",
-      name = "bottom",
-      x = 0,
-      y = 0,
-      width = 25,
-      height = 15,
-      visible = true,
-      opacity = 1,
-      offsetx = 0,
-      offsety = 0,
-      properties = {
-        ["height"] = "15",
-        ["width"] = "20"
-      },
-      encoding = "lua",
-      data = {
-        1, 13, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-        1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 8, 0, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 17, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 13, 1, 0, 0, 0, 0, 0,
-        1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-        1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0,
-        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0
-      }
-    },
-    {
-      type = "objectgroup",
-      name = "bottomObjects",
-      visible = true,
-      opacity = 1,
-      offsetx = 0,
-      offsety = 0,
-      properties = {},
-      objects = {
+          properties = {
+            ["direction"] = "right",
+            ["link"] = "top;192;0;"
+          }
+        },
         {
-          id = 20,
+          id = 6,
           name = "pipe",
           type = "",
           shape = "rectangle",
-          x = 16,
+          x = 192,
           y = 0,
           width = 16,
           height = 16,
@@ -304,31 +161,47 @@ return {
           visible = true,
           properties = {
             ["direction"] = "down",
-            ["link"] = "top;16;160;"
+            ["link"] = "top;0;96;"
           }
         },
         {
-          id = 21,
-          name = "pipe",
+          id = 7,
+          name = "notgate",
           type = "",
           shape = "rectangle",
-          x = 288,
-          y = 96,
+          x = 384,
+          y = 160,
           width = 16,
           height = 16,
           rotation = 0,
           visible = true,
           properties = {
-            ["link"] = "top;224;224;"
+            ["link"] = "top;320;160;"
           }
         },
         {
-          id = 22,
+          id = 8,
+          name = "fan",
+          type = "",
+          shape = "rectangle",
+          x = 368,
+          y = 160,
+          width = 16,
+          height = 16,
+          rotation = 0,
+          visible = true,
+          properties = {
+            ["link"] = "top;384;160;",
+            ["maxheight"] = "6"
+          }
+        },
+        {
+          id = 9,
           name = "door",
           type = "",
           shape = "rectangle",
-          x = 272,
-          y = 64,
+          x = 96,
+          y = 160,
           width = 16,
           height = 16,
           rotation = 0,
@@ -338,12 +211,12 @@ return {
           }
         },
         {
-          id = 23,
+          id = 10,
           name = "key",
           type = "",
           shape = "rectangle",
-          x = 288,
-          y = 176,
+          x = 192,
+          y = 192,
           width = 16,
           height = 16,
           rotation = 0,
@@ -351,27 +224,12 @@ return {
           properties = {}
         },
         {
-          id = 24,
-          name = "laser",
-          type = "",
-          shape = "rectangle",
-          x = 224,
-          y = 80,
-          width = 16,
-          height = 16,
-          rotation = 0,
-          visible = true,
-          properties = {
-            ["height"] = "2"
-          }
-        },
-        {
-          id = 25,
+          id = 11,
           name = "box",
           type = "",
           shape = "rectangle",
           x = 16,
-          y = 128,
+          y = 96,
           width = 16,
           height = 16,
           rotation = 0,

@@ -1,6 +1,6 @@
 return
 {
-    {"levelequals", 12},
+    {"levelequals", 11},
 	{"dialog", {"idiot", "What in the hell is this?", true}},
 	{"sleep", 1},
 	{"dialog", {"ren", "I made sure the puzzles were better.", true}},

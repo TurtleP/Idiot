@@ -7,6 +7,8 @@ function lava:init(x, y, width, screen)
 	self.x = x
 	self.y = y
 
+	self.category = 9
+	
 	self.width = width
 	self.height = 8
 
@@ -22,12 +24,9 @@ function lava:update(dt)
 end
 
 function lava:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	for x = 1, self.width / 16 do
 		love.graphics.draw(lavaImage, lavaQuads[self.quadi], self.x + (x - 1) * 16, self.y)
 	end
-
-	pushPop(self)
 end

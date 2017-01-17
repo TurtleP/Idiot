@@ -1,5 +1,14 @@
 eventsystem = class("eventsystem")
 
+local blackList =
+{
+	["dialog"] = true,
+	["sleep"] = true,
+	["shake"] = true,
+	["usedoor"] = true,
+	["walkcharacter"] = true
+}
+
 function eventsystem:init()
 	self.sleep = 0
 	self.i = 0
@@ -32,6 +41,10 @@ function eventsystem:update(dt)
 				local temp = dialog:new(unpack(v.args))
 				temp:activate()
 				table.insert(objects["dialog"], temp)
+			elseif cmd == "stopmusic" then
+				love.audio.stop()
+			elseif cmd == "playmusic" then
+				_G[v.args]:play()
 			elseif cmd == "sleep" then
 				self.sleep = v.args
 			elseif cmd == "usedoor" then
@@ -44,9 +57,11 @@ function eventsystem:update(dt)
 				if v.args[1] == "idiot" then
 					objects["player"][1] = player:new(_PLAYERSPAWNX, _PLAYERSPAWNY)
 				elseif v.args[1] == "ren" then
-					table.insert(objects["enemy"], renhoek:new(v.args[2], v.args[3], v.args[4]))
+					table.insert(objects["enemy"], renhoek:new(v.args[2], v.args[3], v.args[4], v.args[5]))
 				elseif v.args[1] == "turret" then
 					table.insert(objects["enemy"], turret:new(v.args[2], v.args[3], v.args[4]))
+				elseif v.args[1] == "turtle" then
+					table.insert(objects["enemy"], turtle:new(v.args[2], v.args[3], v.args[4], v.args[5]))
 				end
 			elseif cmd == "walkcharacter" then
 				if v.args[1] == "ren" then
@@ -112,10 +127,6 @@ function eventsystem:clear()
 end
 
 function eventsystem:decrypt(scriptString)
-	if mapRestarted then
-		return
-	end
-	
 	for k, v in ipairs(scriptString) do
 		local cmd, arg = v[1], v[2]
 		if cmd == "levelequals" then
@@ -126,8 +137,15 @@ function eventsystem:decrypt(scriptString)
 				print("Using script {Level Equals: " .. arg .. "}")
 			end
 		end
+
 		self.running = true
 
-		self:queue(cmd, arg)
+		if deathRestart then
+			if not blackList[cmd] then
+				self:queue(cmd, arg)
+			end
+		else
+			self:queue(cmd, arg)
+		end
 	end
 end

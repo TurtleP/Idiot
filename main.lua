@@ -18,6 +18,7 @@ require 'states/intro'
 require 'classes/characters/player'
 require 'classes/characters/ren'
 require 'classes/characters/turret'
+require 'classes/characters/turtle'
 
 --pause menu (forever alone!)
 require 'classes/misc/pausemenu'
@@ -30,20 +31,43 @@ require 'classes/objects/key'
 require 'classes/objects/pressureplate'
 require 'classes/objects/fan'
 require 'classes/objects/door'
-require 'classes/objects/teleporter'
 require 'classes/objects/spikes'
 require 'classes/objects/pipe'
 require 'classes/objects/hud'
-require 'classes/objects/button'
 require 'classes/objects/sensor'
-require 'classes/objects/dropper'
 require 'classes/objects/laser'
 require 'classes/objects/notgate'
-require 'classes/objects/delayer'
 require 'classes/objects/andgate'
 require 'classes/objects/lava'
+require 'classes/objects/bomb'
 
 _EMULATEHOMEBREW = (love.system.getOS() ~= "3ds")
+
+--[[
+	1: ESCAPE
+	2: EASY KEY
+
+	3: BOX N PLATE INTRO
+	4: THINK OUTSIDE THE BOX
+	5: FAN INTRO
+	6: DUAL FANS
+	
+	7: VS TURRET
+	
+	8: FAN GAP
+	9: PIPE N KEY
+	10: PLATFORM BOX
+	11: REPLICA
+	
+	12: VS GABE
+	
+	13: SENSOR
+	14: SPIKE PIT
+	15: LAVA PIT
+	16: LAVA PIT 2
+
+	17: VS TURTLE
+--]]
 
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
@@ -110,39 +134,16 @@ function love.load()
 		end
 	end
 
-	teleporterImage = love.graphics.newImage("graphics/objects/teleporter.png")
-	teleporterQuads = {}
-	for k = 1, 6 do
-		teleporterQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 32, teleporterImage:getWidth(), teleporterImage:getHeight())
-	end
-
 	pipeImage = love.graphics.newImage("graphics/objects/pipe.png")
 	pipeQuads = {}
 	for k = 1, 4 do
 		pipeQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, pipeImage:getWidth(), pipeImage:getHeight())
 	end
 
-	buttonImage = love.graphics.newImage("graphics/objects/button.png")
-	buttonQuads = {}
-	for k = 1, 2 do
-		buttonQuads[k] = {}
-		for y = 1, 2 do
-			buttonQuads[k][y] = love.graphics.newQuad((k - 1) * 4, (y - 1) * 8, 3, 8, buttonImage:getWidth(), buttonImage:getHeight())
-		end
-	end
-
 	dropperImage = love.graphics.newImage("graphics/objects/dropper.png")
 	dropperQuads = {}
 	for k = 1, 9 do
 		dropperQuads[k] = love.graphics.newQuad((k - 1) * 17, 0, 16, 16, dropperImage:getWidth(), dropperImage:getHeight())
-	end
-
-	delayerImage = love.graphics.newImage("graphics/objects/delayer.png")
-	delayerQuads = {}
-	for y = 1, 4 do
-		for x = 1, 5 do
-			table.insert(delayerQuads, love.graphics.newQuad((x - 1) * 15, (y - 1) * 19, 15, 19, delayerImage:getWidth(), delayerImage:getHeight()))
-		end
 	end
 
 	backgroundImage = { top = love.graphics.newImage("graphics/game/background.png") , bottom = love.graphics.newImage("graphics/game/background2.png") }
@@ -175,13 +176,41 @@ function love.load()
 	optionsImage = love.graphics.newImage("maps/options.png")
 	titleLogo = love.graphics.newImage("graphics/title/logo.png")
 
-	notImage = love.graphics.newImage("graphics/objects/not.png")
-
-	andImage = love.graphics.newImage("graphics/objects/and.png")
-
 	introImage = love.graphics.newImage("graphics/intro/intro.png")
 	potionImage = love.graphics.newImage("graphics/intro/potionLogo.png")
 	
+	blocksGraphic = love.graphics.newImage("graphics/objects/blocks.png")
+	blocksQuads = {}
+	for k = 1, 6 do
+		blocksQuads[k] = love.graphics.newQuad((k - 1) * 8, 0, 8, 8, blocksGraphic:getWidth(), blocksGraphic:getHeight())
+	end
+
+	turtleImage = love.graphics.newImage("graphics/enemy/turtle.png")
+	turtleQuads = {}
+	for y = 1, 3 do
+		for x = 1, 4 do
+			table.insert(turtleQuads, love.graphics.newQuad((x - 1) * 12, (y - 1) * 21, 12, 20, turtleImage:getWidth(), turtleImage:getHeight()))
+		end
+	end
+
+	turtleBossImage = love.graphics.newImage("graphics/enemy/turtleboss.png")
+	turtleBossQuads = {}
+	for x = 1, 10 do
+		turtleBossQuads[x] = love.graphics.newQuad((x - 1) * 32, 0, 32, 32, turtleBossImage:getWidth(), turtleBossImage:getHeight())
+	end
+
+	bombImage = love.graphics.newImage("graphics/enemy/bomb.png")
+	bombQuads = {}
+	for x = 1, 3 do
+		bombQuads[x] = love.graphics.newQuad((x - 1) * 12, 0, 12, 12, bombImage:getWidth(), bombImage:getHeight())
+	end
+
+	explosionImage = love.graphics.newImage("graphics/enemy/explosion.png")
+	explosionQuads = {}
+	for k = 1, 7 do
+		explosionQuads[k] = love.graphics.newQuad((k - 1) * 18, 0, 16, 16, explosionImage:getWidth(), explosionImage:getHeight())
+	end
+
 	controls =
 	{
 		["right"] = "cpadright",
@@ -194,16 +223,18 @@ function love.load()
 	}
 
 	mapScripts = {}
-	for k = 1, 8 do
+	for k = 1, 13 do
 		mapScripts[k] = require("maps/script/" .. k)
 	end
 
 	maps = {}
-	for k = 1, 12 do
-		maps[k] = {map = require("maps/" .. k), top = love.graphics.newImage("graphics/maps/top/" .. k .. ".png"), bottom = nil}
+	for k = 1, 18 do
+		maps[k] = {map = require("maps/" .. k), top = love.graphics.newImage("maps/top/" .. k .. ".png"), bottom = nil}
+
+		if love.filesystem.isFile("maps/bottom/" .. k .. ".png") then
+			maps[k].bottom = love.graphics.newImage("maps/bottom/" .. k .. ".png")
+		end
 	end
-	maps[7].bottom = love.graphics.newImage("graphics/maps/bottom/7.png")
-	maps[9].bottom = love.graphics.newImage("graphics/maps/bottom/9.png")
 	
 	jumpSound = love.audio.newSource("audio/jump.ogg", "static")
 	scrollSound = love.audio.newSource("audio/blip.ogg", "static")
@@ -212,31 +243,30 @@ function love.load()
 	deathSound = love.audio.newSource("audio/death.ogg", "static")
 	unlockSound = love.audio.newSource("audio/unlock.ogg", "static")
 	pipeSound = love.audio.newSource("audio/pipe.ogg", "static")
-	buttonSound = love.audio.newSource("audio/button.ogg", "static")
-	timeSound = love.audio.newSource("audio/time.ogg", "static")
 	sensorSound = { love.audio.newSource("audio/sensoron.ogg", "static") , love.audio.newSource("audio/sensoroff.ogg", "static") }
 	pauseSound = love.audio.newSource("audio/pause.ogg", "static")
+	blockPickupSound = love.audio.newSource("audio/pickup.ogg")
+	blockThrowSound = love.audio.newSource("audio/throw.ogg")
+	explosionSound = love.audio.newSource("audio/explode.ogg")
+
+	hitSounds = {}
+	for k = 1, 3 do
+		hitSounds[k] = love.audio.newSource("audio/hurt" .. k .. ".ogg")
+	end
 
 	signFont = love.graphics.newFont("graphics/PressStart2P.ttf", 8)
 	endFont = love.graphics.newFont("graphics/PressStart2P.ttf", 16)
 
 	--enableAudio = false
-	love.audio.setVolume(0)
+	--love.audio.setVolume(0)
 
 	mapScrollY = 0
 
-	buildVersion = "1.0-dev"
-
-	--[[BACKGROUNDLAYER = 1.5
-	NORMALLAYER = 0
-	ENTITYLAYER = -1.5
-	INTERFACELAYER = -3
-
-	love.graphics.set3D(true)]]
+	buildVersion = "v1.0"
 
 	savePath = "sdmc:/LovePotion/Idiot/"
 
-	--loadSettings()
+	loadSettings()
 
 	gameFunctions.changeState("intro")
 end
@@ -261,6 +291,14 @@ function love.update(dt)
 					mapScrollY = math.max(mapScrollY - 480 * dt, 0)
 				end
 			end
+		else
+			if state == "title" then
+				if titleState == "main" then
+					mapScrollY = math.max(mapScrollY - 480 * dt, 0)
+				elseif titleState == "options" then
+					mapScrollY = math.min(mapScrollY + 480 * dt, 240)
+				end
+			end
 		end
 	end
 end
@@ -277,9 +315,6 @@ function love.draw()
 	end
 
 	love.graphics.pop()
-
-	love.graphics.setScreen("top")
-	shadowPrint(love.timer.getFPS(), 0, 6)
 end
 
 function love.keypressed(key)
@@ -333,38 +368,60 @@ function bool(string)
 end
 
 function saveGame()
-	love.filesystem.write(savePath .. "save.txt", "0x" .. tonumber(currentLevel, 16))
+	if love.filesystem.isFile(savePath .. "save.txt") then
+		os.remove(savePath .. "save.txt")
+	end
+
+	local file = love.filesystem.newFile(savePath .. "save.txt")
+
+	file:open("w")
+	file:write(currentLevel)
+	file:close()
 end
 
 function loadSavedGame()
-	if pcall(love.filesystem.read, "save.txt") then
+	if love.filesystem.isFile(savePath .. "save.txt") then
 
-		local data = love.filesystem.read("save.txt")
+		local data = love.filesystem.read(savePath .. "save.txt")
 
 		if not data then
 			return
 		end
 
-		currentLevel = tonumber(love.filesystem.read("save.txt"):gsub("0x", ""), 10)
+		currentLevel = tonumber(love.filesystem.read("save.txt"))
 
 		if not currentLevel then
 			return
 		end
-	end
 
-	gameFunctions.changeState("game", currentLevel)
+		gameFunctions.changeState("game", currentLevel)
+	end
 end
 
 function saveSettings()
+	if love.filesystem.isFile(savePath .. "options.txt") then
+		os.remove(savePath .. "options.txt")
+	end
+
 	local data = tostring(directionalPadEnabled) .. ";" .. controls["jump"] .. ";" .. controls["use"] .. ";"
 
-	love.filesystem.write(savePath .. "options.txt", data)
+	file = love.filesystem.newFile(savePath .. "options.txt")
+
+	file:open("w")
+	file:write(data)
+	file:close()
 end
 
-function deleteData()
-	love.filesystem.remove("options.txt")
+--[[if not _EMULATEHOMEBREW then
+	function love.filesystem.remove(file)
+		os.remove(savePath .. file)
+	end
+end]]
 
-	love.filesystem.remove("save.txt")
+function deleteData()
+	os.remove(savePath .. "options.txt")
+
+	os.remove(savePath .. "save.txt")
 
 	defaultSettings()
 end
@@ -394,18 +451,18 @@ function defaultSettings()
 end
 
 function loadSettings()
-	local succ = pcall(love.filesystem.read, savePath .. "options.txt")
-
-	if succ then
+	if love.filesystem.isFile(savePath .. "options.txt") then
 		local data = love.filesystem.read(savePath .. "options.txt")
 
 		if data then
 			local split = data:split(";")
 
 			if #split ~= 3 then
-				love.filesystem.remove(savePath .. "options.txt")
+				os.remove(savePath .. "options.txt")
 
 				defaultSettings()
+				
+				return
 			end
 
 			toggleDPad(bool(split[1]))
@@ -414,6 +471,8 @@ function loadSettings()
 
 			controls["use"] = split[3]
 		end
+	else
+		defaultSettings()
 	end
 end
 
@@ -426,10 +485,10 @@ function toggleDPad(set)
 	directionalPadEnabled = enable
 
 	if directionalPadEnabled then
-		controls["up"] = "dup"
-		controls["down"] = "ddown"
-		controls["left"] = "dleft"
-		controls["right"] = "dright"
+		controls["up"] = "up"
+		controls["down"] = "down"
+		controls["left"] = "left"
+		controls["right"] = "right"
 	else
 		controls["right"] = "cpadright"
 		controls["left"] = "cpadleft"

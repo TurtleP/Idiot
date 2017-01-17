@@ -3,7 +3,7 @@ function gameInit(loadGame)
 
 	currentLevel = loadGame or 1
 
-	outputs = {"plate", "button", "pipe", "sensor", "logicgate", "box"}
+	outputs = {"plate", "pipe", "sensor", "logicgate", "box"}
 
 	love.graphics.setBackgroundColor(67, 67, 67)
 
@@ -38,26 +38,20 @@ function gameInit(loadGame)
 end
 
 function gameUpdate(dt)
+
+	local x, y, w, h = 0, 0, 400, 248 
+	if _EMULATEHOMEBREW then
+		if love.graphics.getScreen() == "bottom" then
+			x = 40
+			y = 240
+			w = 320
+		end
+	end
+	cameraObjects = checkCamera(x, y, w, h)
+	
 	if paused then
 		pauseMenu:update(dt)
 		return
-	end
-
-	for k, v in pairs(objects) do
-		for j, w in pairs(v) do
-			if w.update then
-				w:update(dt)
-			end
-
-			if w.remove then
-				for k, v in pairs(objectUseRectangles) do
-					if v.callback == w then
-						table.remove(objectUseRectangles, k)
-					end
-				end
-				table.remove(objects[k], j)
-			end
-		end
 	end
 
 	if gameFadeOut then
@@ -69,8 +63,7 @@ function gameUpdate(dt)
 			end
 
 			if gameFade == 1 and deathRestart then
-				gameLoadMap(currentLevel)
-				deathRestart = false
+				gameLoadMap(currentLevel, true)
 			end
 		end
 	else
@@ -91,8 +84,6 @@ function gameUpdate(dt)
 
 	gameHud:update(dt)
 
-	cameraScroll()
-
 	physicsupdate(dt)
 
 	if objects["player"][1] then
@@ -100,73 +91,6 @@ function gameUpdate(dt)
 			objects["player"][1]:updateBox()
 		end
 	end
-end
-
-function cameraScroll()
-	if #objects["player"] == 0 or #objects["player"] > 1 then
-		return
-	end
-
-	local self = objects["player"][1]
-
-	if not self.animations then
-		return
-	end
-	
-	--==HORIZONTAL SCROLL==--
-
-	local _MAPWIDTH = mapDimensions[self.screen][1] or 25
-
-	local _MAX = 25
-	if self.screen == "bottom" then
-		_MAX = 20
-	end
-
-	if _MAPWIDTH > _MAX then
-		if mapScroll[self.screen][1] >= 0 and mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) <= _MAPWIDTH * 16 then
-			if self.x > mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
-			elseif self.x < mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) * 1 / 2 then
-				mapScroll[self.screen][1] = self.x - gameFunctions.getWidth(self.screen) * 1 / 2
-			end
-		end
-
-		if mapScroll[self.screen][1] < 0 then
-			mapScroll[self.screen][1] = 0
-		elseif mapScroll[self.screen][1] + gameFunctions.getWidth(self.screen) >= _MAPWIDTH * 16 then
-			mapScroll[self.screen][1] = _MAPWIDTH * 16 - gameFunctions.getWidth(self.screen)
-		end
-	end
-
-	--==VERTICAL SCROLL==--
-
-	local _MAPHEIGHT = mapDimensions[self.screen][2] or 15
-
-	if _MAPHEIGHT > 15 then
-		if mapScroll[self.screen][2] >= 0 and mapScroll[self.screen][2] + gameFunctions.getHeight() <= (_MAPHEIGHT) * 16 then
-			if self.y + self.height / 2 > mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
-				mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
-			elseif self.y + self.height / 2 < mapScroll[self.screen][2] + gameFunctions.getHeight() * 1 / 2 then
-				mapScroll[self.screen][2] = self.y + self.height / 2 - gameFunctions.getHeight() * 1 / 2
-			end
-		end
-
-		if mapScroll[self.screen][2] < 0 then
-			mapScroll[self.screen][2] = 0
-		elseif mapScroll[self.screen][2] + gameFunctions.getHeight() >= (_MAPHEIGHT) * 16 then
-			mapScroll[self.screen][2] = (_MAPHEIGHT) * 16 - gameFunctions.getHeight()
-		end
-	end
-end
-
-function getMapScrollX()
-	if not objects then
-		return 0
-	elseif not objects["player"][1] then
-		return 0
-	end
-
-	return mapScroll[objects["player"][1].screen][1]
 end
 
 function getMapScrollY()
@@ -187,7 +111,7 @@ function gameDraw()
 		end
 
 		gameDrawEntities()
-
+		
 		love.graphics.setColor(255, 255, 255, 255)
 
 		gameHud:draw()
@@ -200,13 +124,14 @@ function restartMap(paused)
 
 	if paused then
 		gameLoadMap(currentLevel)
+		deathRestart = true
 	else
 		deathRestart = true
 	end
 end
 
 function gameKeypressed(key)
-	if key == controls["pause"] then
+	if key == controls["pause"] and not eventSystem:isRunning() then
 		paused = not paused
 
 		if paused then
@@ -307,99 +232,26 @@ function gameDrawEntities()
 			other = "top"
 		end
 	end
-
-	love.graphics.push()
-
+	
 	love.graphics.setScreen(p)
 
 	love.graphics.draw(backgroundImage[p], 0, 0)
 
-	love.graphics.pop()
-
-	love.graphics.push()
-
-	love.graphics.translate(-math.floor(mapScroll["top"][1]), 0)
-
 	love.graphics.setScreen("top")
 	love.graphics.draw(maps[currentLevel].top, 0, 0)
 
-	love.graphics.pop()
-
 	if maps[currentLevel].bottom then
-		love.graphics.push()
-			
-		love.graphics.translate(-math.floor(mapScroll["bottom"][1]), 0)
-
 		love.graphics.setScreen("bottom")
 		love.graphics.draw(maps[currentLevel].bottom, 0, 0)
-
-		love.graphics.pop()
 	end
 
-	for k, v in pairs(objects["sensor"]) do
-		if v.draw then
-			v:draw()
+	for k = 1, #cameraObjects do
+		if cameraObjects[k][2].screen == p then
+			local obj = cameraObjects[k][2]
+			if obj.draw then
+				obj:draw()
+			end
 		end
-	end
-	
-	for k, v in pairs(objects["tile"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["door"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["plate"]) do
-		v:draw()
-	end
-
-	for k,v in pairs(objects["spikes"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["key"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["lava"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["fan"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["fanparticle"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["player"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["laser"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["box"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["dropper"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["pipe"]) do
-		v:draw()
-	end
-	
-	for k, v in pairs(objects["button"]) do
-		v:draw()
-	end
-
-	for k, v in pairs(objects["enemy"]) do
-		v:draw()
 	end
 
 	love.graphics.push()
@@ -417,10 +269,6 @@ function gameDrawEntities()
 	love.graphics.setColor(255, 255, 255, 255)
 
 	love.graphics.pop()
-
-	for k, v in pairs(objects["dialog"]) do
-		v:draw()
-	end
 
 	if paused then
 		pauseMenu:draw()
@@ -455,51 +303,18 @@ end
 function gameNextLevel()
 	if maps[currentLevel + 1] then
 		table.remove(objects["player"], 1)
+		deathRestart = false
 		gameLoadMap(currentLevel + 1)
 	else
 		gameFunctions.changeState("title")
 	end	
 end
 
-function pushPop(self, start)
-	local v
-
-	if not objects then
-		return
-	end
-	
-	if objects["player"][1] then
-		v = objects["player"][1]
-	end
-
-	if not v then
-		return
-	else
-		if start then
-			if self.screen == v.screen then
-				love.graphics.push()
-			
-				love.graphics.translate(-math.floor(mapScroll[self.screen][1]), -math.floor(mapScroll[self.screen][2]))
-			else
-				love.graphics.push()
-
-				love.graphics.translate(-math.floor(mapScroll[self.screen][1]), -math.floor(mapScroll[self.screen][2]))
-			end
-		else
-			love.graphics.pop()
-		end
-
-		if self.screen ~= objects["player"][1].screen or not insideCamera(self) then
-			return
-		end
-	end
-end
-
 function insideCamera(self)
 	return (self.x + self.width < getMapScrollX() or self.x > gameFunctions.getWidth() + getMapScrollX())
 end
 
-function gameLoadObjects()
+function gameLoadObjects(decrypt)
 	objects = {}
 
 	objects["tile"] = {}
@@ -513,13 +328,12 @@ function gameLoadObjects()
 	objects["spikes"] = {}
 	objects["dialog"] = {}
 	objects["pipe"] = {}
-	objects["button"] = {}
 	objects["sensor"] = {}
-	objects["dropper"] = {}
 	objects["laser"] = {}
 	objects["logicgate"] = {}
 	objects["enemy"] = {}
 	objects["lava"] = {}
+	objects["bomb"] = {}
 
 	objectUseRectangles = {}
 
@@ -533,21 +347,29 @@ function gameLoadObjects()
 
 	gameFadeOut = false
 
+	if not decrypt then
+		return
+	end
+
 	for k = 1, #mapScripts do
-		if k ~= 7 then
+		if k ~= 6 then
 			eventSystem:decrypt(mapScripts[k])
 		end
 	end
 end
 
-function gameLoadMap(map)
+function gameLoadMap(map, decrypt)
 	currentLevel = map
 
 	if bossSong:isPlaying() then
 		bossSong:stop()
 	end
 
-	gameLoadObjects()
+	local decrypt = decrypt
+	if not decrypt then
+		decrypt = true
+	end
+	gameLoadObjects(decrypt)
 
 	local newMap = maps[map].map
 
@@ -645,9 +467,7 @@ function loadTiles(mapWidth, mapHeight, properties, mapData, screen)
 					first = true
 				end
 			elseif r > 1 then
-				if getID(r) then
-					table.insert(objects["tile"], tile:new((x - 1) * 16, (y - 1) * 16, 16, 16, screen, getID(r)))
-				end
+				table.insert(objects["tile"], tile:new((x - 1) * 16, (y - 1) * 16, 16, 16, screen, r))
 			end
 
 			if first then

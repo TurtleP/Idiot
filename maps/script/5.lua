@@ -1,12 +1,18 @@
 return
 {
-	{"levelequals", 9},
+	{"levelequals", 7},
+	{"spawncharacter", {"idiot"}},
+	{"freezeplayer"},
+	{"dialog", {"idiot", "Woah, where am I?!"}},
 	{"sleep", 1},
-	{"dialog", {"idiot", "Sheesh, how many puzzles has it been?", true}},
-	{"dialog", {"turtle", "I told you we planned it all out.", true}},
-	{"dialog", {"turret", "Yeah, and just wait until later.", true}},
-	{"dialog", {"ren", "Shut up Turret. You'll ruin everything!", true}},
-	{"dialog", {"turret", "I'll ruin it alright like JOOHN CEEEE--", true}},
+	{"dialog", {"ren", "Does he really have to do this?"}},
+	{"dialog", {"turtle", "Yes, Gabe. It's his fault he made it easy."}},
+	{"dialog", {"turret", "Well, shouldn't he learn before--"}},
 	{"shake", 10},
-	{"dialog", {"turret", "OW! Alright, sorry.", true}}
+	{"dialog", {"turret", "Ow! Alright.. Fine. I deserved that."}},
+	{"dialog", {"idiot", "Oh come on, this can't be happening."}},
+	{"spawncharacter", {"turret", 352, 176, "top"}},
+	{"facedirection", {"enemy", 2}},
+	{"unfreezeplayer"},
+	{"disable"}
 }

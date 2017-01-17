@@ -38,7 +38,7 @@ function pausemenu:init()
 end
 
 function pausemenu:update(dt)
-	self.sineTimer = self.sineTimer + 0.5 * dt
+	self.sineTimer = self.sineTimer + dt
 	self.sineValue = math.abs( math.sin( self.sineTimer * math.pi ) / 2 ) + 0.5
 end
 

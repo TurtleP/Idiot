@@ -1,7 +1,7 @@
 return {
   version = "1.1",
   luaversion = "5.1",
-  tiledversion = "0.14.2",
+  tiledversion = "0.17.0",
   orientation = "orthogonal",
   renderorder = "right-down",
   width = 25,
@@ -19,7 +19,7 @@ return {
       spacing = 1,
       margin = 0,
       image = "../graphics/objects.png",
-      imagewidth = 306,
+      imagewidth = 340,
       imageheight = 17,
       tileoffset = {
         x = 0,
@@ -27,7 +27,7 @@ return {
       },
       properties = {},
       terrains = {},
-      tilecount = 18,
+      tilecount = 20,
       tiles = {}
     }
   },
@@ -73,6 +73,7 @@ return {
       opacity = 1,
       offsetx = 0,
       offsety = 0,
+      draworder = "topdown",
       properties = {},
       objects = {
         {

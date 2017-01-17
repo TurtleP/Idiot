@@ -9,7 +9,7 @@
    <property name="width" value="25"/>
   </properties>
   <data encoding="csv">
-1,1,1,1,1,1,1,1,1,1,1,1,11,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,0,0,1,1,1,1,1,1,
 1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
 1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,
@@ -26,7 +26,7 @@
 1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1
 </data>
  </layer>
- <objectgroup name="topObjects">
+ <objectgroup name="topObjects" visible="0">
   <object id="1" name="spawn" x="192" y="0" width="16" height="16"/>
   <object id="2" name="lava" x="80" y="224" width="64" height="16"/>
   <object id="3" name="lava" x="256" y="224" width="64" height="16"/>

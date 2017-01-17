@@ -1,18 +1,11 @@
 return
 {
-	{"levelequals", 11},
-	{"spawncharacter", {"idiot"}},
-	{"freezeplayer"},
-	{"dialog", {"idiot", "Woah, where am I?!"}},
+	{"dialog", {"idiot", "Sheesh. That was annoying. I feel bad though.", true}},
 	{"sleep", 1},
-	{"dialog", {"ren", "Does he really have to do this?"}},
-	{"dialog", {"turtle", "Yes, Gabe. It's his fault he made it easy."}},
-	{"dialog", {"turret", "Well, shouldn't he learn before--"}},
-	{"shake", 10},
-	{"dialog", {"turret", "Ow! Alright.. Fine. I deserved that."}},
-	{"dialog", {"idiot", "Oh come on, this can't be happening."}},
-	{"spawncharacter", {"turret", 352, 176, "top"}},
-	{"facedirection", {"enemy", 2}},
-	{"unfreezeplayer"},
-	{"disable"}
+	{"dialog", {"turtle", "Gabe.. Your puzzles better be hard. Or else.", true}},
+	{"dialog", {"ren", "*gulp*. I'll make sure of it. For sure.", true}},
+	{"sleep", 1},
+	{"fadeout", 1},
+	{"sleep", 1},
+	{"nextlevel"}
 }

@@ -219,7 +219,7 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 				quad = args[2]
 				x = args[3] or 0
 				y = args[4] or 0
-				scalex, scaley = args[5], args[6]
+				rotation = args[5] or 0
 			else
 				x, y = args[2] or 0, args[3] or 0
 				r = args[4] or 0
@@ -237,7 +237,7 @@ if love.system.getOS() == "3ds" or _EMULATEHOMEBREW then
 					olddraw(image, x, y)
 				end
 			else
-				olddraw(image, quad, x, y, 0, scalex, scaley)
+				olddraw(image, quad, x, y, rotation, args[6] or 1, args[7] or 1, args[8] or 0, args[9] or 0)
 			end
 		end
 

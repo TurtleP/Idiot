@@ -7,15 +7,12 @@ function player:init(x, y)
 	self.width = 12
 	self.height = 16
 
+	self.category = 2
 	self.mask = 
 	{
-		["tile"] = true,
-		["box"] = true,
-		["fan"] = true,
-		["spikes"] = true,
-		["door"] = true,
-		["pipe"] = true,
-		["enemy"] = true
+		true, false, true, true,
+		true, true, false, false,
+		true, true, true, true
 	}
 
 	self.active = true
@@ -80,7 +77,7 @@ end
 function player:update(dt)
 	if self.falling and self.speedy < 0 then
 		if self.speedy < self.minJumpHeight then
-			self.speedy = self.minJumpHeight
+			self.speedy = self.speedy * 0.5
 		end
 	end
 
@@ -141,7 +138,6 @@ function player:updateBox()
 end	
 
 function player:draw()
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	if self.draws then
@@ -156,8 +152,6 @@ function player:draw()
 	end
 
 	love.graphics.setColor(255, 255, 255, 255)
-
-	pushPop(self)
 end
 
 function player:upCollide(name, data)
@@ -166,6 +160,18 @@ function player:upCollide(name, data)
 			if self.upKey then
 				data:use(self)
 			end
+		end
+	end
+
+	if name == "bomb" then
+		if not data.passive then
+			self.item = data:use(self)
+		end
+	end
+
+	if name == "block" then
+		if not self.jumping then
+			self:die()
 		end
 	end
 
@@ -181,7 +187,7 @@ function player:downCollide(name, data)
 	self.jumping = false
 	self.falling = false
 
-	if name == "spikes" then
+	if name == "spikes" or name == "lava" then
 		self:die()
 	end
 
@@ -298,11 +304,12 @@ function player:passiveCollide(name, data)
 		end
 	end
 
+	if name == "explosion" then
+		self:die()
+	end
+
 	if name == "key" then
-		if not self.key then
-			self.keys = self.keys + 1
-			data:collect()
-		end
+		data:collect(self)
 	end
 
 	if name == "door" then
@@ -310,21 +317,15 @@ function player:passiveCollide(name, data)
 			if self.speedx ~= 0 or self.item or self.fade == 0 or math.floor(self.speedy) ~= 6 then
 				return
 			end
-
-			data:use(self)
-		end
-	end
-
-	if name == "teleporter" then
-		if not data.teleported then
-			--self.transition = true
 			data:use(self)
 		end
 	end
 
 	if name == "laser" then
 		if data.on then
-			self:die()
+			if not self.item then
+				self:die()
+			end
 		end
 	end
 end
@@ -352,7 +353,7 @@ end
 function player:dialogScroll()
 	for k, v in ipairs(objects["dialog"]) do
 		if v.activated then
-			--[[if v.autoscroll then
+			--[[if eventSystem:isRunning() then
 				return
 			end]]
 			v:scrollText()
@@ -365,12 +366,15 @@ function player:dialogScroll()
 end
 
 function player:die()
-	deathSound:play()
+	if not self.remove then
+		deathSound:play()
 
-	self:dropBox()
+		self:dropBox()
 
-	self.remove = true
-	table.insert(objects["player"], death:new(self.x + self.width / 2 - 8, self.y + self.height / 2 - 8, self.screen))
+		table.insert(objects["player"], death:new(self.x + self.width / 2 - 8, self.y + self.height / 2 - 8, self.screen))
+		
+		self.remove = true
+	end
 end
 
 function player:respawn()
@@ -535,7 +539,6 @@ function player:useItem()
 			if not self.item then
 				for j = 1, #collide do	
 					if collide[j].screen == self.screen then
-						print("Pick up:", collide[j])
 						self.item = collide[j]:use(self)
 						break
 					end
@@ -551,13 +554,19 @@ function player:useItem()
 				add = -self.item.width - 2
 			end
 
-			local ret = checkrectangle(self.x + add, self.y, self.item.width, self.item.height, {"exclude", self.item}, nil, true)
-			print(#ret)
+			local ret = checkrectangle(self.x + add, self.y - 16, self.item.width, self.item.height, {"exclude", self.item}, nil, true)
+			
 			if #ret > 0 then
+				print(ret[1][1])
 				table.insert(objects["box"], newBoxGhost(self.x + add, self.y, self.screen))
 				self.useKey = true
 				return
 			else
+				self:dropBox()
+			end
+		else
+			--hacky solution
+			if tostring(self.item) == "bomb" then
 				self:dropBox()
 			end
 		end
@@ -577,6 +586,7 @@ function player:dropBox()
 		end
 		self.item.y = self.y + (self.height / 2) - self.item.height / 2
 		self.item.speedy = 0
+		self.item.speedx = 0
 
 		self.item = false
 	end
@@ -627,7 +637,6 @@ function death:update(dt)
 end
 
 function death:draw(homebrew)
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	local add = self.width / 2
@@ -636,8 +645,6 @@ function death:draw(homebrew)
 	end
 
 	love.graphics.draw(idiotDeadImage, self.x + add, self.y + add, self.rotation, 1, 1, add, add)
-
-	pushPop(self)
 end
 
 hat = class("hat")
@@ -670,7 +677,6 @@ function hat:update(dt)
 end
 
 function hat:draw(homebrew)
-	pushPop(self, true)
 	love.graphics.setScreen(self.screen)
 
 	local addx, addy = self.width / 2, self.height / 2
@@ -679,6 +685,4 @@ function hat:draw(homebrew)
 	end
 
 	love.graphics.draw(idiotHatImage, self.x + addx, self.y + addy, self.rotation, 1, 1, addx, addy)
-
-	pushPop(self)
 end

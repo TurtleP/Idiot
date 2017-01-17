@@ -1,50 +1,3 @@
-sign = class("sign")
-
-function sign:init(x, y, r, screen)
-	self.x = x
-	self.y = y
-
-	self.width = 16
-	self.height = 16
-
-	self.passive = true
-
-	self.r = r.text or ""
-
-	self.useRectangle = gameAddUseRectangle(self.x, self.y, self.width, self.height, self)
-	
-	local temp = dialog:new(self.r, false, false, self, screen)
-	table.insert(objects["dialog"], temp)
-	self.dialog = temp
-
-	self.screen = screen
-end
-
-function sign:draw()
-	pushPop(self, true)
-	love.graphics.setScreen(self.screen)
-
-	love.graphics.setFont(signFont)
-
-	love.graphics.draw(objectSet, objectQuads[2], self.x, self.y)
-	
-	pushPop(self)
-end
-
-function sign:use()
-	self.dialog:activate()
-end
-
-function sign:reset()
-	self.dialog = nil
-
-	if not self.dialog then
-		local temp = dialog:new(self.r, false, false, self, self.screen)
-		table.insert(objects["dialog"], temp)
-		self.dialog = temp
-	end
-end
-
 dialog = class("dialog")
 
 function dialog:init(character, text, autoscroll, sign, screen)
@@ -53,6 +6,7 @@ function dialog:init(character, text, autoscroll, sign, screen)
 
 	self.color = color
 
+	self.active = true
 	self.static = true
 
 	self.x = 2
@@ -127,8 +81,10 @@ function dialog:scrollText()
 	end
 
 	if not self.canScroll then
-		self.drawText = self.text
-		self.current = #self.text+1
+		if eventSystem:isRunning() then
+			self.drawText = self.text
+			self.current = #self.text+1
+		end
 		return
 	end
 

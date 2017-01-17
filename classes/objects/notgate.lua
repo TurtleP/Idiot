@@ -13,6 +13,9 @@ function notgate:init(x, y, properties, screen)
 	self.initial = true
 	self.out = false
 
+	self.active = true
+	self.static = true
+
 	self.screen = screen
 
 	self.outtable = {}
@@ -26,6 +29,7 @@ function notgate:addLink()
 	for k, v in pairs(outputs) do
 		for j, w in pairs(objects[v]) do
 			if w.screen == self.link[1] then
+				print(w.x, w.y)
 				if w.x == tonumber(self.link[2]) and w.y == tonumber(self.link[3]) then
 					w:addOut(self)
 

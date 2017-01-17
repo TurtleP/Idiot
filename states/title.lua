@@ -26,6 +26,15 @@ function titleInit()
 		{"Quit Idiot", love.event.quit}
 	}
 
+	if love.filesystem.isFile(savePath .. "save.txt") then
+		titleOptions[1] = 
+		{"Load Game", 
+			function()
+				loadSavedGame()
+			end
+		}
+	end
+	
 	titleSelection = 1
 
 	titleSineValue = 1
@@ -44,9 +53,11 @@ function titleInit()
 		toggleDPad,
 
 		function()
+			deleteData()
 		end,
 
 		function()
+			viewCredits = true
 		end,
 
 		function()
@@ -96,7 +107,7 @@ function titleUpdate(dt)
 			end
 		end
 	else
-		titleSineTimer = titleSineTimer + 0.5 * dt
+		titleSineTimer = titleSineTimer + dt
 		titleSineValue = math.abs( math.sin( titleSineTimer * math.pi ) / 2 ) + 0.5
 
 		if titleState == "select" then
@@ -121,6 +132,8 @@ end
 
 function titleDraw()
 	love.graphics.setScreen("top")
+
+	love.graphics.translate(0, -math.floor(mapScrollY))
 
 	love.graphics.setColor(255, 255, 255, 255)
 	love.graphics.draw(backgroundImage.top)
@@ -161,47 +174,53 @@ function titleDraw()
 	love.graphics.draw(backgroundImage.bottom, 0, 0)
 	love.graphics.draw(optionsImage, 0, 0)
 
-	shadowPrint(":: Options ::", gameFunctions.getWidth() / 2 - signFont:getWidth(":: Options ::") / 2, 26 - signFont:getHeight(":: Options ::") / 2)
+	if not viewCredits then
+		shadowPrint(":: Options ::", gameFunctions.getWidth() / 2 - signFont:getWidth(":: Options ::") / 2, 26 - signFont:getHeight(":: Options ::") / 2)
 
-	shadowPrint("[General]", 24, 50)
-	local mul = 1
-	if currentOption == 1 then
-		mul = titleSineValue
-	end
-	shadowPrint("Enable D-Pad: " .. tostring(directionalPadEnabled):gsub("^%l", string.upper), 24, 68, mul)
+		shadowPrint("[General]", 24, 50)
+		local mul = 1
+		if currentOption == 1 then
+			mul = titleSineValue
+		end
+		shadowPrint("Enable D-Pad: " .. tostring(directionalPadEnabled):gsub("^%l", string.upper), 24, 68, mul)
 
-	local mul = 1
-	if currentOption == 2 then
-		mul = titleSineValue
-	end
-	shadowPrint("Erase save data", 24, 84, mul)
+		local mul = 1
+		if currentOption == 2 then
+			mul = titleSineValue
+		end
+		shadowPrint("Erase save data", 24, 84, mul)
 
-	local mul = 1
-	if currentOption == 3 then
-		mul = titleSineValue
-	end
-	shadowPrint("View credits", 24, 100, mul)
+		local mul = 1
+		if currentOption == 3 then
+			mul = titleSineValue
+		end
+		shadowPrint("View credits", 24, 100, mul)
 
-	shadowPrint("[Controls]", 24, 132)
+		shadowPrint("[Controls]", 24, 132)
 
-	local mul = 1
-	if currentOption == 4 then
-		mul = titleSineValue
-	end
-	shadowPrint("Jump/Advance dialog: " .. controls["jump"]:gsub("^%l", string.upper), 24, 148, mul)
-		
-	local mul = 1
-	if currentOption == 5 then
-		mul = titleSineValue
-	end
-	shadowPrint("Pick up items: " .. controls["use"]:gsub("^%l", string.upper), 24, 164, mul)
+		local mul = 1
+		if currentOption == 4 then
+			mul = titleSineValue
+		end
+		shadowPrint("Jump/Advance dialog: " .. controls["jump"]:gsub("^%l", string.upper), 24, 148, mul)
+			
+		local mul = 1
+		if currentOption == 5 then
+			mul = titleSineValue
+		end
+		shadowPrint("Pick up items: " .. controls["use"]:gsub("^%l", string.upper), 24, 164, mul)
 
-	if optionsDescriptions[currentOption] then
-		love.graphics.setColor(0, 0, 0, 200)
-		love.graphics.rectangle("fill", 0, gameFunctions.getHeight() - 15, gameFunctions.getWidth(), 14)
+		if optionsDescriptions[currentOption] then
+			love.graphics.setColor(0, 0, 0, 200)
+			love.graphics.rectangle("fill", 0, gameFunctions.getHeight() - 15, gameFunctions.getWidth(), 14)
 
-		love.graphics.setColor(255, 255, 255, 255)
-		love.graphics.print(optionsDescriptions[currentOption], optionsScroll, (gameFunctions.getHeight() - 6) - signFont:getHeight(optionsDescriptions[currentOption]) / 2)
+			love.graphics.setColor(255, 255, 255, 255)
+			love.graphics.print(optionsDescriptions[currentOption], optionsScroll, (gameFunctions.getHeight() - 6) - signFont:getHeight(optionsDescriptions[currentOption]) / 2)
+		end
+	else
+		for y = 1, #credits do
+			shadowPrint(credits[y], gameFunctions.getWidth() / 2 - signFont:getWidth(credits[y]) / 2, 32 + (y - 1) * 18)
+		end
 	end
 
 	love.graphics.setColor(0, 0, 0, 255 * optionsFade)
@@ -234,35 +253,41 @@ function titleKeypressed(key)
 			return
 		end
 	end
-		
-	if key == "cpadup" or key == "up" then
-		if titleState == "select" then 
-			titleChangeSelection(-1)
-		elseif titleState == "options" then
-			titleChangeOptions(-1)
+	
+	if not viewCredits then
+		if key == "cpadup" or key == "up" then
+			if titleState == "select" then 
+				titleChangeSelection(-1)
+			elseif titleState == "options" then
+				titleChangeOptions(-1)
+			end
+		elseif key == "cpaddown" or key == "down" then
+			if titleState == "select" then
+				titleChangeSelection(1)
+			elseif titleState == "options" then
+				titleChangeOptions(1)
+			end
+		elseif key == "a" then
+			if titleState == "select" then
+				titleOptions[titleSelection][2]()
+			elseif titleState == "options" then
+				titleSettings[currentOption]()
+			end
 		end
-	elseif key == "cpaddown" or key == "down" then
-		if titleState == "select" then
-			titleChangeSelection(1)
-		elseif titleState == "options" then
-			titleChangeOptions(1)
-		end
-	elseif key == "a" then
-		if titleState == "select" then
-			titleOptions[titleSelection][2]()
-		elseif titleState == "options" then
-			titleSettings[currentOption]()
-		end
-	end
 
-	if key == "b" then
-		if titleState == "select" then
-			titleState = "main"
-		elseif titleState == "options" then
-			titleState = "select"
-			saveSettings()
-		elseif titleState == "credits" then
-			titleState = "options"
+		if key == "b" then
+			if titleState == "select" then
+				titleState = "main"
+			elseif titleState == "options" then
+				titleState = "select"
+				saveSettings()
+			elseif titleState == "credits" then
+				titleState = "options"
+			end
+		end
+	else
+		if key == "b" then
+			viewCredits = false
 		end
 	end
 end

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="15" tilewidth="16" tileheight="16" nextobjectid="30">
+ <tileset firstgid="1" name="base" tilewidth="16" tileheight="16" spacing="1" tilecount="20" columns="20">
+  <image source="../../graphics/objects.png" width="340" height="17"/>
+ </tileset>
+ <layer name="top" width="25" height="15">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,1,
+1,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,
+1,0,0,0,1,1,0,0,0,0,0,1,1,1,1,0,0,0,0,1,1,0,0,0,1,
+1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,1,1,0,1,1,1,1,1,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1
+</data>
+ </layer>
+ <objectgroup name="topObjects">
+  <object id="2" name="lava" x="96" y="224" width="240" height="16"/>
+  <object id="9" name="door" x="32" y="128" width="16" height="16">
+   <properties>
+    <property name="start" value="true"/>
+   </properties>
+  </object>
+  <object id="10" name="door" x="352" y="128" width="16" height="16"/>
+  <object id="11" name="door" x="256" y="128" width="16" height="16">
+   <properties>
+    <property name="link" value="bottom;80;96;"/>
+    <property name="locked" value="true"/>
+   </properties>
+  </object>
+  <object id="13" name="pipe" x="192" y="160" width="16" height="16">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="link" value="bottom;16;128;"/>
+   </properties>
+  </object>
+  <object id="14" name="lava" x="64" y="224" width="16" height="16"/>
+  <object id="17" name="fan" x="80" y="224" width="16" height="16">
+   <properties>
+    <property name="maxheight" value="7"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <layer name="bottom" width="25" height="15" visible="0">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,0,0,0,0,1,1,1,0,0,0,1,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,0,0,0,0,0,
+1,1,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,
+1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+1,0,0,0,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,
+1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,1,0,0,0,0,0,
+1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,0,0,0,0,0,
+1,1,1,1,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0,0,0,0,0,
+1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,1,0,0,0,0,0,
+1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup name="bottomObjects">
+  <object id="19" name="pipe" x="16" y="128" width="16" height="16">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="link" value="top;192;160;"/>
+   </properties>
+  </object>
+  <object id="20" name="sensor" x="192" y="208" width="16" height="16">
+   <properties>
+    <property name="direction" value="ver"/>
+   </properties>
+  </object>
+  <object id="22" name="door" x="272" y="80" width="16" height="16">
+   <properties>
+    <property name="link" value="bottom;272;48;"/>
+    <property name="locked" value="true"/>
+   </properties>
+  </object>
+  <object id="23" name="box" x="288" y="80" width="16" height="16"/>
+  <object id="25" name="notgate" x="272" y="48" width="16" height="16">
+   <properties>
+    <property name="link" value="bottom;192;208;"/>
+   </properties>
+  </object>
+  <object id="27" name="pressureplate" x="80" y="96" width="16" height="16"/>
+  <object id="29" name="lava" x="96" y="224" width="64" height="16"/>
+ </objectgroup>
+</map>
